@@ -276,6 +276,78 @@ export default function AdminDashboardPage() {
               <div className="text-[11px] text-slate-500">Protected Peer Tutoring</div>
             </div>
           </div>
+
+          {/* Visual Trend Chart & Branch Distribution */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Weekly Activity Chart */}
+            <div className="lg:col-span-8 glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
+                    Weekly Student Predictor & Search Volume
+                  </h4>
+                  <p className="text-xs text-slate-500">
+                    Daily search requests across KCET and COMEDK archives
+                  </p>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600">
+                  +24.8% vs last week
+                </span>
+              </div>
+
+              {/* Bar visualization */}
+              <div className="h-48 flex items-end justify-between gap-3 pt-6 pb-2 px-2 border-b border-slate-100 dark:border-slate-800">
+                {[
+                  { day: 'Mon', count: 1840, height: '55%' },
+                  { day: 'Tue', count: 2420, height: '72%' },
+                  { day: 'Wed', count: 2100, height: '62%' },
+                  { day: 'Thu', count: 3150, height: '94%' },
+                  { day: 'Fri', count: 2890, height: '86%' },
+                  { day: 'Sat', count: 3400, height: '100%' },
+                  { day: 'Sun', count: 2750, height: '82%' },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                    <div className="text-[9px] font-mono text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {item.count}
+                    </div>
+                    <div 
+                      style={{ height: item.height }} 
+                      className="w-full rounded-t-lg bg-gradient-to-t from-blue-600 to-indigo-500 group-hover:from-blue-500 group-hover:to-cyan-400 transition-all shadow-sm"
+                    />
+                    <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                      {item.day}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Branch Preference Breakdown */}
+            <div className="lg:col-span-4 glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+              <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
+                Karnataka Branch Demand Share
+              </h4>
+              <div className="space-y-3 text-xs">
+                {[
+                  { branch: 'Computer Science (CSE)', pct: 42, color: 'bg-blue-600' },
+                  { branch: 'AI & Machine Learning (AIML)', pct: 26, color: 'bg-indigo-600' },
+                  { branch: 'Electronics & Comm (ECE)', pct: 18, color: 'bg-purple-600' },
+                  { branch: 'Information Science (ISE)', pct: 10, color: 'bg-cyan-500' },
+                  { branch: 'Mechanical / Civil / Others', pct: 4, color: 'bg-slate-400' },
+                ].map((b, idx) => (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex justify-between font-semibold text-slate-700 dark:text-slate-300">
+                      <span>{b.branch}</span>
+                      <span className="font-mono">{b.pct}%</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                      <div style={{ width: `${b.pct}%` }} className={`h-full rounded-full ${b.color}`} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { CommandPalette } from './CommandPalette';
 import { 
   GraduationCap, 
   Search, 
@@ -24,7 +25,8 @@ import {
   ChevronDown,
   Layers,
   FileText,
-  UserCheck
+  UserCheck,
+  Command
 } from 'lucide-react';
 import { UserRole } from '@/types';
 
@@ -41,10 +43,24 @@ export function Navbar() {
     toggleTheme 
   } = useAuth();
   
+  const [mounted, setMounted] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
@@ -178,6 +194,20 @@ export function Navbar() {
           {/* Right Controls: Role Switcher, Admin Button, Notifications, Theme, User */}
           <div className="flex items-center gap-2 sm:gap-3">
             
+            {/* Quick Search / Command Palette Trigger */}
+            <button
+              onClick={() => setIsCommandPaletteOpen(true)}
+              className="hidden md:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 text-xs hover:border-blue-500/60 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm group"
+              title="Quick Search (Ctrl + K / Cmd + K)"
+            >
+              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors" />
+              <span className="hidden xl:inline text-[11px] font-medium">Search colleges, tools...</span>
+              <span className="xl:hidden text-[11px] font-medium">Search</span>
+              <kbd className="px-1.5 py-0.5 rounded text-[10px] bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono font-semibold">
+                Ctrl K
+              </kbd>
+            </button>
+
             {/* Admin Badge & Direct Link */}
             {isAdmin && (
               <Link
@@ -195,9 +225,15 @@ export function Navbar() {
                 onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-xs font-medium text-slate-700 dark:text-slate-300 hover:border-blue-500 transition-colors"
                 title="Switch User Role to test permissions"
+                suppressHydrationWarning
               >
-                <span className={`w-2 h-2 rounded-full ${user ? (rolesList.find(r => r.role === user.role)?.color || 'bg-blue-500') : 'bg-slate-400'}`} />
-                <span className="capitalize">{user ? user.role.replace('_', ' ') : 'Guest'}</span>
+                <span 
+                  className={`w-2 h-2 rounded-full ${user ? (rolesList.find(r => r.role === user.role)?.color || 'bg-blue-500') : 'bg-blue-500'}`} 
+                  suppressHydrationWarning
+                />
+                <span className="capitalize" suppressHydrationWarning>
+                  {user ? user.role.replace('_', ' ') : 'Student'}
+                </span>
                 <ChevronDown className="w-3 h-3 text-slate-400" />
               </button>
 
@@ -366,6 +402,12 @@ export function Navbar() {
           </div>
         </div>
       )}
+
+      {/* Global Command Palette (Ctrl+K / Cmd+K) */}
+      <CommandPalette 
+        isOpen={isCommandPaletteOpen} 
+        onClose={() => setIsCommandPaletteOpen(false)} 
+      />
     </header>
   );
 }

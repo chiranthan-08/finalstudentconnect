@@ -26,8 +26,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const defaultStudentUser = INITIAL_USERS.find(u => u.role === 'student') || INITIAL_USERS[1];
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(defaultStudentUser);
   const [savedColleges, setSavedColleges] = useState<string[]>(['rvce-bangalore', 'pes-rr-bangalore']);
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>(['course-python-engineers']);
   const [notifications, setNotifications] = useState<NotificationItem[]>(NOTIFICATIONS);
