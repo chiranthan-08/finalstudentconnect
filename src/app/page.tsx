@@ -378,13 +378,16 @@ export default function LandingPage() {
         </div>
 
         {/* Animated Statistics Bar */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           {stats.map((s, idx) => {
             const Icon = s.icon;
+            const isLastOnMobile = idx === 4;
             return (
               <div
                 key={idx}
-                className="glass-card rounded-2xl p-4 text-center border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:border-blue-500/50 transition-all hover:scale-105"
+                className={`glass-card rounded-2xl p-4 text-center border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:border-blue-500/50 transition-all hover:scale-105 ${
+                  isLastOnMobile ? 'col-span-2 sm:col-span-1' : ''
+                }`}
               >
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                   <Icon className="w-4 h-4" />
@@ -567,8 +570,11 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left">
+          <div className="overflow-x-auto -mx-2 sm:mx-0">
+            <div className="text-[11px] text-slate-400 block sm:hidden mb-2 px-2">
+              ↔ Scroll horizontally to compare all metrics
+            </div>
+            <table className="w-full text-xs text-left min-w-[680px]">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-400 uppercase tracking-wider font-bold">
                   <th className="py-3 px-4">Institution</th>
