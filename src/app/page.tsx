@@ -229,6 +229,26 @@ export default function LandingPage() {
               Free Courses & Certificates
             </Link>
           </div>
+
+          {/* Quick Search Bar */}
+          <div className="pt-4 max-w-xl mx-auto">
+            <div className="relative glass-card rounded-2xl p-1.5 flex items-center shadow-lg border border-slate-200/80 dark:border-slate-800">
+              <Search className="w-4 h-4 text-slate-400 ml-3 shrink-0" />
+              <input
+                type="text"
+                value={instantSearch}
+                onChange={(e) => setInstantSearch(e.target.value)}
+                placeholder="Search colleges (RVCE, BMSCE, Ramaiah, Mysuru)..."
+                className="w-full px-3 py-2 text-xs bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none"
+              />
+              <Link
+                href={`/colleges${instantSearch ? `?q=${encodeURIComponent(instantSearch)}` : ''}`}
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shrink-0"
+              >
+                Search
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* INTERACTIVE HERO SIMULATOR WIDGET */}

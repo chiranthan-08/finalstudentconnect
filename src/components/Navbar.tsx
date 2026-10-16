@@ -336,7 +336,8 @@ export function Navbar() {
                   <img
                     src={user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'}
                     alt={user.name}
-                    className="w-6 h-6 rounded-full object-cover"
+                    className="w-6 h-6 rounded-full object-cover shrink-0"
+                    style={{ width: '24px', height: '24px', minWidth: '24px', maxWidth: '24px', borderRadius: '9999px', objectFit: 'cover' }}
                   />
                   <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 hidden sm:inline max-w-[90px] truncate">
                     {user.name.split(' ')[0]}
