@@ -9,11 +9,30 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   isSuperAdmin: boolean;
-  login: (email: string, password?: string) => Promise<{ success: boolean; message?: string }>;
+  login: (email: string, password?: string, preferredRole?: UserRole) => Promise<{ success: boolean; message?: string }>;
   loginWithGoogle: () => Promise<{ success: boolean; message?: string }>;
   switchRoleDemo: (role: UserRole) => void;
   logout: () => void;
-  register: (name: string, email: string, role: UserRole, college?: string) => Promise<boolean>;
+  register: (
+    nameOrData: string | {
+      name: string;
+      email: string;
+      role: UserRole;
+      password?: string;
+      college?: string;
+      branch?: string;
+      usn?: string;
+      year?: string;
+      skills?: string[];
+      bio?: string;
+      hourlyRate?: number;
+      designation?: string;
+      organization?: string;
+    },
+    email?: string,
+    role?: UserRole,
+    college?: string
+  ) => Promise<boolean>;
   savedColleges: string[];
   toggleSaveCollege: (collegeId: string) => void;
   enrolledCourses: string[];
@@ -76,7 +95,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.classList.toggle('dark', nextTheme === 'dark');
   };
 
-  const login = async (email: string, password?: string) => {
+  const login = async (email: string, password?: string, preferredRole?: UserRole) => {
     const cleanEmail = email.trim().toLowerCase();
     
     // Check for hardcoded credentials requested by user
@@ -99,16 +118,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Dynamic login for new demo emails
+    const roleToAssign: UserRole = preferredRole || (cleanEmail.includes('admin') ? 'admin' : 'student');
     const newUser: User = {
       id: 'usr_' + Date.now(),
       name: email.split('@')[0].toUpperCase(),
       email: cleanEmail,
-      role: 'student',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      role: roleToAssign,
+      avatar: roleToAssign === 'admin' || roleToAssign === 'super_admin'
+        ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+        : roleToAssign === 'mentor'
+        ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'
+        : 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
       college: 'VTU Affiliated Institution',
       branch: 'Computer Science',
       year: '2nd Year',
-      skills: ['Python', 'Web Basics'],
+      skills: ['Karnataka Academic Ecosystem'],
       reputationScore: 50,
       isVerified: true,
     };
@@ -166,20 +190,86 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('sc_active_user');
   };
 
-  const register = async (name: string, email: string, role: UserRole, college?: string) => {
+  const register = async (
+    nameOrData: string | {
+      name: string;
+      email: string;
+      role: UserRole;
+      password?: string;
+      college?: string;
+      branch?: string;
+      usn?: string;
+      year?: string;
+      skills?: string[];
+      bio?: string;
+      hourlyRate?: number;
+      designation?: string;
+      organization?: string;
+    },
+    emailArg?: string,
+    roleArg?: UserRole,
+    collegeArg?: string
+  ): Promise<boolean> => {
+    let payload: {
+      name: string;
+      email: string;
+      role: UserRole;
+      college?: string;
+      branch?: string;
+      usn?: string;
+      year?: string;
+      skills?: string[];
+      bio?: string;
+    };
+
+    if (typeof nameOrData === 'object') {
+      payload = {
+        name: nameOrData.name,
+        email: nameOrData.email,
+        role: nameOrData.role,
+        college: nameOrData.college,
+        branch: nameOrData.branch,
+        usn: nameOrData.usn,
+        year: nameOrData.year,
+        skills: nameOrData.skills,
+        bio: nameOrData.bio,
+      };
+    } else {
+      payload = {
+        name: nameOrData,
+        email: emailArg || '',
+        role: roleArg || 'student',
+        college: collegeArg,
+      };
+    }
+
     const newUser: User = {
       id: 'usr_' + Date.now(),
-      name,
-      email: email.trim().toLowerCase(),
-      role,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      college: college || 'Karnataka Engineering College',
-      branch: 'Computer Science',
-      year: '1st Year',
-      skills: ['Engineering Fundamentals'],
-      reputationScore: 50,
+      name: payload.name,
+      email: payload.email.trim().toLowerCase(),
+      role: payload.role,
+      avatar: payload.role === 'admin' || payload.role === 'super_admin'
+        ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+        : payload.role === 'mentor'
+        ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'
+        : payload.role === 'recruiter'
+        ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'
+        : payload.role === 'college_rep'
+        ? 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80'
+        : payload.role === 'event_organizer'
+        ? 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80'
+        : 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+      college: payload.college || (payload.role === 'student' ? 'VTU Affiliated Engineering College' : undefined),
+      branch: payload.branch,
+      year: payload.year,
+      usn: payload.usn,
+      bio: payload.bio || `${payload.role.replace('_', ' ').toUpperCase()} on Student Connect Karnataka`,
+      skills: payload.skills && payload.skills.length > 0 ? payload.skills : ['Karnataka Engineering Ecosystem'],
+      reputationScore: payload.role === 'student' ? 60 : 90,
       isVerified: true,
+      googleVerified: false,
     };
+
     setUser(newUser);
     localStorage.setItem('sc_active_user', JSON.stringify(newUser));
     return true;

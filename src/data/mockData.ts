@@ -84,6 +84,29 @@ export const INITIAL_USERS: User[] = [
     skills: ['Academic Policy', 'Curriculum Design', 'NAAC / NBA Accreditation'],
     reputationScore: 94,
     isVerified: true,
+  },
+  {
+    id: 'user-event-organizer',
+    name: 'Rohan Deshmukh',
+    email: 'organizer@studentconnect.edu',
+    role: 'event_organizer',
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80',
+    college: 'BMS College of Engineering',
+    bio: 'Lead Organizer for Student Connect Hackathon 2025 & GDSC Student Community Lead.',
+    skills: ['Hackathons', 'Prize Escrow', 'Developer Relations', 'Event Management'],
+    reputationScore: 91,
+    isVerified: true,
+  },
+  {
+    id: 'user-admin-council',
+    name: 'Dr. Shailaja Hegde',
+    email: 'council@studentconnect.edu',
+    role: 'admin',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+    bio: 'VTU Academic Council Member & Institutional Content Verifier for Karnataka Colleges.',
+    skills: ['Institutional Audits', 'Curriculum Approval', 'Cutoff Validation', 'Moderation'],
+    reputationScore: 98,
+    isVerified: true,
   }
 ];
 

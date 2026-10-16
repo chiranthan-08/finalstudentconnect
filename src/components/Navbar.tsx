@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CommandPalette } from './CommandPalette';
 import { 
+  Home,
   GraduationCap, 
   Search, 
   Bot, 
@@ -22,12 +23,12 @@ import {
   X, 
   ShieldCheck, 
   Sparkles, 
-  ChevronDown,
-  Layers,
-  FileText,
-  UserCheck,
-  LogOut,
-  ChevronRight
+  ChevronDown, 
+  Layers, 
+  FileText, 
+  UserCheck, 
+  LogOut, 
+  ChevronRight 
 } from 'lucide-react';
 import { UserRole } from '@/types';
 
@@ -75,6 +76,7 @@ export function Navbar() {
 
   // Primary curated desktop links (compact & high priority)
   const primaryLinks = [
+    { href: '/', label: 'Home', icon: Home },
     { href: '/colleges', label: 'Colleges', icon: GraduationCap },
     { href: '/predictor', label: 'Predictor', icon: Sparkles, badge: 'KCET' },
     { href: '/vtu-tools', label: 'VTU Tools', icon: Calculator },
@@ -286,6 +288,16 @@ export function Navbar() {
                       {user?.role === r.role && <span className="text-[10px] text-blue-600 font-bold">Active</span>}
                     </button>
                   ))}
+                  <div className="pt-1.5 mt-1 border-t border-slate-100 dark:border-slate-800 px-1">
+                    <Link
+                      href="/login"
+                      onClick={() => setRoleDropdownOpen(false)}
+                      className="px-2.5 py-1.5 text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 flex items-center justify-between rounded-lg transition-colors"
+                    >
+                      <span>Role Login & Register Portal</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
@@ -376,12 +388,20 @@ export function Navbar() {
                 </button>
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-colors"
-              >
-                Log In
-              </Link>
+              <div className="flex items-center gap-1.5">
+                <Link
+                  href="/login"
+                  className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/login?tab=register"
+                  className="px-2.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-colors hidden sm:inline-block"
+                >
+                  Register
+                </Link>
+              </div>
             )}
 
             {/* Mobile Menu Toggle Button (Visible on < lg) */}
@@ -434,6 +454,7 @@ export function Navbar() {
             </div>
             <div className="grid grid-cols-1 gap-1">
               {[
+                { href: '/', label: 'Home Dashboard', desc: 'Central landing page, simulator & rankings', icon: Home },
                 { href: '/colleges', label: 'Karnataka Engineering Colleges', desc: 'Cutoffs, fees & NIRF ranks', icon: GraduationCap },
                 { href: '/predictor', label: 'AI KCET & COMEDK Predictor', desc: 'Calculate odds based on rank', icon: Sparkles, badge: 'Popular' },
                 { href: '/vtu-tools', label: 'VTU Academic Tools Suite', desc: 'SGPA, CGPA & attendance calc', icon: Calculator },
@@ -546,6 +567,24 @@ export function Navbar() {
                 );
               })}
             </div>
+          </div>
+
+          {/* Section 4: Role Authentication & Access */}
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800/60">
+            <Link
+              href="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white text-xs font-bold shadow-md"
+            >
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="w-4 h-4 shrink-0" />
+                <div>
+                  <div>Login & Registration Portal</div>
+                  <div className="text-[10px] font-normal text-blue-100">Access by Role (Student, Mentor, College Rep, HR, Organizer, Admin)</div>
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 shrink-0" />
+            </Link>
           </div>
 
         </div>
