@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CommandPalette } from './CommandPalette';
 import { 
@@ -28,12 +28,14 @@ import {
   FileText, 
   UserCheck, 
   LogOut, 
-  ChevronRight 
+  ChevronRight,
+  Lock
 } from 'lucide-react';
 import { UserRole } from '@/types';
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { 
     user, 
     isAdmin, 
@@ -274,6 +276,14 @@ export function Navbar() {
                     <button
                       key={r.role}
                       onClick={() => {
+                        if (r.role === 'admin' || r.role === 'super_admin') {
+                          if (!isAdmin) {
+                            alert('Administrator access is restricted. Please sign in with your authorized administrator credentials.');
+                            router.push('/login?role=admin');
+                            setRoleDropdownOpen(false);
+                            return;
+                          }
+                        }
                         switchRoleDemo(r.role);
                         setRoleDropdownOpen(false);
                       }}
@@ -284,6 +294,9 @@ export function Navbar() {
                       <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${r.color}`} />
                         <span>{r.label}</span>
+                        {(r.role === 'admin' || r.role === 'super_admin') && (
+                          <Lock className="w-3 h-3 text-slate-400 ml-0.5" />
+                        )}
                       </div>
                       {user?.role === r.role && <span className="text-[10px] text-blue-600 font-bold">Active</span>}
                     </button>

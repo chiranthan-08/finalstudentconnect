@@ -169,35 +169,35 @@ const ROLES_CONFIG: RoleConfig[] = [
   {
     role: 'admin',
     title: 'Admin',
-    badge: 'Institutional Moderator',
+    badge: 'State Platform Moderator',
     color: 'text-indigo-600 dark:text-indigo-400',
     activeBg: 'bg-indigo-50 dark:bg-indigo-950/60',
     borderColor: 'border-indigo-500',
     icon: ShieldCheck,
-    description: 'University council members & moderators maintaining platform trust and content accuracy.',
+    description: 'Designated Platform Administrators overseeing college datasets, cutoff verifications, and disputes.',
     capabilities: [
       'Verify institutional badges and college representative IDs',
       'Resolve escrow tutoring disputes and guarantee student refunds',
-      'Moderate community discussions and flag spam posts',
-      'Curriculum updates for VTU NEP 2022 scheme'
+      'Moderate community discussions and academic broadcasts',
+      'Manage statewide college database and placement updates'
     ],
     demoUser: {
-      name: 'Dr. Shailaja Hegde',
-      email: 'council@studentconnect.edu',
-      password: 'Admin@123',
-      institution: 'VTU Academic Council & Platform Directorate',
-      designationOrBio: 'Institutional Content Auditor & Lead Moderator'
+      name: 'Platform Administrator',
+      email: 'admin@studentconnect.edu',
+      password: 'StudentConnect#Admin2025!',
+      institution: 'Karnataka Engineering Central Administration',
+      designationOrBio: 'Lead Governance & Security Administrator'
     }
   },
   {
     role: 'super_admin',
     title: 'Super Admin',
-    badge: 'Ecosystem Clearance',
+    badge: 'Root Ecosystem Clearance',
     color: 'text-red-600 dark:text-red-400',
     activeBg: 'bg-red-50 dark:bg-red-950/60',
     borderColor: 'border-red-500',
     icon: Zap,
-    description: 'Complete platform governance, security enforcement, database administration, and analytics.',
+    description: 'Higher Education Technical Cell executive governance with complete root platform authorization.',
     capabilities: [
       'Full root administrative access across all modules',
       'Real-time ecosystem database management & audit logs',
@@ -205,11 +205,11 @@ const ROLES_CONFIG: RoleConfig[] = [
       'Global security and Role-Based Access Control settings'
     ],
     demoUser: {
-      name: 'Admin Chief',
-      email: 'admin@studentconnect.edu',
-      password: 'Admin@SC2025!',
-      institution: 'Student Connect Governance Platform',
-      designationOrBio: 'Lead System Governor & Core Platform Architect'
+      name: 'Super Admin Authority',
+      email: 'superadmin@studentconnect.edu',
+      password: 'SuperAdmin#Karnataka2025!',
+      institution: 'Higher Education Technical Cell, Karnataka',
+      designationOrBio: 'Executive Director & Chief Platform Authority'
     }
   }
 ];
@@ -303,7 +303,12 @@ function LoginContent() {
   useEffect(() => {
     if (activeTab === 'login') {
       setLoginEmail(currentRoleConfig.demoUser.email);
-      setLoginPassword(currentRoleConfig.demoUser.password);
+      // Security Policy: Never auto-fill passwords for Administrator accounts
+      if (selectedRole === 'admin' || selectedRole === 'super_admin') {
+        setLoginPassword('');
+      } else {
+        setLoginPassword(currentRoleConfig.demoUser.password);
+      }
       setErrorMessage('');
     }
   }, [selectedRole, activeTab]);
@@ -329,8 +334,12 @@ function LoginContent() {
     }
   };
 
-  // 1-Click Fast Persona Switch & Sign-In
+  // 1-Click Fast Persona Switch & Sign-In (Strictly restricted to non-admin roles)
   const handleQuickPersonaLogin = (roleConfig: RoleConfig) => {
+    if (roleConfig.role === 'admin' || roleConfig.role === 'super_admin') {
+      setErrorMessage('Access Denied: Administrator accounts require entering authorized credentials. 1-Click bypass is disabled for security.');
+      return;
+    }
     setLoading(true);
     setErrorMessage('');
     try {
@@ -405,9 +414,9 @@ function LoginContent() {
       return;
     }
 
-    // Role specific validation
-    if ((selectedRole === 'admin' || selectedRole === 'super_admin') && !regAdminCode.trim()) {
-      setErrorMessage('Admin Security Clearance Token is required. Use "SC-ADMIN-2025" or "SC-SUPER-KEY" for testing.');
+    // Role specific validation: Public registration disallowed for admin roles
+    if (selectedRole === 'admin' || selectedRole === 'super_admin') {
+      setErrorMessage('Access Denied: Administrative accounts cannot be registered through the public portal. Please switch to the Sign In tab and authenticate using your designated administrator credentials.');
       return;
     }
 
@@ -604,16 +613,23 @@ function LoginContent() {
               </div>
             </div>
 
-            {/* 1-Click Fast Instant Login Button for active persona */}
-            <button
-              type="button"
-              onClick={() => handleQuickPersonaLogin(currentRoleConfig)}
-              disabled={loading}
-              className="shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-blue-500/25 active:scale-95 transition-all"
-            >
-              <Zap className="w-4 h-4 text-amber-300 fill-amber-300" />
-              <span>1-Click Test as {currentRoleConfig.demoUser.name}</span>
-            </button>
+            {/* 1-Click Fast Instant Login Button (Restricted to non-admin roles) */}
+            {(currentRoleConfig.role === 'admin' || currentRoleConfig.role === 'super_admin') ? (
+              <div className="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 font-semibold text-xs">
+                <Lock className="w-4 h-4 shrink-0 text-amber-500" />
+                <span>Restricted: Manual Credentials Required</span>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleQuickPersonaLogin(currentRoleConfig)}
+                disabled={loading}
+                className="shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-blue-500/25 active:scale-95 transition-all"
+              >
+                <Zap className="w-4 h-4 text-amber-300 fill-amber-300" />
+                <span>1-Click Test as {currentRoleConfig.demoUser.name}</span>
+              </button>
+            )}
           </div>
 
           <div className="pt-2 border-t border-slate-200/60 dark:border-slate-800/60">
@@ -685,26 +701,45 @@ function LoginContent() {
               </div>
 
               {/* Persona Credentials Auto-Fill Banner */}
-              <div className="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-                <div>
-                  <div className="font-semibold text-slate-800 dark:text-slate-200">
-                    Official Persona: <span className="text-blue-600 dark:text-blue-400 font-bold">{currentRoleConfig.demoUser.name}</span> ({currentRoleConfig.demoUser.institution})
+              {(currentRoleConfig.role === 'admin' || currentRoleConfig.role === 'super_admin') ? (
+                <div className="p-3.5 rounded-2xl border border-red-200 dark:border-red-900/50 bg-red-50/60 dark:bg-red-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <ShieldCheck className="w-5 h-5 text-red-600 shrink-0" />
+                    <div>
+                      <div className="font-bold text-slate-900 dark:text-white">
+                        Authorized Administrator Clearance Required
+                      </div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        Admin Email: <strong className="font-mono text-indigo-600 dark:text-indigo-400">{currentRoleConfig.demoUser.email}</strong> • Enter your designated admin password below
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[11px] text-slate-500 font-mono mt-0.5">
-                    Email: <strong>{currentRoleConfig.demoUser.email}</strong> • Pass: <strong>{currentRoleConfig.demoUser.password}</strong>
-                  </div>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 font-bold uppercase shrink-0">
+                    Protected Role
+                  </span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginEmail(currentRoleConfig.demoUser.email);
-                    setLoginPassword(currentRoleConfig.demoUser.password);
-                  }}
-                  className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline shrink-0"
-                >
-                  Auto-Fill
-                </button>
-              </div>
+              ) : (
+                <div className="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                  <div>
+                    <div className="font-semibold text-slate-800 dark:text-slate-200">
+                      Official Persona: <span className="text-blue-600 dark:text-blue-400 font-bold">{currentRoleConfig.demoUser.name}</span> ({currentRoleConfig.demoUser.institution})
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-mono mt-0.5">
+                      Email: <strong>{currentRoleConfig.demoUser.email}</strong> • Pass: <strong>{currentRoleConfig.demoUser.password}</strong>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginEmail(currentRoleConfig.demoUser.email);
+                      setLoginPassword(currentRoleConfig.demoUser.password);
+                    }}
+                    className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline shrink-0"
+                  >
+                    Auto-Fill
+                  </button>
+                </div>
+              )}
 
               {/* Login Form */}
               <form onSubmit={handleLoginSubmit} className="space-y-4">
@@ -797,7 +832,34 @@ function LoginContent() {
 
           {/* TAB 2: REGISTER / CREATE ACCOUNT MODE */}
           {activeTab === 'register' && (
-            <form onSubmit={handleRegisterSubmit} className="space-y-6">
+            (selectedRole === 'admin' || selectedRole === 'super_admin') ? (
+              <div className="p-8 text-center space-y-5 max-w-md mx-auto">
+                <div className="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center shadow-md">
+                  <Lock className="w-7 h-7" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    Administrator Registration Restricted
+                  </h3>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Administrator and Super Admin accounts cannot be created via public registration. Platform governance provisions administrative credentials directly to authorized state officers.
+                  </p>
+                </div>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab('login');
+                      setErrorMessage('');
+                    }}
+                    className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600 to-indigo-600 hover:from-red-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md transition-colors"
+                  >
+                    Switch to Sign In with Official Admin Credentials
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleRegisterSubmit} className="space-y-6">
               
               <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div>
@@ -1123,28 +1185,6 @@ function LoginContent() {
                   </div>
                 )}
 
-                {/* 6 & 7. ADMIN / SUPER ADMIN SPECIFICS */}
-                {(selectedRole === 'admin' || selectedRole === 'super_admin') && (
-                  <div className="space-y-2 text-xs">
-                    <label className="block font-semibold text-slate-700 dark:text-slate-300">
-                      Security Clearance Token / Authorization Code *
-                    </label>
-                    <div className="relative">
-                      <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                      <input
-                        type="text"
-                        required
-                        value={regAdminCode}
-                        onChange={(e) => setRegAdminCode(e.target.value)}
-                        placeholder="Enter clearance token: e.g. SC-ADMIN-2025 or SC-SUPER-KEY"
-                        className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                      />
-                    </div>
-                    <div className="text-[11px] text-slate-500">
-                      Evaluator Demo Hint: Enter <code className="bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded font-mono text-blue-600 dark:text-blue-400 font-bold">SC-ADMIN-2025</code> or <code className="bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded font-mono text-red-600 dark:text-red-400 font-bold">SC-SUPER-KEY</code>.
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Submit Button */}
@@ -1161,7 +1201,7 @@ function LoginContent() {
                 By registering, you agree to Student Connect’s Karnataka Academic Guidelines and Community Code of Conduct.
               </p>
             </form>
-          )}
+          ))}
 
         </div>
 

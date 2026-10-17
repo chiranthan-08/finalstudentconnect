@@ -98,35 +98,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password?: string, preferredRole?: UserRole) => {
     const cleanEmail = email.trim().toLowerCase();
     
-    // Check for hardcoded credentials requested by user
+    // 1. Strict Administrator Authentication Gate
     if (cleanEmail === 'admin@studentconnect.edu') {
-      if (password && password !== 'Admin@SC2025!') {
-        return { success: false, message: 'Invalid Admin Password! Please use "Admin@SC2025!"' };
+      if (!password || password !== 'StudentConnect#Admin2025!') {
+        return { success: false, message: 'Invalid Admin Credentials! Password does not match.' };
       }
-      const adminUser = INITIAL_USERS.find(u => u.email === 'admin@studentconnect.edu')!;
+      const adminUser = INITIAL_USERS.find(u => u.email === 'admin@studentconnect.edu') || {
+        id: 'user-admin',
+        name: 'Platform Administrator',
+        email: 'admin@studentconnect.edu',
+        role: 'super_admin' as UserRole,
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+        bio: 'Karnataka Engineering Ecosystem Chief Administrator',
+        skills: ['Governance', 'KEA Verification', 'Escrow Security'],
+        reputationScore: 100,
+        isVerified: true,
+      };
       setUser(adminUser);
       localStorage.setItem('sc_active_user', JSON.stringify(adminUser));
       return { success: true };
     }
 
-    // Check existing mock users
-    const foundUser = INITIAL_USERS.find(u => u.email.toLowerCase() === cleanEmail);
+    if (cleanEmail === 'council@studentconnect.edu') {
+      if (!password || password !== 'Council#Admin2025!') {
+        return { success: false, message: 'Invalid Academic Council Administrator credentials!' };
+      }
+      const councilUser = INITIAL_USERS.find(u => u.email === 'council@studentconnect.edu')!;
+      setUser(councilUser);
+      localStorage.setItem('sc_active_user', JSON.stringify(councilUser));
+      return { success: true };
+    }
+
+    // 2. Strict Security: Block ANY other user/email from claiming Admin or Super Admin role
+    if (preferredRole === 'admin' || preferredRole === 'super_admin' || cleanEmail.includes('admin')) {
+      return { 
+        success: false, 
+        message: 'Access Denied: Administrator role is restricted to verified administrator credentials provided by system governance.' 
+      };
+    }
+
+    // 3. Check existing verified non-admin mock users
+    const foundUser = INITIAL_USERS.find(u => u.email.toLowerCase() === cleanEmail && u.role !== 'admin' && u.role !== 'super_admin');
     if (foundUser) {
       setUser(foundUser);
       localStorage.setItem('sc_active_user', JSON.stringify(foundUser));
       return { success: true };
     }
 
-    // Dynamic login for new demo emails
-    const roleToAssign: UserRole = preferredRole || (cleanEmail.includes('admin') ? 'admin' : 'student');
+    // 4. Dynamic login for standard public users (Strictly non-privileged roles)
+    const safeRole: UserRole = preferredRole || 'student';
+
     const newUser: User = {
       id: 'usr_' + Date.now(),
       name: email.split('@')[0].toUpperCase(),
       email: cleanEmail,
-      role: roleToAssign,
-      avatar: roleToAssign === 'admin' || roleToAssign === 'super_admin'
-        ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
-        : roleToAssign === 'mentor'
+      role: safeRole,
+      avatar: safeRole === 'mentor'
         ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'
         : 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
       college: 'VTU Affiliated Institution',
@@ -165,6 +192,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const switchRoleDemo = (role: UserRole) => {
+    // Security Restriction: Only users with verified admin credentials can switch to admin
+    if (role === 'admin' || role === 'super_admin') {
+      if (user?.role !== 'admin' && user?.role !== 'super_admin') {
+        alert('Access Denied: Administrator role requires credential authentication. Please sign in with authorized administrator credentials at /login.');
+        return;
+      }
+    }
+
     const matched = INITIAL_USERS.find(u => u.role === role);
     if (matched) {
       setUser(matched);
@@ -243,14 +278,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
     }
 
+    // Security Restriction: Administrative roles cannot be registered publicly
+    if (payload.role === 'admin' || payload.role === 'super_admin') {
+      alert('Security Policy: Administrator accounts cannot be registered publicly. Only pre-configured authorized administrator credentials can access admin privileges.');
+      return false;
+    }
+
     const newUser: User = {
       id: 'usr_' + Date.now(),
       name: payload.name,
       email: payload.email.trim().toLowerCase(),
       role: payload.role,
-      avatar: payload.role === 'admin' || payload.role === 'super_admin'
-        ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
-        : payload.role === 'mentor'
+      avatar: payload.role === 'mentor'
         ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'
         : payload.role === 'recruiter'
         ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'

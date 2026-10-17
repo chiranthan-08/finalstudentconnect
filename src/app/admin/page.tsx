@@ -56,9 +56,26 @@ export default function AdminDashboardPage() {
   const [broadcastMessage, setBroadcastMessage] = useState('');
   const [broadcastSuccess, setBroadcastSuccess] = useState(false);
 
-  // Quick 1-click admin login for evaluators
-  const handleEvaluatorAdminLogin = async () => {
-    await login('admin@studentconnect.edu', 'Admin@SC2025!');
+  // Secure admin login form state
+  const [adminAuthEmail, setAdminAuthEmail] = useState('admin@studentconnect.edu');
+  const [adminAuthPassword, setAdminAuthPassword] = useState('');
+  const [adminAuthError, setAdminAuthError] = useState('');
+  const [adminAuthLoading, setAdminAuthLoading] = useState(false);
+
+  const handleAdminAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAdminAuthError('');
+    setAdminAuthLoading(true);
+    try {
+      const res = await login(adminAuthEmail, adminAuthPassword, 'admin');
+      if (!res.success) {
+        setAdminAuthError(res.message || 'Access Denied: Invalid administrator credentials.');
+      }
+    } catch {
+      setAdminAuthError('An authentication error occurred.');
+    } finally {
+      setAdminAuthLoading(false);
+    }
   };
 
   const handleAddCollege = (e: React.FormEvent) => {
@@ -141,42 +158,76 @@ export default function AdminDashboardPage() {
   if (!isAdmin) {
     return (
       <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center p-4">
-        <div className="glass-card rounded-3xl max-w-md w-full p-8 text-center space-y-5 border border-red-200 dark:border-red-950 shadow-2xl">
-          <div className="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-950 text-red-600 mx-auto flex items-center justify-center shadow-md">
+        <div className="glass-card rounded-3xl max-w-md w-full p-8 text-center space-y-6 border border-slate-200 dark:border-slate-800 shadow-2xl">
+          <div className="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-950/80 text-red-600 dark:text-red-400 mx-auto flex items-center justify-center shadow-md">
             <Lock className="w-7 h-7" />
           </div>
 
           <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-400 text-[11px] font-bold">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Restricted Security Clearance</span>
+            </div>
             <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-              Restricted Admin Area
+              Administrator Access Only
             </h2>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Only authenticated administrators can manage colleges, verify KEA cutoffs, and oversee escrow payments.
+              This portal is strictly restricted to authorized platform administrators. Please enter your administrator email and password to proceed.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-left text-xs space-y-1 font-mono">
-            <div className="text-[10px] font-bold text-slate-400 uppercase font-sans mb-1">
-              Designated Admin Credentials:
+          {adminAuthError && (
+            <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-400 text-xs font-medium text-left flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-red-500" />
+              <span>{adminAuthError}</span>
             </div>
-            <div>Email: <strong className="text-indigo-600 dark:text-indigo-400">admin@studentconnect.edu</strong></div>
-            <div>Password: <strong className="text-indigo-600 dark:text-indigo-400">Admin@SC2025!</strong></div>
-          </div>
+          )}
 
-          <div className="space-y-2 pt-2">
+          <form onSubmit={handleAdminAuthSubmit} className="space-y-4 text-left">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Admin Email Address
+              </label>
+              <input
+                type="email"
+                required
+                value={adminAuthEmail}
+                onChange={(e) => setAdminAuthEmail(e.target.value)}
+                placeholder="admin@studentconnect.edu"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Admin Password
+              </label>
+              <input
+                type="password"
+                required
+                value={adminAuthPassword}
+                onChange={(e) => setAdminAuthPassword(e.target.value)}
+                placeholder="••••••••••••"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
             <button
-              onClick={handleEvaluatorAdminLogin}
-              className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
+              type="submit"
+              disabled={adminAuthLoading}
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-indigo-600 hover:from-red-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
             >
               <ShieldCheck className="w-4 h-4" />
-              <span>1-Click Sign In as Admin</span>
+              <span>{adminAuthLoading ? 'Authenticating...' : 'Sign In as Administrator'}</span>
             </button>
+          </form>
 
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
             <Link
-              href="/login"
-              className="block w-full py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors"
+              href="/"
+              className="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
             >
-              Go to Standard Login Page
+              ← Return to Student Connect Home
             </Link>
           </div>
         </div>
