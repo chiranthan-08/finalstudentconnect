@@ -30,12 +30,11 @@ export default function StudyMaterialsPage() {
     if (selectedCategory !== 'ALL' && m.category !== selectedCategory) return false;
     if (selectedSem !== 'ALL' && m.semester.toString() !== selectedSem) return false;
     if (selectedScheme !== 'ALL' && m.scheme !== selectedScheme) return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      const matchTitle = m.title.toLowerCase().includes(q);
-      const matchSub = m.subject.toLowerCase().includes(q);
-      const matchCode = m.subjectCode.toLowerCase().includes(q);
-      if (!matchTitle && !matchSub && !matchCode) return false;
+    if (searchQuery.trim()) {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const fullSearchable = `${m.title} ${m.subject} ${m.subjectCode} ${m.scheme} ${m.branch} ${m.category} ${m.author}`.toLowerCase();
+      const allMatch = tokens.every(tok => fullSearchable.includes(tok));
+      if (!allMatch) return false;
     }
     return true;
   });

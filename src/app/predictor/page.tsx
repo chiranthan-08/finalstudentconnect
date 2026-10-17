@@ -12,9 +12,10 @@ import {
   TrendingDown, 
   CheckCircle2, 
   AlertCircle,
-  HelpCircle,
-  ArrowRight,
-  Sliders
+  HelpCircle, 
+  ArrowRight, 
+  Sliders,
+  Search
 } from 'lucide-react';
 import { COLLEGES_DATA } from '@/data/mockData';
 
@@ -32,6 +33,7 @@ function CollegePredictorContent() {
   const [collegeType, setCollegeType] = useState('ALL');
   const [maxBudget, setMaxBudget] = useState<number>(300000);
   const [hasCalculated, setHasCalculated] = useState(true);
+  const [resultsFilter, setResultsFilter] = useState('');
 
   // Compute predictions
   const results = React.useMemo(() => {
@@ -99,6 +101,22 @@ function CollegePredictorContent() {
 
     return { safe, moderate, dream };
   }, [rank, category, branch, district, collegeType, maxBudget, examType]);
+
+  // Instant filter for predicted results
+  const filteredResults = React.useMemo(() => {
+    if (!resultsFilter.trim()) return results;
+    const tokens = resultsFilter.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    const filterFn = (item: any) => {
+      const full = `${item.college.name} ${item.college.shortName} ${item.college.code} ${item.college.location.city} ${item.college.location.district} ${item.branch.branchName} ${item.branch.branchCode}`.toLowerCase();
+      return tokens.every(tok => full.includes(tok));
+    };
+
+    return {
+      safe: results.safe.filter(filterFn),
+      moderate: results.moderate.filter(filterFn),
+      dream: results.dream.filter(filterFn),
+    };
+  }, [results, resultsFilter]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -264,6 +282,24 @@ function CollegePredictorContent() {
       {/* PREDICTION RESULTS 3-TIER COLUMNS */}
       <div className="space-y-6">
         
+        {/* Instant Filter Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl glass-card border border-slate-200 dark:border-slate-800">
+          <div>
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">Predicted College Options</h3>
+            <p className="text-xs text-slate-500">Filtered across Safe, Moderate, and Dream probability bands</p>
+          </div>
+          <div className="relative max-w-sm w-full">
+            <Search className="w-4 h-4 text-blue-500 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              value={resultsFilter}
+              onChange={(e) => setResultsFilter(e.target.value)}
+              placeholder="Search in results (RVCE, BMSCE, Bengaluru, CSE)..."
+              className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
         {/* Safe Colleges (85%+) */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -273,19 +309,19 @@ function CollegePredictorContent() {
                 Safe Colleges (80% - 95% Probability)
               </h2>
               <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
-                {results.safe.length} Options
+                {filteredResults.safe.length} Options
               </span>
             </div>
             <span className="text-xs text-slate-500">Historical cutoff is comfortably higher than your rank</span>
           </div>
 
-          {results.safe.length === 0 ? (
+          {filteredResults.safe.length === 0 ? (
             <div className="p-6 rounded-2xl glass-card text-center text-xs text-slate-400">
-              No safe colleges found matching this exact filter combination. Try adjusting target branch or budget.
+              No safe colleges found matching this filter. Try clearing the search or adjusting target branch.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {results.safe.map((item, idx) => (
+              {filteredResults.safe.map((item, idx) => (
                 <div key={idx} className="glass-card rounded-2xl p-4 border border-emerald-500/30 hover:border-emerald-500 transition-all space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
@@ -330,19 +366,19 @@ function CollegePredictorContent() {
                 Moderate Chance Colleges (50% - 75% Probability)
               </h2>
               <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">
-                {results.moderate.length} Options
+                {filteredResults.moderate.length} Options
               </span>
             </div>
             <span className="text-xs text-slate-500">Your rank is close to the cutoff borderline</span>
           </div>
 
-          {results.moderate.length === 0 ? (
+          {filteredResults.moderate.length === 0 ? (
             <div className="p-6 rounded-2xl glass-card text-center text-xs text-slate-400">
-              No moderate options under current filter criteria.
+              No moderate options under current search criteria.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {results.moderate.map((item, idx) => (
+              {filteredResults.moderate.map((item, idx) => (
                 <div key={idx} className="glass-card rounded-2xl p-4 border border-amber-500/30 hover:border-amber-500 transition-all space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
@@ -389,19 +425,19 @@ function CollegePredictorContent() {
                 Dream Colleges (15% - 40% Probability)
               </h2>
               <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-bold">
-                {results.dream.length} Options
+                {filteredResults.dream.length} Options
               </span>
             </div>
             <span className="text-xs text-slate-500">Ambitious choices worth entering in Round 1/2 Option Entry</span>
           </div>
 
-          {results.dream.length === 0 ? (
+          {filteredResults.dream.length === 0 ? (
             <div className="p-6 rounded-2xl glass-card text-center text-xs text-slate-400">
-              No dream colleges found for this filter.
+              No dream colleges found for this search.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {results.dream.map((item, idx) => (
+              {filteredResults.dream.map((item, idx) => (
                 <div key={idx} className="glass-card rounded-2xl p-4 border border-purple-500/30 hover:border-purple-500 transition-all space-y-3">
                   <div className="flex items-start justify-between">
                     <div>

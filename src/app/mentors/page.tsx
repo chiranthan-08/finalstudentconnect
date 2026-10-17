@@ -52,12 +52,11 @@ export default function MentorsPage() {
   ]);
 
   const filteredMentors = mentors.filter(m => {
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      const matchName = m.name.toLowerCase().includes(q);
-      const matchCol = m.college.toLowerCase().includes(q);
-      const matchSkill = m.skills.some(s => s.toLowerCase().includes(q));
-      if (!matchName && !matchCol && !matchSkill) return false;
+    if (searchQuery.trim()) {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const fullSearchable = `${m.name} ${m.college} ${m.branch} ${m.skills.join(' ')} ${m.subjects.join(' ')} ${m.bio}`.toLowerCase();
+      const allMatch = tokens.every(tok => fullSearchable.includes(tok));
+      if (!allMatch) return false;
     }
     if (selectedSubject !== 'ALL') {
       if (!m.subjects.some(s => s.toLowerCase().includes(selectedSubject.toLowerCase()))) {

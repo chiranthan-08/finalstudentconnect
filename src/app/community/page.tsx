@@ -13,11 +13,12 @@ import {
   CheckCircle2, 
   ExternalLink, 
   Sparkles, 
-  Send,
-  Award,
-  Filter,
-  Code,
-  Globe
+  Send, 
+  Award, 
+  Filter, 
+  Code, 
+  Globe,
+  Search
 } from 'lucide-react';
 import { COMMUNITY_POSTS, INITIAL_USERS } from '@/data/mockData';
 import { CommunityPost } from '@/types';
@@ -26,6 +27,7 @@ export default function CommunityPage() {
   const { user } = useAuth();
   const [posts, setPosts] = useState<CommunityPost[]>(COMMUNITY_POSTS);
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Create post modal state
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -104,8 +106,14 @@ export default function CommunityPage() {
   };
 
   const filteredPosts = posts.filter(p => {
-    if (activeCategory === 'ALL') return true;
-    return p.category === activeCategory;
+    if (activeCategory !== 'ALL' && p.category !== activeCategory) return false;
+    if (searchQuery.trim()) {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const fullSearchable = `${p.author.name} ${p.author.college} ${p.content} ${p.tags.join(' ')} ${p.category}`.toLowerCase();
+      const allMatch = tokens.every(tok => fullSearchable.includes(tok));
+      if (!allMatch) return false;
+    }
+    return true;
   });
 
   return (
@@ -226,21 +234,34 @@ export default function CommunityPage() {
             </button>
           </div>
 
-          {/* Filter Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold">
-            {['ALL', 'Project', 'Achievement', 'Question', 'Hackathon'].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-xl transition-colors ${
-                  activeCategory === cat
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100'
-                }`}
-              >
-                {cat === 'ALL' ? 'All Posts' : `${cat}s`}
-              </button>
-            ))}
+          {/* Filter Tabs & Search Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold">
+              {['ALL', 'Project', 'Achievement', 'Question', 'Hackathon'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3 py-1.5 rounded-xl transition-colors whitespace-nowrap ${
+                    activeCategory === cat
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100'
+                  }`}
+                >
+                  {cat === 'ALL' ? 'All Posts' : `${cat}s`}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative max-w-xs w-full">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search posts, topics, tags..."
+                className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
 
           {/* Posts List */}

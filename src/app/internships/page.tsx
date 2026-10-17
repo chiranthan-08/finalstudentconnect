@@ -26,12 +26,11 @@ export default function InternshipsPage() {
 
   const filteredInternships = internships.filter(item => {
     if (filterRemote && !item.isRemote) return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      const matchRole = item.role.toLowerCase().includes(q);
-      const matchComp = item.companyName.toLowerCase().includes(q);
-      const matchLoc = item.location.toLowerCase().includes(q);
-      if (!matchRole && !matchComp && !matchLoc) return false;
+    if (searchQuery.trim()) {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const fullSearchable = `${item.role} ${item.companyName} ${item.location} ${item.skillsRequired.join(' ')} ${item.isRemote ? 'remote' : 'in-office'} ${item.description}`.toLowerCase();
+      const allMatch = tokens.every(tok => fullSearchable.includes(tok));
+      if (!allMatch) return false;
     }
     return true;
   });

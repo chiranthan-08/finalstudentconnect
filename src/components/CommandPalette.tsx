@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Search, 
@@ -17,178 +17,386 @@ import {
   ShieldCheck, 
   X, 
   ArrowRight,
-  Layers
+  Layers,
+  Zap,
+  MapPin,
+  Calendar,
+  Building2,
+  Lock,
+  UserCheck
 } from 'lucide-react';
-import { COLLEGES_DATA } from '@/data/mockData';
+import { 
+  COLLEGES_DATA, 
+  COURSES_DATA, 
+  STUDY_MATERIALS, 
+  MENTORS_DATA, 
+  INTERNSHIPS_DATA, 
+  TECHNICAL_EVENTS, 
+  STUDY_ROOMS 
+} from '@/data/mockData';
 
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+export type PaletteCategory = 
+  | 'All'
+  | 'Colleges' 
+  | 'AI & Tools' 
+  | 'Courses' 
+  | 'Study Materials' 
+  | 'Mentors' 
+  | 'Internships' 
+  | 'Events' 
+  | 'Study Rooms' 
+  | 'Auth & Roles';
+
 interface PaletteItem {
   id: string;
   title: string;
   subtitle: string;
-  category: 'Colleges' | 'AI & Tools' | 'Learning' | 'Campus & Community' | 'Admin';
+  category: PaletteCategory;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: string;
+  keywords?: string;
 }
 
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const router = useRouter();
   const [query, setQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<PaletteCategory>('All');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Pre-configured searchable index
-  const baseItems: PaletteItem[] = [
-    // Tools
+  // 1. Comprehensive Core Tools & Services
+  const baseTools: PaletteItem[] = [
     {
       id: 'tool-predictor',
-      title: 'AI College Predictor',
-      subtitle: 'Calculate admission odds based on KCET & COMEDK historical cutoffs',
+      title: 'AI College Cutoff Predictor',
+      subtitle: 'Calculate KCET & COMEDK round-wise admission odds by exam rank and category (GM, 2A, 2B, 3A, 3B, SC, ST)',
       category: 'AI & Tools',
       href: '/predictor',
       icon: Sparkles,
       badge: 'Popular',
+      keywords: 'kcet comedk cutoff rank predictor probability kea counseling option entry round 1 round 2 seat allotment odds safe moderate dream',
     },
     {
       id: 'tool-assistant',
-      title: 'Connect AI Copilot',
-      subtitle: 'Ask about cutoffs, VTU schemes, syllabi, and career paths',
+      title: 'Connect AI Copilot (GPT-4o)',
+      subtitle: 'Karnataka engineering assistant: answer VTU schemes, KEA cutoffs, 2022 NEP syllabi, and coding roadmaps',
       category: 'AI & Tools',
       href: '/assistant',
       icon: Bot,
-      badge: 'GPT-4o',
+      badge: 'AI Copilot',
+      keywords: 'ai assistant chat copilot gpt vtu syllabus question answer career roadmap karnataka',
     },
     {
-      id: 'tool-vtu',
-      title: 'VTU Academic Tools Suite',
-      subtitle: 'Calculate SGPA, CGPA, Attendance Bunk Forecaster & CIE Internal Marks',
+      id: 'tool-vtu-sgpa',
+      title: 'VTU SGPA & CGPA Calculator',
+      subtitle: 'Semester grade point average calculator supporting VTU 2022 NEP, 2021, and 2018 CBCS credit schemes',
       category: 'AI & Tools',
       href: '/vtu-tools',
       icon: Calculator,
-      badge: '2022 Scheme',
+      badge: '2022 NEP',
+      keywords: 'vtu sgpa cgpa calculator marks credits grading nep 2022 2021 cbcs grade points percentage converter',
+    },
+    {
+      id: 'tool-vtu-attendance',
+      title: 'VTU 75% Attendance Bunk Forecaster',
+      subtitle: 'Calculate safe classes to miss while staying compliant with VTU mandatory 75% and safe 85% attendance criteria',
+      category: 'AI & Tools',
+      href: '/vtu-tools',
+      icon: Calculator,
+      badge: 'Attendance',
+      keywords: 'attendance bunk calculator 75% 85% classes shortage condonation medical certificate vtu',
+    },
+    {
+      id: 'tool-vtu-cie',
+      title: 'VTU CIE Internal 50-Scale Marks Calculator',
+      subtitle: 'Continuous Internal Evaluation marks predictor: IA tests, quizzes, and lab continuous evaluations',
+      category: 'AI & Tools',
+      href: '/vtu-tools',
+      icon: Calculator,
+      badge: 'Internal Marks',
+      keywords: 'cie internal marks test ia1 ia2 assignment 50 marks pass marks vtu',
     },
     {
       id: 'tool-ats',
-      title: 'AI Resume ATS Analyzer',
-      subtitle: 'Scan your resume against Bangalore tech job descriptions',
+      title: 'AI Resume ATS Scanner',
+      subtitle: 'Instant ATS score scanner matching engineering resumes with Bangalore tech job descriptions',
       category: 'AI & Tools',
       href: '/placements',
       icon: Briefcase,
-      badge: 'ATS Score',
+      badge: 'ATS Scanner',
+      keywords: 'resume ats scanner score placement cv bangalore tech fresher jobs keywords ctc',
     },
     {
       id: 'tool-roadmap',
       title: 'AI Career Roadmap Generator',
-      subtitle: 'Personalized step-by-step career path for Karnataka engineers',
+      subtitle: 'Tailored milestone roadmap for frontend, backend, AI/ML, DevOps, and cloud engineering',
       category: 'AI & Tools',
       href: '/advanced',
       icon: Layers,
-    },
-
-    // Learning
-    {
-      id: 'learn-courses',
-      title: 'Technical Courses & Certifications',
-      subtitle: 'Free beginner starter courses with verifiable certificate generator',
-      category: 'Learning',
-      href: '/courses',
-      icon: BookOpen,
-      badge: '3 Free Courses',
+      keywords: 'career roadmap advanced ai skills gap digital portfolio portfolio generator',
     },
     {
-      id: 'learn-materials',
-      title: 'VTU Study Material Hub',
-      subtitle: 'Syllabus notes, Previous Year Questions (PYQs), and Lab manuals',
-      category: 'Learning',
-      href: '/study-materials',
-      icon: FileText,
+      id: 'tool-colleges-matrix',
+      title: 'College Side-by-Side Comparison Matrix',
+      subtitle: 'Compare up to 3 Karnataka engineering colleges by cutoff, fees, placements, and NIRF rank',
+      category: 'Colleges',
+      href: '/colleges',
+      icon: GraduationCap,
+      keywords: 'compare comparison matrix colleges rvce bmsce msrit pes fees placement nirf',
     },
-
-    // Campus & Community
+    // Authentication & Roles
     {
-      id: 'comm-feed',
-      title: 'Student Community Feed',
-      subtitle: 'Cross-college discussion, technical questions, and peer updates',
-      category: 'Campus & Community',
-      href: '/community',
-      icon: Users,
-    },
-    {
-      id: 'comm-tutors',
-      title: 'Peer Tutoring Marketplace',
-      subtitle: 'Book 1-on-1 tutoring sessions with senior toppers (Escrow protected)',
-      category: 'Campus & Community',
-      href: '/mentors',
-      icon: Users,
-      badge: 'Escrow',
+      id: 'auth-student',
+      title: 'Student Access Portal',
+      subtitle: 'Sign in or register as an undergraduate VTU / Autonomous engineering student',
+      category: 'Auth & Roles',
+      href: '/login?role=student',
+      icon: GraduationCap,
+      badge: 'Student',
+      keywords: 'student login sign in register account kcet comedk vtu',
     },
     {
-      id: 'comm-studyrooms',
-      title: 'Virtual Study Rooms',
-      subtitle: 'Realtime whiteboard, collaborative code editor, and study rooms',
-      category: 'Campus & Community',
-      href: '/study-rooms',
-      icon: Video,
-      badge: 'Live',
+      id: 'auth-mentor',
+      title: 'Mentor & Tutor Escrow Portal',
+      subtitle: 'Sign in as a verified peer tutor or senior mentor to earn by teaching',
+      category: 'Auth & Roles',
+      href: '/login?role=mentor',
+      icon: UserCheck,
+      badge: 'Tutor',
+      keywords: 'mentor tutor login register earn teach 1-on-1 escrow booking',
     },
     {
-      id: 'comm-internships',
-      title: 'Verified Bangalore Internships',
-      subtitle: 'Paid internship opportunities with stipend tracking',
-      category: 'Campus & Community',
-      href: '/internships',
+      id: 'auth-college-rep',
+      title: 'College Representative Portal',
+      subtitle: 'Admissions deans, TPOs, and departmental coordinators managing college cutoffs',
+      category: 'Auth & Roles',
+      href: '/login?role=college_rep',
+      icon: Building2,
+      badge: 'College Rep',
+      keywords: 'college rep admissions tpo dean institutional login cutoffs placement',
+    },
+    {
+      id: 'auth-recruiter',
+      title: 'HR & Tech Recruiter Portal',
+      subtitle: 'Post verified Bangalore internships, review resumes, and hire campus talent',
+      category: 'Auth & Roles',
+      href: '/login?role=recruiter',
       icon: Briefcase,
+      badge: 'HR Recruiter',
+      keywords: 'recruiter hr talent hiring jobs internships bangalore tech startup',
     },
     {
-      id: 'comm-hackathons',
-      title: 'Student Connect Annual Hackathon 2025',
-      subtitle: '₹2,50,000 cash prize pool • Statewide hybrid hackathon',
-      category: 'Campus & Community',
-      href: '/events',
+      id: 'auth-organizer',
+      title: 'Event & Hackathon Organizer Portal',
+      subtitle: 'Host inter-college hackathons with ₹2.5L prize escrow and cross-campus teams',
+      category: 'Auth & Roles',
+      href: '/login?role=event_organizer',
       icon: Trophy,
-      badge: '₹2.5L Prize',
+      badge: 'Organizer',
+      keywords: 'event organizer hackathon gdsc ieee symposium competition host',
     },
-
-    // Admin
     {
-      id: 'admin-console',
-      title: 'Admin Management Console',
-      subtitle: 'Platform analytics, college & cutoff editor, escrow release, MongoDB status',
-      category: 'Admin',
+      id: 'auth-admin',
+      title: 'Admin & System Governance Console',
+      subtitle: 'Institutional audit console, dispute resolution, escrow release, and RBAC control',
+      category: 'Auth & Roles',
       href: '/admin',
       icon: ShieldCheck,
-      badge: 'Super Admin',
+      badge: 'Admin',
+      keywords: 'admin super admin console security dashboard governance audit users',
+    },
+    {
+      id: 'auth-register',
+      title: 'Create a New Verified Account',
+      subtitle: 'Register on Student Connect under any of the 7 supported Karnataka engineering personas',
+      category: 'Auth & Roles',
+      href: '/register',
+      icon: Lock,
+      badge: 'Register',
+      keywords: 'register sign up create account new user onboarding rbac',
     },
   ];
 
-  // Dynamically add top Karnataka colleges
-  const collegeItems: PaletteItem[] = COLLEGES_DATA.map((col) => ({
-    id: `col-${col.id}`,
-    title: `${col.name} (${col.shortName})`,
-    subtitle: `${col.location.city} • Rank #${col.accreditations.karnatakaRank} in KA • Avg CTC: ₹${col.placements.averagePackageLPA} LPA`,
-    category: 'Colleges',
-    href: `/colleges/${col.id}`,
-    icon: GraduationCap,
-    badge: `NAAC ${col.accreditations.naacGrade}`,
-  }));
+  // 2. All Karnataka Colleges
+  const collegeItems: PaletteItem[] = useMemo(() => {
+    return COLLEGES_DATA.map((col) => {
+      const branchNames = col.branches.map(b => `${b.branchCode} (${b.branchName})`).join(', ');
+      const cutoffMin = Math.min(...col.branches.map(b => b.cutoffs.kcet.gm));
+      return {
+        id: `col-${col.id}`,
+        title: `${col.name} (${col.shortName})`,
+        subtitle: `${col.location.city}, ${col.location.district} • Code: ${col.code} • Rank #${col.accreditations.karnatakaRank} in KA • Avg CTC: ₹${col.placements.averagePackageLPA} LPA • Cutoff from ~${cutoffMin}`,
+        category: 'Colleges' as PaletteCategory,
+        href: `/colleges/${col.id}`,
+        icon: GraduationCap,
+        badge: `NAAC ${col.accreditations.naacGrade}`,
+        keywords: `${col.name} ${col.shortName} ${col.code} ${col.location.city} ${col.location.district} ${col.affiliation} ${col.collegeType} ${col.placements.topRecruiters.join(' ')} ${branchNames} ${col.accreditations.naacGrade} cutoff placement fees`,
+      };
+    });
+  }, []);
 
-  const allItems = [...baseItems, ...collegeItems];
+  // 3. All Technical Courses
+  const courseItems: PaletteItem[] = useMemo(() => {
+    return COURSES_DATA.map((c) => ({
+      id: `course-${c.id}`,
+      title: c.title,
+      subtitle: `${c.instructor.name} • ${c.durationHours} hrs • ${c.level} • ${c.isFreeStarter ? 'Free lifetime starter' : 'Pro track'} with certificate`,
+      category: 'Courses' as PaletteCategory,
+      href: `/courses`,
+      icon: BookOpen,
+      badge: c.isFreeStarter ? 'Free Course' : 'Certificate',
+      keywords: `${c.title} ${c.description} ${c.category} ${c.skills.join(' ')} ${c.instructor.name} ${c.level} learn coding certification`,
+    }));
+  }, []);
 
-  const filteredItems = query.trim() === ''
-    ? baseItems
-    : allItems.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.subtitle.toLowerCase().includes(query.toLowerCase()) ||
-        item.category.toLowerCase().includes(query.toLowerCase())
-      );
+  // 4. All Study Materials & VTU Notes
+  const materialItems: PaletteItem[] = useMemo(() => {
+    return STUDY_MATERIALS.map((m) => ({
+      id: `material-${m.id}`,
+      title: `${m.title} [${m.subjectCode}]`,
+      subtitle: `${m.subject} • ${m.semester}th Sem • Scheme: ${m.scheme} • ${m.downloadsCount} downloads • ${m.fileSize}`,
+      category: 'Study Materials' as PaletteCategory,
+      href: `/study-materials`,
+      icon: FileText,
+      badge: m.category,
+      keywords: `${m.title} ${m.subject} ${m.subjectCode} ${m.scheme} ${m.category} ${m.branch} semester pyq notes model question paper solutions`,
+    }));
+  }, []);
+
+  // 5. All Mentors & Tutors
+  const mentorItems: PaletteItem[] = useMemo(() => {
+    return MENTORS_DATA.map((m) => ({
+      id: `mentor-${m.id}`,
+      title: `${m.name} • ${m.college.split(' ')[0]} Mentor`,
+      subtitle: `Expertise: ${m.subjects.join(', ')} • Rating: ${m.rating} ★ (${m.reviewsCount} reviews) • ₹${m.hourlyRateINR}/hr (Escrow)`,
+      category: 'Mentors' as PaletteCategory,
+      href: `/mentors`,
+      icon: Users,
+      badge: `₹${m.hourlyRateINR}/hr`,
+      keywords: `${m.name} ${m.college} ${m.branch} ${m.subjects.join(' ')} ${m.skills.join(' ')} ${m.bio} tutor mentor topper teaching 1-on-1`,
+    }));
+  }, []);
+
+  // 6. All Internships
+  const internshipItems: PaletteItem[] = useMemo(() => {
+    return INTERNSHIPS_DATA.map((item) => ({
+      id: `intern-${item.id}`,
+      title: `${item.role} @ ${item.companyName}`,
+      subtitle: `${item.location} • Stipend: ₹${item.stipendMonthlyINR.toLocaleString()}/mo • ${item.durationMonths} mos • ${item.isRemote ? 'Remote' : 'In-Office'}`,
+      category: 'Internships' as PaletteCategory,
+      href: `/internships`,
+      icon: Briefcase,
+      badge: `₹${Math.round(item.stipendMonthlyINR / 1000)}k/mo`,
+      keywords: `${item.role} ${item.companyName} ${item.location} ${item.skillsRequired.join(' ')} ${item.isRemote ? 'remote' : 'in-office'} ${item.description} internship stipend bangalore`,
+    }));
+  }, []);
+
+  // 7. All Events & Hackathons
+  const eventItems: PaletteItem[] = useMemo(() => {
+    return TECHNICAL_EVENTS.map((e) => ({
+      id: `event-${e.id}`,
+      title: e.title,
+      subtitle: `${e.date} • ${e.location} • Cash Prize Pool: ₹${e.prizePoolINR.toLocaleString()} • ${e.type}`,
+      category: 'Events' as PaletteCategory,
+      href: `/events`,
+      icon: Trophy,
+      badge: `₹${Math.round(e.prizePoolINR / 100000)}L Prize`,
+      keywords: `${e.title} ${e.type} ${e.location} ${e.description} hackathon contest fest registration prize`,
+    }));
+  }, []);
+
+  // 8. Virtual Study Rooms
+  const roomItems: PaletteItem[] = useMemo(() => {
+    return STUDY_ROOMS.map((r) => ({
+      id: `room-${r.id}`,
+      title: r.name,
+      subtitle: `Topic: ${r.topic} • ${r.activeParticipants}/${r.maxParticipants} online • Whiteboard & live code pad`,
+      category: 'Study Rooms' as PaletteCategory,
+      href: `/study-rooms`,
+      icon: Video,
+      badge: `${r.activeParticipants} Online`,
+      keywords: `${r.name} ${r.topic} ${r.category} virtual study room live whiteboard code pad peer discussion`,
+    }));
+  }, []);
+
+  // Combine all items into a single master searchable index
+  const masterIndex: PaletteItem[] = useMemo(() => {
+    return [
+      ...baseTools,
+      ...collegeItems,
+      ...courseItems,
+      ...materialItems,
+      ...mentorItems,
+      ...internshipItems,
+      ...eventItems,
+      ...roomItems,
+    ];
+  }, [collegeItems, courseItems, materialItems, mentorItems, internshipItems, eventItems, roomItems]);
+
+  // Intelligent Search with token matching & relevance scoring
+  const filteredItems = useMemo(() => {
+    const rawQuery = query.toLowerCase().trim();
+
+    // Base filtering by category chip if active
+    let pool = masterIndex;
+    if (activeFilter !== 'All') {
+      pool = masterIndex.filter(item => item.category === activeFilter);
+    }
+
+    if (!rawQuery) {
+      return pool.slice(0, 15);
+    }
+
+    const tokens = rawQuery.split(/\s+/).filter(Boolean);
+
+    const scored = pool.map((item) => {
+      const titleLower = item.title.toLowerCase();
+      const subLower = item.subtitle.toLowerCase();
+      const catLower = item.category.toLowerCase();
+      const kwLower = (item.keywords || '').toLowerCase();
+      const combined = `${titleLower} ${subLower} ${catLower} ${kwLower}`;
+
+      // Every token must match somewhere in combined text
+      const allTokensMatch = tokens.every(token => combined.includes(token));
+      if (!allTokensMatch) {
+        return { item, score: -1 };
+      }
+
+      let score = 0;
+
+      // Exact title match gets highest priority
+      if (titleLower === rawQuery) {
+        score += 1000;
+      } else if (titleLower.startsWith(rawQuery)) {
+        score += 500;
+      } else if (titleLower.includes(rawQuery)) {
+        score += 250;
+      }
+
+      // Exact token matches
+      tokens.forEach(tok => {
+        if (titleLower.includes(tok)) score += 60;
+        if (kwLower.includes(tok)) score += 35;
+        if (subLower.includes(tok)) score += 20;
+      });
+
+      return { item, score };
+    });
+
+    return scored
+      .filter(s => s.score >= 0)
+      .sort((a, b) => b.score - a.score)
+      .map(s => s.item);
+  }, [query, activeFilter, masterIndex]);
 
   useEffect(() => {
     setSelectedIndex(0);
-  }, [query]);
+  }, [query, activeFilter]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -218,47 +426,87 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   if (!isOpen) return null;
 
+  const filterTabs: PaletteCategory[] = [
+    'All',
+    'Colleges',
+    'AI & Tools',
+    'Courses',
+    'Study Materials',
+    'Mentors',
+    'Internships',
+    'Events',
+    'Auth & Roles'
+  ];
+
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-10 sm:pt-16 px-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div 
-        className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[75vh]"
+        className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Search Input Bar */}
-        <div className="flex items-center px-4 py-3.5 border-b border-slate-100 dark:border-slate-800 gap-3 bg-slate-50/50 dark:bg-slate-900/50">
-          <Search className="w-5 h-5 text-blue-500 shrink-0" />
+        {/* 1. SEARCH INPUT HEADER */}
+        <div className="flex items-center px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-slate-800 gap-3 bg-slate-50/80 dark:bg-slate-900/80">
+          <Search className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a college name, tool, course, or shortcut..."
-            className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none"
+            placeholder="Search anything: 'RVCE CSE', 'SGPA calculator', 'Python course', '18MAT21 notes', 'DSA mentor', 'Bangalore internship'..."
+            className="w-full bg-transparent text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none font-medium"
             autoFocus
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="px-2 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-[11px] font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors shrink-0"
             >
               Clear
             </button>
           )}
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            className="p-1.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors shrink-0"
+            title="Close (Esc)"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Results List */}
-        <div className="overflow-y-auto p-2 space-y-1 flex-1">
+        {/* 2. CATEGORY FILTER CHIPS */}
+        <div className="flex items-center gap-1.5 px-4 sm:px-6 py-2.5 border-b border-slate-100 dark:border-slate-800/80 overflow-x-auto text-[11px] scrollbar-none bg-white dark:bg-slate-900">
+          <span className="text-slate-400 font-bold uppercase text-[10px] mr-1 shrink-0">Filter:</span>
+          {filterTabs.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveFilter(cat)}
+              className={`px-3 py-1 rounded-full font-bold whitespace-nowrap transition-all shrink-0 ${
+                activeFilter === cat
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* 3. SEARCH RESULTS LIST */}
+        <div className="overflow-y-auto p-3 sm:p-4 space-y-1.5 flex-1 divide-y divide-slate-100 dark:divide-slate-800/50">
           {filteredItems.length === 0 ? (
-            <div className="text-center py-12 text-slate-400 text-xs">
-              No matching results found for <span className="font-semibold text-slate-700 dark:text-slate-300">"{query}"</span>
+            <div className="text-center py-14 space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mx-auto">
+                <Search className="w-6 h-6" />
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
+                No matching results found for "{query}"
+              </div>
+              <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                Try searching for college codes (E001), branches (CSE, ISE), subject codes (18MAT21), tools (SGPA, Attendance), or company names.
+              </p>
             </div>
           ) : (
             filteredItems.map((item, index) => {
@@ -272,42 +520,42 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     onClose();
                   }}
                   onMouseEnter={() => setSelectedIndex(index)}
-                  className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer text-xs transition-colors ${
+                  className={`flex items-center justify-between p-3 rounded-2xl cursor-pointer text-xs transition-all ${
                     isSelected
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20 translate-x-1'
+                      : 'hover:bg-slate-50 dark:hover:bg-slate-800/70 text-slate-700 dark:text-slate-200'
                   }`}
                 >
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <div className={`p-2 rounded-lg shrink-0 ${
-                      isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-blue-500'
+                  <div className="flex items-center gap-3 overflow-hidden pr-2">
+                    <div className={`p-2.5 rounded-xl shrink-0 ${
+                      isSelected ? 'bg-white/20 text-white' : 'bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400'
                     }`}>
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="truncate">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold truncate">{item.title}</span>
+                        <span className="font-extrabold text-xs sm:text-sm truncate">{item.title}</span>
                         {item.badge && (
-                          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
                             isSelected
-                              ? 'bg-white/20 text-white'
-                              : 'bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400'
+                              ? 'bg-white/25 text-white'
+                              : 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300'
                           }`}>
                             {item.badge}
                           </span>
                         )}
                       </div>
-                      <p className={`text-[11px] truncate mt-0.5 ${
-                        isSelected ? 'text-blue-100' : 'text-slate-400'
+                      <p className={`text-[11px] truncate mt-0.5 leading-relaxed ${
+                        isSelected ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'
                       }`}>
                         {item.subtitle}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0 ml-3">
-                    <span className={`text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded ${
-                      isSelected ? 'bg-white/10 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                  <div className="flex items-center gap-2 shrink-0 ml-2">
+                    <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
+                      isSelected ? 'bg-white/15 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                     }`}>
                       {item.category}
                     </span>
@@ -319,15 +567,18 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           )}
         </div>
 
-        {/* Footer shortcuts */}
-        <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/80 flex items-center justify-between text-[11px] text-slate-400">
-          <div className="flex items-center gap-3">
-            <span><kbd className="px-1 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">↑</kbd> <kbd className="px-1 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">↓</kbd> to navigate</span>
-            <span><kbd className="px-1 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">↵</kbd> to select</span>
-            <span><kbd className="px-1 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">esc</kbd> to close</span>
+        {/* 4. FOOTER SHORTCUTS & RESULTS COUNTER */}
+        <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-slate-500 gap-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span><kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">↑</kbd> <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">↓</kbd> to navigate</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">↵</kbd> to select</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">esc</kbd> to close</span>
           </div>
-          <span className="font-semibold text-blue-600 dark:text-blue-400">Student Connect</span>
+          <div className="font-bold text-slate-600 dark:text-slate-300">
+            {filteredItems.length} relevant results found
+          </div>
         </div>
+
       </div>
     </div>
   );

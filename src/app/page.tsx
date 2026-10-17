@@ -28,10 +28,11 @@ import {
   ChevronDown,
   ChevronUp,
   Sliders,
-  Check,
-  Briefcase,
-  HelpCircle,
-  ExternalLink
+  Briefcase, 
+  HelpCircle, 
+  ExternalLink,
+  Calculator,
+  X
 } from 'lucide-react';
 import { COLLEGES_DATA, COURSES_DATA, COMMUNITY_POSTS, TECHNICAL_EVENTS, ADVERTISEMENTS } from '@/data/mockData';
 
@@ -66,17 +67,61 @@ export default function LandingPage() {
   // College filter on landing page
   const [selectedTypeFilter, setSelectedTypeFilter] = useState<'all' | 'Autonomous' | 'VTU Affiliated' | 'Deemed' | 'State University'>('all');
 
+  // Intelligent Multi-token College filter on landing page
   const filteredColleges = useMemo(() => {
     return COLLEGES_DATA.filter(c => {
-      const matchesSearch = instantSearch === '' || 
-        c.name.toLowerCase().includes(instantSearch.toLowerCase()) ||
-        c.shortName.toLowerCase().includes(instantSearch.toLowerCase()) ||
-        c.location.district.toLowerCase().includes(instantSearch.toLowerCase());
+      const matchesSearch = !instantSearch.trim() || (() => {
+        const tokens = instantSearch.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        const branchKeywords = c.branches.map(b => `${b.branchCode} ${b.branchName}`).join(' ');
+        const fullText = `${c.name} ${c.shortName} ${c.code} ${c.location.city} ${c.location.district} ${c.affiliation} ${c.collegeType} ${c.accreditations.naacGrade} ${branchKeywords} ${c.placements.topRecruiters.join(' ')}`.toLowerCase();
+        return tokens.every(t => fullText.includes(t));
+      })();
       
       const matchesType = selectedTypeFilter === 'all' || c.affiliation === selectedTypeFilter;
       return matchesSearch && matchesType;
     });
   }, [instantSearch, selectedTypeFilter]);
+
+  // Live Hero Instant Search Matches across colleges, tools, and courses
+  const quickSearchMatches = useMemo(() => {
+    const raw = instantSearch.trim().toLowerCase();
+    if (!raw) return { colleges: [], tools: [], courses: [] };
+
+    const tokens = raw.split(/\s+/).filter(Boolean);
+
+    // 1. Matched colleges
+    const matchedColleges = COLLEGES_DATA.filter(c => {
+      const branchKeywords = c.branches.map(b => `${b.branchCode} ${b.branchName}`).join(' ');
+      const full = `${c.name} ${c.shortName} ${c.code} ${c.location.city} ${c.location.district} ${c.affiliation} ${branchKeywords}`.toLowerCase();
+      return tokens.every(t => full.includes(t));
+    }).slice(0, 3);
+
+    // 2. Matched platform tools
+    const toolsPool = [
+      { id: 't-pred', title: 'KCET & COMEDK AI Predictor', desc: 'Admission probability by rank & category', href: '/predictor', icon: Sparkles, keywords: 'predictor kcet comedk cutoff odds rank counseling' },
+      { id: 't-vtu', title: 'VTU SGPA, CGPA & 75% Bunk Tools', desc: 'NEP 2022 credit calculator & attendance', href: '/vtu-tools', icon: Calculator, keywords: 'vtu sgpa cgpa attendance bunk marks cie 2022 nep' },
+      { id: 't-ai', title: 'Connect AI Copilot (GPT-4o)', desc: 'Ask about cutoffs, syllabi & roadmaps', href: '/assistant', icon: Bot, keywords: 'copilot assistant ai gpt chat question' },
+      { id: 't-ats', title: 'AI Resume ATS Scanner', desc: 'Bangalore tech JD keyword matcher', href: '/placements', icon: Briefcase, keywords: 'resume ats placement cv jobs fresher' },
+      { id: 't-tutor', title: 'Escrow Peer Tutoring Hub', desc: '1-on-1 tutoring sessions with toppers', href: '/mentors', icon: Users, keywords: 'mentor tutor teaching escrow dsa math' },
+      { id: 't-rooms', title: 'Virtual Study Rooms & Whiteboard', desc: 'Realtime collaborative whiteboard & code pad', href: '/study-rooms', icon: Video, keywords: 'study rooms whiteboard video code pad' },
+    ];
+    const matchedTools = toolsPool.filter(t => {
+      const full = `${t.title} ${t.desc} ${t.keywords}`.toLowerCase();
+      return tokens.every(tok => full.includes(tok));
+    }).slice(0, 2);
+
+    // 3. Matched courses
+    const matchedCourses = COURSES_DATA.filter(c => {
+      const full = `${c.title} ${c.description} ${c.skills.join(' ')} ${c.instructor.name}`.toLowerCase();
+      return tokens.every(tok => full.includes(tok));
+    }).slice(0, 2);
+
+    return {
+      colleges: matchedColleges,
+      tools: matchedTools,
+      courses: matchedCourses,
+    };
+  }, [instantSearch]);
 
   // Real-time simulated odds calculation for Hero Simulator
   const simulatedChances = useMemo(() => {
@@ -230,24 +275,166 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Quick Search Bar */}
-          <div className="pt-4 max-w-xl mx-auto">
-            <div className="relative glass-card rounded-2xl p-1.5 flex items-center shadow-lg border border-slate-200/80 dark:border-slate-800">
-              <Search className="w-4 h-4 text-slate-400 ml-3 shrink-0" />
+          {/* Quick Search Bar with Live Instant Results Dropdown */}
+          <div className="pt-4 max-w-xl mx-auto relative">
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (instantSearch.trim()) {
+                  router.push(`/colleges?q=${encodeURIComponent(instantSearch.trim())}`);
+                }
+              }}
+              className="relative glass-card rounded-2xl p-1.5 flex items-center shadow-lg border border-slate-200/80 dark:border-slate-800 focus-within:ring-2 focus-within:ring-blue-500 transition-all"
+            >
+              <Search className="w-4 h-4 text-blue-500 ml-3 shrink-0" />
               <input
                 type="text"
                 value={instantSearch}
                 onChange={(e) => setInstantSearch(e.target.value)}
-                placeholder="Search colleges (RVCE, BMSCE, Ramaiah, Mysuru)..."
+                placeholder="Search colleges, tools, cutoffs (RVCE, CSE, VTU SGPA, Python)..."
                 className="w-full px-3 py-2 text-xs bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none"
               />
-              <Link
-                href={`/colleges${instantSearch ? `?q=${encodeURIComponent(instantSearch)}` : ''}`}
-                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shrink-0"
+              {instantSearch && (
+                <button
+                  type="button"
+                  onClick={() => setInstantSearch('')}
+                  className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 mr-1"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shrink-0 shadow-sm"
               >
                 Search
-              </Link>
-            </div>
+              </button>
+            </form>
+
+            {/* LIVE INSTANT SEARCH RESULTS DROPDOWN */}
+            {instantSearch.trim() && (
+              <div className="absolute top-full left-0 right-0 mt-2 z-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-2 space-y-2 animate-in fade-in max-h-[380px] overflow-y-auto">
+                
+                {/* 1. Matched Colleges */}
+                {quickSearchMatches.colleges.length > 0 && (
+                  <div>
+                    <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                      <span>Karnataka Colleges</span>
+                      <span className="text-blue-500">{quickSearchMatches.colleges.length} matches</span>
+                    </div>
+                    <div className="space-y-1">
+                      {quickSearchMatches.colleges.map((c) => (
+                        <Link
+                          key={c.id}
+                          href={`/colleges/${c.id}`}
+                          onClick={() => setInstantSearch('')}
+                          className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 text-left transition-colors"
+                        >
+                          <div className="flex items-center gap-2.5 overflow-hidden">
+                            <img src={c.logo} alt={c.shortName} className="w-7 h-7 rounded-lg object-cover shrink-0" />
+                            <div className="truncate">
+                              <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                                {c.name} ({c.shortName})
+                              </div>
+                              <div className="text-[10px] text-slate-500">
+                                {c.location.city} • Code: {c.code} • Rank #{c.accreditations.karnatakaRank} • Avg CTC: ₹{c.placements.averagePackageLPA} LPA
+                              </div>
+                            </div>
+                          </div>
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 ml-2">
+                            Cutoff ~{c.branches[0].cutoffs.kcet.gm.toLocaleString()}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Matched Tools & Calculators */}
+                {quickSearchMatches.tools.length > 0 && (
+                  <div className="pt-1 border-t border-slate-100 dark:border-slate-800">
+                    <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Calculators & AI Tools
+                    </div>
+                    <div className="space-y-1">
+                      {quickSearchMatches.tools.map((t) => {
+                        const TIcon = t.icon;
+                        return (
+                          <Link
+                            key={t.id}
+                            href={t.href}
+                            onClick={() => setInstantSearch('')}
+                            className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 text-left transition-colors"
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400">
+                                <TIcon className="w-3.5 h-3.5" />
+                              </div>
+                              <div>
+                                <div className="font-bold text-xs text-slate-900 dark:text-white">{t.title}</div>
+                                <div className="text-[10px] text-slate-500">{t.desc}</div>
+                              </div>
+                            </div>
+                            <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0 ml-2" />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. Matched Courses */}
+                {quickSearchMatches.courses.length > 0 && (
+                  <div className="pt-1 border-t border-slate-100 dark:border-slate-800">
+                    <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Courses & Certifications
+                    </div>
+                    <div className="space-y-1">
+                      {quickSearchMatches.courses.map((course) => (
+                        <Link
+                          key={course.id}
+                          href="/courses"
+                          onClick={() => setInstantSearch('')}
+                          className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 text-left transition-colors"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className="p-1.5 rounded-lg bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400">
+                              <BookOpen className="w-3.5 h-3.5" />
+                            </div>
+                            <div>
+                              <div className="font-bold text-xs text-slate-900 dark:text-white">{course.title}</div>
+                              <div className="text-[10px] text-slate-500">{course.instructor.name} • {course.durationHours} hrs • Free certificate</div>
+                            </div>
+                          </div>
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                            Free
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* If nothing matched */}
+                {quickSearchMatches.colleges.length === 0 && quickSearchMatches.tools.length === 0 && quickSearchMatches.courses.length === 0 && (
+                  <div className="p-4 text-center text-xs text-slate-500">
+                    No instant matches for "{instantSearch}". Click <strong>Search</strong> to query the complete database.
+                  </div>
+                )}
+
+                {/* Directory Link Footer */}
+                <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 text-center">
+                  <Link
+                    href={`/colleges?q=${encodeURIComponent(instantSearch.trim())}`}
+                    onClick={() => setInstantSearch('')}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline py-1"
+                  >
+                    <span>View all matching results in Directory →</span>
+                  </Link>
+                </div>
+
+              </div>
+            )}
           </div>
         </div>
 

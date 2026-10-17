@@ -46,12 +46,11 @@ export default function CoursesPage() {
 
   const filteredCourses = COURSES_DATA.filter(course => {
     if (selectedCategory !== 'ALL' && course.category !== selectedCategory) return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      const matchTitle = course.title.toLowerCase().includes(q);
-      const matchDesc = course.description.toLowerCase().includes(q);
-      const matchSkill = course.skills.some(s => s.toLowerCase().includes(q));
-      if (!matchTitle && !matchDesc && !matchSkill) return false;
+    if (searchQuery.trim()) {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const fullSearchable = `${course.title} ${course.description} ${course.category} ${course.skills.join(' ')} ${course.instructor} ${course.level}`.toLowerCase();
+      const allMatch = tokens.every(tok => fullSearchable.includes(tok));
+      if (!allMatch) return false;
     }
     return true;
   });

@@ -66,12 +66,15 @@ function CollegesDirectoryContent() {
   // Filtered & Sorted Colleges
   const filteredColleges = useMemo(() => {
     return COLLEGES_DATA.filter(col => {
-      // Query filter
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const matchesName = col.name.toLowerCase().includes(q) || col.shortName.toLowerCase().includes(q);
-        const matchesCity = col.location.city.toLowerCase().includes(q) || col.location.district.toLowerCase().includes(q);
-        if (!matchesName && !matchesCity) return false;
+      // Intelligent Multi-token Query filter
+      if (searchQuery.trim()) {
+        const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        const branchKeywords = col.branches.map(b => `${b.branchCode} ${b.branchName}`).join(' ');
+        const recruiterKeywords = col.placements.topRecruiters.join(' ');
+        const fullSearchable = `${col.name} ${col.shortName} ${col.code} ${col.location.city} ${col.location.district} ${col.affiliation} ${col.collegeType} ${col.accreditations.naacGrade} ${branchKeywords} ${recruiterKeywords}`.toLowerCase();
+
+        const allTokensMatch = tokens.every(token => fullSearchable.includes(token));
+        if (!allTokensMatch) return false;
       }
 
       // District

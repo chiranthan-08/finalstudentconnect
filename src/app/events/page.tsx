@@ -22,6 +22,17 @@ export default function EventsPage() {
   const [events, setEvents] = useState<TechnicalEvent[]>(TECHNICAL_EVENTS);
   const [registeredEvents, setRegisteredEvents] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'all' | 'hackathon_portal'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredEvents = events.filter(ev => {
+    if (searchQuery.trim()) {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const fullSearchable = `${ev.title} ${ev.organizer} ${ev.type} ${ev.location} ${ev.description}`.toLowerCase();
+      const allMatch = tokens.every(tok => fullSearchable.includes(tok));
+      if (!allMatch) return false;
+    }
+    return true;
+  });
 
   // Team Finder state for Hackathon
   const [teams, setTeams] = useState<{ id: string; teamName: string; lookingFor: string; college: string; leader: string }[]>([
@@ -212,11 +223,29 @@ export default function EventsPage() {
       {/* ALL EVENTS LIST */}
       {activeTab === 'all' && (
         <div className="space-y-4">
-          <h2 className="font-extrabold text-lg text-slate-900 dark:text-white">
-            Upcoming Technical Fests & Ideathons
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {events.map((ev) => (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h2 className="font-extrabold text-lg text-slate-900 dark:text-white">
+              Upcoming Technical Fests & Ideathons
+            </h2>
+            <div className="relative max-w-xs w-full">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search events, tracks, fests..."
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+          
+          {filteredEvents.length === 0 ? (
+            <div className="p-10 rounded-2xl glass-card text-center text-xs text-slate-400">
+              No technical events found matching "{searchQuery}".
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {filteredEvents.map((ev) => (
               <div
                 key={ev.id}
                 className="glass-card rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 transition-all space-y-4 flex flex-col justify-between"
@@ -262,6 +291,7 @@ export default function EventsPage() {
               </div>
             ))}
           </div>
+          )}
         </div>
       )}
 
