@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { 
   Sparkles, 
@@ -19,7 +19,12 @@ import {
 
 export default function AdvancedStudentSuitePage() {
   const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<'roadmap' | 'skillgap' | 'marketplace' | 'portfolio'>('roadmap');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // 1. Roadmap Generator State
   const [careerGoal, setCareerGoal] = useState('Full-Stack Distributed Systems Engineer');
@@ -325,21 +330,22 @@ export default function AdvancedStudentSuitePage() {
 
       {/* 4. DIGITAL STUDENT PORTFOLIO */}
       {activeTab === 'portfolio' && (
-        <div className="glass-card rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 max-w-3xl mx-auto space-y-6">
+        <div className="glass-card rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 max-w-3xl mx-auto space-y-6" suppressHydrationWarning>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
             <div className="flex items-center gap-4">
               <img
-                src={user?.avatar || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80'}
+                src={mounted && user?.avatar ? user.avatar : 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80'}
                 alt="user"
                 className="w-16 h-16 rounded-2xl object-cover shadow-lg"
+                suppressHydrationWarning
               />
               <div>
-                <h2 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                  <span>{user?.name || 'Prajwal Kulkarni'}</span>
+                <h2 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2" suppressHydrationWarning>
+                  <span>{mounted && user?.name ? user.name : 'Prajwal Kulkarni'}</span>
                   <CheckCircle2 className="w-5 h-5 text-blue-500" />
                 </h2>
-                <div className="text-xs text-slate-500">{user?.college || 'RV College of Engineering, Bengaluru'}</div>
-                <div className="text-xs font-bold text-blue-600">{user?.branch || 'Computer Science & Engineering'} • USN: 1RV22CS104</div>
+                <div className="text-xs text-slate-500" suppressHydrationWarning>{mounted && user?.college ? user.college : 'RV College of Engineering, Bengaluru'}</div>
+                <div className="text-xs font-bold text-blue-600" suppressHydrationWarning>{mounted && user?.branch ? user.branch : 'Computer Science & Engineering'} • USN: 1RV22CS104</div>
               </div>
             </div>
 

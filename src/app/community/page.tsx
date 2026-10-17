@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { 
@@ -25,9 +25,14 @@ import { CommunityPost } from '@/types';
 
 export default function CommunityPage() {
   const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
   const [posts, setPosts] = useState<CommunityPost[]>(COMMUNITY_POSTS);
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // Create post modal state
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -122,23 +127,24 @@ export default function CommunityPage() {
         
         {/* Left Column: Student Profile Summary Card */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+          <div className="glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 space-y-4" suppressHydrationWarning>
             <div className="flex items-center gap-3">
               <img
-                src={user?.avatar || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80'}
-                alt={user?.name || 'User'}
+                src={mounted && user?.avatar ? user.avatar : 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80'}
+                alt={mounted && user?.name ? user.name : 'User'}
                 className="w-14 h-14 rounded-2xl object-cover shadow-md"
+                suppressHydrationWarning
               />
               <div>
-                <div className="flex items-center gap-1.5 font-extrabold text-sm text-slate-900 dark:text-white">
-                  <span>{user?.name || 'Guest Student'}</span>
+                <div className="flex items-center gap-1.5 font-extrabold text-sm text-slate-900 dark:text-white" suppressHydrationWarning>
+                  <span>{mounted && user?.name ? user.name : 'Prajwal Kulkarni'}</span>
                   {user?.isVerified && <CheckCircle2 className="w-4 h-4 text-blue-500" />}
                 </div>
-                <div className="text-xs text-slate-500">
-                  {user?.college || 'RV College of Engineering'}
+                <div className="text-xs text-slate-500" suppressHydrationWarning>
+                  {mounted && user?.college ? user.college : 'RV College of Engineering'}
                 </div>
-                <div className="text-[11px] text-blue-600 dark:text-blue-400 font-semibold">
-                  {user?.branch || 'CSE'} • {user?.year || '3rd Year'}
+                <div className="text-[11px] text-blue-600 dark:text-blue-400 font-semibold" suppressHydrationWarning>
+                  {mounted && user?.branch ? user.branch : 'CSE'} • {mounted && user?.year ? user.year : '3rd Year'}
                 </div>
               </div>
             </div>

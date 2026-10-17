@@ -234,7 +234,7 @@ export function Navbar() {
             </button>
 
             {/* Admin Badge (only when Admin) */}
-            {isAdmin && (
+            {mounted && isAdmin && (
               <Link
                 href="/admin"
                 className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-red-600 to-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-600/20 hover:scale-105 transition-transform shrink-0"
@@ -253,11 +253,11 @@ export function Navbar() {
                 suppressHydrationWarning
               >
                 <span 
-                  className={`w-2 h-2 rounded-full ${user ? (rolesList.find(r => r.role === user.role)?.color || 'bg-blue-500') : 'bg-blue-500'} shrink-0`} 
+                  className={`w-2 h-2 rounded-full ${mounted && user ? (rolesList.find(r => r.role === user.role)?.color || 'bg-blue-500') : 'bg-blue-500'} shrink-0`} 
                   suppressHydrationWarning
                 />
                 <span className="capitalize hidden sm:inline" suppressHydrationWarning>
-                  {user ? user.role.replace('_', ' ') : 'Student'}
+                  {mounted && user ? user.role.replace('_', ' ') : 'Student'}
                 </span>
                 <ChevronDown className="w-3 h-3 text-slate-400" />
               </button>
@@ -310,7 +310,7 @@ export function Navbar() {
                 title="Notifications"
               >
                 <Bell className="w-4 h-4" />
-                {unreadCount > 0 && (
+                {mounted && unreadCount > 0 && (
                   <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                 )}
               </button>
@@ -323,7 +323,7 @@ export function Navbar() {
                   <div className="px-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-900 dark:text-white">Academic Notifications</span>
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
-                      {unreadCount} new
+                      {mounted ? unreadCount : 3} new
                     </span>
                   </div>
                   <div className="max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/50">
@@ -357,25 +357,37 @@ export function Navbar() {
               onClick={toggleTheme}
               className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
               title="Toggle Theme"
+              suppressHydrationWarning
             >
-              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+              {mounted ? (
+                theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />
+              ) : (
+                <div className="w-4 h-4" />
+              )}
             </button>
 
             {/* User Profile / Login */}
-            {user ? (
-              <div className="flex items-center gap-1.5">
+            {!mounted ? (
+              <div className="flex items-center gap-1.5 animate-pulse" suppressHydrationWarning>
+                <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800" />
+                <div className="w-12 h-3 rounded bg-slate-200 dark:bg-slate-800 hidden md:block" />
+              </div>
+            ) : user ? (
+              <div className="flex items-center gap-1.5" suppressHydrationWarning>
                 <Link
                   href="/community"
                   className="flex items-center gap-1.5 p-1 pl-1 pr-2 rounded-full border border-slate-200 dark:border-slate-800 hover:border-blue-500 bg-slate-50 dark:bg-slate-900 transition-colors"
                   title="View Profile in Community"
+                  suppressHydrationWarning
                 >
                   <img
                     src={user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'}
                     alt={user.name}
                     className="w-6 h-6 rounded-full object-cover shrink-0"
                     style={{ width: '24px', height: '24px', minWidth: '24px', maxWidth: '24px', borderRadius: '9999px', objectFit: 'cover' }}
+                    suppressHydrationWarning
                   />
-                  <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 hidden md:inline max-w-[80px] truncate">
+                  <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 hidden md:inline max-w-[80px] truncate" suppressHydrationWarning>
                     {user.name.split(' ')[0]}
                   </span>
                 </Link>
@@ -388,7 +400,7 @@ export function Navbar() {
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5" suppressHydrationWarning>
                 <Link
                   href="/login"
                   className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold transition-colors"
