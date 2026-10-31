@@ -69,6 +69,16 @@ export interface College {
     process: string;
     managementQuotaDetails?: string;
   };
+  description?: string;
+  facilities?: string[];
+  highlights?: string[];
+  campusPhotos?: {
+    title: string;
+    category: string;
+    url: string;
+    caption?: string;
+  }[];
+  events?: CollegeEvent[];
   sourceInfo: {
     source: string;
     lastUpdated: string;
@@ -132,18 +142,21 @@ export interface Course {
   modules: CourseModule[];
 }
 
+export interface CourseLesson {
+  id: string;
+  title: string;
+  type: 'video' | 'pdf' | 'quiz' | 'assignment';
+  videoUrl?: string;
+  pdfUrl?: string;
+  duration?: string;
+  description?: string;
+}
+
 export interface CourseModule {
   id: string;
   title: string;
   durationMinutes: number;
-  lessons: {
-    id: string;
-    title: string;
-    type: 'video' | 'pdf' | 'quiz' | 'assignment';
-    videoUrl?: string;
-    pdfUrl?: string;
-    duration?: string;
-  }[];
+  lessons: CourseLesson[];
 }
 
 export interface CommunityPost {
@@ -266,6 +279,40 @@ export interface TechnicalEvent {
   registeredCount: number;
 }
 
+export interface CollegeEvent {
+  id: string;
+  collegeId: string;
+  collegeName?: string;
+  title: string;
+  tagline?: string;
+  theme?: string;
+  category: 'Technical' | 'Non-Technical';
+  eventType: 'Hackathon' | 'Workshop' | 'Cultural Fest' | 'State Festival' | 'Symposium' | 'Coding Competition' | 'Sports Fest' | 'Technical Fest';
+  department?: string;
+  inAssociationWith?: string[];
+  eventDate: string;
+  registrationDeadline: string;
+  duration?: string;
+  venue: string;
+  status: 'Open' | 'Closing Soon' | 'Live' | 'Upcoming' | 'Completed';
+  prizePool?: string;
+  registrationFee: string;
+  teamSize?: string;
+  eligibility: string;
+  domains?: string[];
+  brochureUrl?: string;
+  bannerUrl: string;
+  description: string;
+  coordinators?: {
+    type: 'Faculty' | 'Student';
+    name: string;
+    phone?: string;
+  }[];
+  registrationUrl?: string;
+  registeredCount: number;
+  instagramHandle?: string;
+}
+
 export interface NotificationItem {
   id: string;
   title: string;
@@ -287,3 +334,35 @@ export interface Advertisement {
   clicks: number;
   active: boolean;
 }
+
+export interface PortalVisitorLog {
+  id: string;
+  userName: string;
+  email: string;
+  role: UserRole;
+  authMethod: 'Google 2-Step OTP' | 'Password Authentication' | 'Fast Persona Login' | 'Public Registration' | 'Admin Clearance';
+  timestamp: string;
+  status: 'VERIFIED_SESSION' | 'NEW_REGISTRATION' | 'ADMIN_CLEARANCE';
+  location: string;
+  ipMasked: string;
+  device: string;
+  googleVerified?: boolean;
+}
+
+export interface PortalCredentialAccount {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  passwordDisplay: string;
+  authType: 'CREDENTIALS' | 'GOOGLE_OAUTH';
+  college: string;
+  registeredDate: string;
+  status: 'ACTIVE' | 'VERIFIED' | 'PROTECTED_ADMIN';
+  avatar: string;
+  bio?: string;
+  phoneOrContact?: string;
+  googleVerified?: boolean;
+}
+
+export * from './sports';

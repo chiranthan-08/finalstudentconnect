@@ -149,6 +149,16 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       icon: GraduationCap,
       keywords: 'compare comparison matrix colleges rvce bmsce msrit pes fees placement nirf',
     },
+    {
+      id: 'tool-sports',
+      title: 'Sports Opportunities Hub',
+      subtitle: 'Discover inter-college tournaments, VTU championships, Khelo India trials, and athletic meets',
+      category: 'Events',
+      href: '/sports',
+      icon: Trophy,
+      badge: 'New',
+      keywords: 'sports tournaments trials cricket football basketball volleyball badminton kabaddi athletics chess swimming powerlifting vtu khelo india kanteerava tumkur cit sit',
+    },
     // Authentication & Roles
     {
       id: 'auth-student',

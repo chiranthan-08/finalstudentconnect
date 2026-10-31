@@ -16,10 +16,13 @@ import {
   DollarSign,
   Sparkles,
   Search,
-  X
+  X,
+  Smartphone
 } from 'lucide-react';
 import { MENTORS_DATA } from '@/data/mockData';
 import { Mentor, MentorBooking } from '@/types';
+import { useRazorpayCheckout } from '@/lib/useRazorpayCheckout';
+import { RazorpaySimulatorModal } from '@/components/payment/RazorpaySimulatorModal';
 
 export default function MentorsPage() {
   const { user } = useAuth();
@@ -77,26 +80,46 @@ export default function MentorsPage() {
     setPaymentStep('payment');
   };
 
+  const {
+    initiatePayment,
+    loading: razorpayLoading,
+    simulatedModal,
+    handleSimulatedSuccess,
+    closeSimulatedModal,
+  } = useRazorpayCheckout();
+
   const handleConfirmEscrowPayment = () => {
     if (!bookingModalMentor) return;
 
-    const newBooking: MentorBooking = {
-      id: 'bk-' + Date.now().toString().slice(-4),
-      studentId: user?.id || 'usr_demo',
-      studentName: user?.name || 'Student',
-      mentorId: bookingModalMentor.id,
-      mentorName: `${bookingModalMentor.name} (${bookingModalMentor.college.split(' ')[0]})`,
-      subject: selectedTopic,
-      date: selectedSlot.split(' ')[0],
-      timeSlot: selectedSlot,
+    initiatePayment({
+      plan: 'mentor_escrow',
+      planName: `Escrow Mentorship: ${selectedTopic} with ${bookingModalMentor.name}`,
       amountINR: bookingModalMentor.hourlyRateINR,
-      escrowStatus: 'HELD_IN_ESCROW',
-      sessionStatus: 'SCHEDULED',
-      meetingRoomId: 'room-' + Date.now().toString().slice(-4),
-    };
+      itemType: 'mentor_session',
+      itemId: bookingModalMentor.id,
+      user: user
+        ? { id: user.id, name: user.name, email: user.email }
+        : { id: 'guest_student', name: 'Student', email: 'student@rvce.edu.in' },
+      onSuccess: () => {
+        const newBooking: MentorBooking = {
+          id: 'bk-' + Date.now().toString().slice(-4),
+          studentId: user?.id || 'usr_demo',
+          studentName: user?.name || 'Student',
+          mentorId: bookingModalMentor.id,
+          mentorName: `${bookingModalMentor.name} (${bookingModalMentor.college.split(' ')[0]})`,
+          subject: selectedTopic,
+          date: selectedSlot.split(' ')[0],
+          timeSlot: selectedSlot,
+          amountINR: bookingModalMentor.hourlyRateINR,
+          escrowStatus: 'HELD_IN_ESCROW',
+          sessionStatus: 'SCHEDULED',
+          meetingRoomId: 'room-' + Date.now().toString().slice(-4),
+        };
 
-    setUserBookings([newBooking, ...userBookings]);
-    setPaymentStep('confirmed');
+        setUserBookings([newBooking, ...userBookings]);
+        setPaymentStep('confirmed');
+      },
+    });
   };
 
   const handleReleaseEscrow = (bookingId: string) => {
@@ -407,24 +430,23 @@ export default function MentorsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <span className="font-bold text-slate-700 dark:text-slate-300">Choose Demo Payment Method:</span>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button className="p-3 rounded-xl border border-blue-500 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold text-center">
-                      UPI (GPay / PhonePe)
-                    </button>
-                    <button className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold text-center">
-                      Debit / Credit Card
-                    </button>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">Payment Powered by Razorpay:</span>
+                  <div className="p-3 rounded-xl border border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/30 text-[11px] text-slate-600 dark:text-slate-400 flex items-center justify-between">
+                    <span className="font-semibold text-emerald-700 dark:text-emerald-300">Supports UPI, GPay, PhonePe, Cards, NetBanking</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-600 text-white">Instant</span>
                   </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={handleConfirmEscrowPayment}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition-all shadow-md flex items-center justify-center gap-1.5"
+                  disabled={razorpayLoading}
+                  className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
-                  <Lock className="w-3.5 h-3.5" />
-                  <span>Authorize & Lock ₹{bookingModalMentor.hourlyRateINR} in Escrow</span>
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>
+                    {razorpayLoading ? 'Launching Razorpay...' : `Pay & Lock ₹${bookingModalMentor.hourlyRateINR} with Razorpay`}
+                  </span>
                 </button>
               </div>
             )}
@@ -454,6 +476,15 @@ export default function MentorsPage() {
         </div>
       )}
 
+      {/* Razorpay Simulator for Test Mode */}
+      <RazorpaySimulatorModal
+        isOpen={Boolean(simulatedModal?.isOpen)}
+        orderData={simulatedModal?.orderData}
+        options={simulatedModal?.options}
+        onClose={closeSimulatedModal}
+        onSuccess={handleSimulatedSuccess}
+        loading={razorpayLoading}
+      />
     </div>
   );
 }

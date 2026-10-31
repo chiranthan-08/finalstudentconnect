@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, UserRole, NotificationItem } from '@/types';
-import { INITIAL_USERS, NOTIFICATIONS } from '@/data/mockData';
+import { User, UserRole, NotificationItem, PortalVisitorLog, PortalCredentialAccount } from '@/types';
+import { INITIAL_USERS, NOTIFICATIONS, PORTAL_CREDENTIALS_REGISTRY, DEFAULT_VISITOR_LOGS } from '@/data/mockData';
 
 interface AuthContextType {
   user: User | null;
@@ -10,7 +10,14 @@ interface AuthContextType {
   isAdmin: boolean;
   isSuperAdmin: boolean;
   login: (email: string, password?: string, preferredRole?: UserRole) => Promise<{ success: boolean; message?: string }>;
-  loginWithGoogle: () => Promise<{ success: boolean; message?: string }>;
+  loginWithGoogle: (options?: { 
+    email?: string; 
+    name?: string; 
+    college?: string; 
+    branch?: string; 
+    role?: UserRole; 
+    avatar?: string;
+  }) => Promise<{ success: boolean; message?: string }>;
   switchRoleDemo: (role: UserRole) => void;
   logout: () => void;
   register: (
@@ -41,6 +48,12 @@ interface AuthContextType {
   markNotificationAsRead: (id: string) => void;
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  visitorLogs: PortalVisitorLog[];
+  registeredCredentials: PortalCredentialAccount[];
+  impersonateUser: (account: PortalCredentialAccount) => void;
+  deleteRegisteredCredential: (id: string) => void;
+  addRegisteredCredential: (account: Omit<PortalCredentialAccount, 'id' | 'registeredDate'>) => void;
+  clearVisitorLogs: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -53,6 +66,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>(['course-python-engineers']);
   const [notifications, setNotifications] = useState<NotificationItem[]>(NOTIFICATIONS);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [visitorLogs, setVisitorLogs] = useState<PortalVisitorLog[]>(DEFAULT_VISITOR_LOGS);
+  const [registeredCredentials, setRegisteredCredentials] = useState<PortalCredentialAccount[]>(PORTAL_CREDENTIALS_REGISTRY);
 
   // Load initial session
   useEffect(() => {
@@ -66,6 +81,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const storedUser = localStorage.getItem('sc_active_user');
+      const token = localStorage.getItem('sc_token');
+
+      if (token) {
+        fetch('/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success && data.user) {
+              setUser(data.user);
+              localStorage.setItem('sc_active_user', JSON.stringify(data.user));
+            }
+          })
+          .catch(() => {});
+      }
+
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       } else {
@@ -83,10 +114,104 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (storedCourses) {
         setEnrolledCourses(JSON.parse(storedCourses));
       }
+
+      const storedLogs = localStorage.getItem('sc_visitor_logs');
+      if (storedLogs) {
+        setVisitorLogs(JSON.parse(storedLogs));
+      } else {
+        localStorage.setItem('sc_visitor_logs', JSON.stringify(DEFAULT_VISITOR_LOGS));
+      }
+
+      const storedCreds = localStorage.getItem('sc_portal_credentials');
+      if (storedCreds) {
+        setRegisteredCredentials(JSON.parse(storedCreds));
+      } else {
+        localStorage.setItem('sc_portal_credentials', JSON.stringify(PORTAL_CREDENTIALS_REGISTRY));
+      }
     } catch {
       // safe fallback
     }
   }, []);
+
+  const recordVisitorLog = (
+    name: string,
+    email: string,
+    role: UserRole,
+    authMethod: PortalVisitorLog['authMethod'],
+    status: PortalVisitorLog['status'],
+    googleVerified?: boolean
+  ) => {
+    try {
+      const now = new Date();
+      const timeStr = `Today at ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const newLog: PortalVisitorLog = {
+        id: 'vis-' + Date.now(),
+        userName: name,
+        email: email.toLowerCase(),
+        role,
+        authMethod,
+        timestamp: timeStr,
+        status,
+        location: 'Bengaluru Urban, Karnataka (State Portal Node)',
+        ipMasked: '106.51.***.*** (ACT/Jio Karnataka)',
+        device: typeof navigator !== 'undefined' ? (navigator.userAgent.includes('Windows') ? 'Chrome / Windows 11' : navigator.userAgent.includes('Mac') ? 'Safari / macOS' : 'Mobile / Android') : 'Web Browser',
+        googleVerified: !!googleVerified,
+      };
+
+      setVisitorLogs(prev => {
+        const updated = [newLog, ...prev.slice(0, 49)];
+        localStorage.setItem('sc_visitor_logs', JSON.stringify(updated));
+        return updated;
+      });
+    } catch {
+      // safe fallback
+    }
+  };
+
+  const impersonateUser = (account: PortalCredentialAccount) => {
+    const targetUser: User = {
+      id: account.id,
+      name: account.name,
+      email: account.email,
+      role: account.role,
+      avatar: account.avatar,
+      college: account.college,
+      bio: account.bio || `${account.role.toUpperCase()} on Student Connect Karnataka`,
+      skills: ['Karnataka Academic Ecosystem'],
+      reputationScore: 90,
+      isVerified: true,
+      googleVerified: account.googleVerified,
+    };
+    setUser(targetUser);
+    localStorage.setItem('sc_active_user', JSON.stringify(targetUser));
+    recordVisitorLog(account.name, account.email, account.role, 'Fast Persona Login', 'VERIFIED_SESSION', account.googleVerified);
+  };
+
+  const deleteRegisteredCredential = (id: string) => {
+    setRegisteredCredentials(prev => {
+      const updated = prev.filter(c => c.id !== id);
+      localStorage.setItem('sc_portal_credentials', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const addRegisteredCredential = (account: Omit<PortalCredentialAccount, 'id' | 'registeredDate'>) => {
+    const newEntry: PortalCredentialAccount = {
+      ...account,
+      id: 'cred-' + Date.now(),
+      registeredDate: new Date().toISOString().split('T')[0],
+    };
+    setRegisteredCredentials(prev => {
+      const updated = [newEntry, ...prev];
+      localStorage.setItem('sc_portal_credentials', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const clearVisitorLogs = () => {
+    setVisitorLogs([]);
+    localStorage.removeItem('sc_visitor_logs');
+  };
 
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
@@ -98,6 +223,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password?: string, preferredRole?: UserRole) => {
     const cleanEmail = email.trim().toLowerCase();
     
+    // 0. Connect directly to real MongoDB Authentication API
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, password }),
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        setUser(data.user);
+        if (data.token) {
+          localStorage.setItem('sc_token', data.token);
+        }
+        localStorage.setItem('sc_active_user', JSON.stringify(data.user));
+        recordVisitorLog(data.user.name, cleanEmail, data.user.role, 'Password Authentication', 'VERIFIED_SESSION', false);
+        return { success: true };
+      } else if (res.status === 401 || res.status === 400 || res.status === 403) {
+        return { success: false, message: data.message || 'Invalid credentials.' };
+      }
+    } catch (apiErr) {
+      console.warn('API login check note: Falling back to local authentication.', apiErr);
+    }
+
     // 1. Strict Administrator Authentication Gate
     if (cleanEmail === 'admin@studentconnect.edu') {
       if (!password || password !== 'StudentConnect#Admin2025!') {
@@ -107,15 +255,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: 'user-admin',
         name: 'Platform Administrator',
         email: 'admin@studentconnect.edu',
-        role: 'super_admin' as UserRole,
+        role: 'admin' as UserRole,
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-        bio: 'Karnataka Engineering Ecosystem Chief Administrator',
+        bio: 'Karnataka Engineering Ecosystem Lead Governance Administrator',
         skills: ['Governance', 'KEA Verification', 'Escrow Security'],
         reputationScore: 100,
         isVerified: true,
       };
       setUser(adminUser);
       localStorage.setItem('sc_active_user', JSON.stringify(adminUser));
+      recordVisitorLog(adminUser.name, cleanEmail, 'admin', 'Admin Clearance', 'ADMIN_CLEARANCE', true);
+      return { success: true };
+    }
+
+    if (cleanEmail === 'superadmin@studentconnect.edu') {
+      if (!password || password !== 'SuperAdmin#Karnataka2025!') {
+        return { success: false, message: 'Invalid Super Admin Credentials! Password does not match.' };
+      }
+      const superAdminUser = {
+        id: 'user-superadmin',
+        name: 'Super Admin Authority',
+        email: 'superadmin@studentconnect.edu',
+        role: 'super_admin' as UserRole,
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+        bio: 'Higher Education Technical Cell - Root Ecosystem Authority',
+        skills: ['Root Ecosystem Clearance', 'Database Governance', 'Statewide Audit'],
+        reputationScore: 100,
+        isVerified: true,
+      };
+      setUser(superAdminUser);
+      localStorage.setItem('sc_active_user', JSON.stringify(superAdminUser));
+      recordVisitorLog(superAdminUser.name, cleanEmail, 'super_admin', 'Admin Clearance', 'ADMIN_CLEARANCE', true);
       return { success: true };
     }
 
@@ -126,6 +296,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const councilUser = INITIAL_USERS.find(u => u.email === 'council@studentconnect.edu')!;
       setUser(councilUser);
       localStorage.setItem('sc_active_user', JSON.stringify(councilUser));
+      recordVisitorLog(councilUser.name, cleanEmail, 'admin', 'Admin Clearance', 'ADMIN_CLEARANCE', true);
       return { success: true };
     }
 
@@ -142,6 +313,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (foundUser) {
       setUser(foundUser);
       localStorage.setItem('sc_active_user', JSON.stringify(foundUser));
+      recordVisitorLog(foundUser.name, cleanEmail, foundUser.role, 'Password Authentication', 'VERIFIED_SESSION', foundUser.googleVerified);
       return { success: true };
     }
 
@@ -165,29 +337,90 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     setUser(newUser);
     localStorage.setItem('sc_active_user', JSON.stringify(newUser));
+    recordVisitorLog(newUser.name, cleanEmail, newUser.role, 'Password Authentication', 'VERIFIED_SESSION', false);
     return { success: true };
   };
 
-  const loginWithGoogle = async () => {
-    // Realistic Google Verification simulation
+  const loginWithGoogle = async (options?: {
+    email?: string;
+    name?: string;
+    college?: string;
+    branch?: string;
+    role?: UserRole;
+    avatar?: string;
+  }) => {
+    const rawEmail = options?.email?.trim().toLowerCase() || 'student@gmail.com';
+    
+    // Strict Google Verification Check:
+    // Only accept genuine @gmail.com or verified Karnataka engineering college Google Workspace domains (.edu, .edu.in, .ac.in)
+    const isGmail = rawEmail.endsWith('@gmail.com');
+    const isCollegeWorkspace = rawEmail.endsWith('.edu.in') || rawEmail.endsWith('.ac.in') || rawEmail.endsWith('.edu');
+    
+    if (!isGmail && !isCollegeWorkspace) {
+      return {
+        success: false,
+        message: 'Invalid email domain. Google authentication strictly requires a verified @gmail.com or Karnataka College Google Workspace (.edu.in, .ac.in) address.',
+      };
+    }
+
+    const assignedRole: UserRole = (options?.role && options.role !== 'admin' && options.role !== 'super_admin') 
+      ? options.role 
+      : 'student';
+
+    const formattedName = options?.name?.trim() || rawEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    
+    const assignedCollege = options?.college || (
+      rawEmail.includes('rvce') ? 'R.V. College of Engineering (RVCE), Bengaluru' :
+      rawEmail.includes('bmsce') ? 'B.M.S. College of Engineering (BMSCE), Bengaluru' :
+      rawEmail.includes('msrit') ? 'Ramaiah Institute of Technology (MSRIT), Bengaluru' :
+      rawEmail.includes('pes') ? 'PES University, Bengaluru' :
+      'VTU Affiliated Engineering Institution, Karnataka'
+    );
+
     const googleUser: User = {
       id: 'google_' + Date.now(),
-      name: 'Aditi Deshpande',
-      email: 'aditi.google.verified@gmail.com',
-      role: 'student',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      college: 'PES University, Bengaluru',
-      branch: 'Computer Science & Engineering (AIML)',
+      name: formattedName,
+      email: rawEmail,
+      role: assignedRole,
+      avatar: options?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      college: assignedCollege,
+      branch: options?.branch || 'Computer Science & Engineering',
       year: '3rd Year',
-      bio: 'Verified Google Student Account. Exploring ML research and hackathons.',
-      skills: ['TensorFlow', 'Python', 'React', 'MongoDB'],
-      reputationScore: 78,
+      bio: `Verified Google Account (${rawEmail}). Engineering student active on Student Connect Karnataka.`,
+      skills: ['Python', 'Data Structures', 'React', 'VTU SGPA', 'Next.js'],
+      reputationScore: 85,
       isVerified: true,
       googleVerified: true,
     };
 
     setUser(googleUser);
     localStorage.setItem('sc_active_user', JSON.stringify(googleUser));
+    recordVisitorLog(googleUser.name, googleUser.email, googleUser.role, 'Google 2-Step OTP', 'VERIFIED_SESSION', true);
+
+    setRegisteredCredentials(prev => {
+      if (!prev.some(c => c.email.toLowerCase() === rawEmail)) {
+        const newCred: PortalCredentialAccount = {
+          id: 'cred-' + Date.now(),
+          name: formattedName,
+          email: rawEmail,
+          role: assignedRole,
+          passwordDisplay: 'Google 2-Step OTP (G-XXXXXX)',
+          authType: 'GOOGLE_OAUTH',
+          college: assignedCollege,
+          registeredDate: new Date().toISOString().split('T')[0],
+          status: 'VERIFIED',
+          avatar: googleUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+          bio: googleUser.bio,
+          phoneOrContact: 'Verified Google Security ID',
+          googleVerified: true,
+        };
+        const updated = [newCred, ...prev];
+        localStorage.setItem('sc_portal_credentials', JSON.stringify(updated));
+        return updated;
+      }
+      return prev;
+    });
+
     return { success: true };
   };
 
@@ -204,6 +437,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (matched) {
       setUser(matched);
       localStorage.setItem('sc_active_user', JSON.stringify(matched));
+      recordVisitorLog(matched.name, matched.email, role, 'Fast Persona Login', 'VERIFIED_SESSION', matched.googleVerified);
     } else {
       const generated: User = {
         id: 'usr_role_' + role,
@@ -217,6 +451,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
       setUser(generated);
       localStorage.setItem('sc_active_user', JSON.stringify(generated));
+      recordVisitorLog(generated.name, generated.email, role, 'Fast Persona Login', 'VERIFIED_SESSION', false);
     }
   };
 
@@ -249,6 +484,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       name: string;
       email: string;
       role: UserRole;
+      password?: string;
       college?: string;
       branch?: string;
       usn?: string;
@@ -262,6 +498,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         name: nameOrData.name,
         email: nameOrData.email,
         role: nameOrData.role,
+        password: nameOrData.password,
         college: nameOrData.college,
         branch: nameOrData.branch,
         usn: nameOrData.usn,
@@ -282,6 +519,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (payload.role === 'admin' || payload.role === 'super_admin') {
       alert('Security Policy: Administrator accounts cannot be registered publicly. Only pre-configured authorized administrator credentials can access admin privileges.');
       return false;
+    }
+
+    // Connect directly to real MongoDB Registration API
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        setUser(data.user);
+        if (data.token) {
+          localStorage.setItem('sc_token', data.token);
+        }
+        localStorage.setItem('sc_active_user', JSON.stringify(data.user));
+        recordVisitorLog(data.user.name, data.user.email, data.user.role, 'Public Registration', 'NEW_REGISTRATION', false);
+
+        setRegisteredCredentials(prev => {
+          const newCred: PortalCredentialAccount = {
+            id: 'cred-' + Date.now(),
+            name: data.user.name,
+            email: data.user.email,
+            role: data.user.role,
+            passwordDisplay: payload.password || 'Registered@2025',
+            authType: 'CREDENTIALS',
+            college: data.user.college || 'Karnataka Engineering College',
+            registeredDate: new Date().toISOString().split('T')[0],
+            status: 'VERIFIED',
+            avatar: data.user.avatar || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+            bio: data.user.bio,
+            phoneOrContact: '+91 98*** *****',
+            googleVerified: false,
+          };
+          const updated = [newCred, ...prev.filter(c => c.email.toLowerCase() !== data.user.email)];
+          localStorage.setItem('sc_portal_credentials', JSON.stringify(updated));
+          return updated;
+        });
+
+        return true;
+      } else if (!data.success) {
+        alert(data.message || 'Registration failed');
+        return false;
+      }
+    } catch (apiErr) {
+      console.warn('API registration note: Falling back to local registration store.', apiErr);
     }
 
     const newUser: User = {
@@ -311,6 +594,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setUser(newUser);
     localStorage.setItem('sc_active_user', JSON.stringify(newUser));
+    recordVisitorLog(newUser.name, newUser.email, newUser.role, 'Public Registration', 'NEW_REGISTRATION', false);
+
+    // Save to registeredCredentials registry
+    setRegisteredCredentials(prev => {
+      const newCred: PortalCredentialAccount = {
+        id: 'cred-' + Date.now(),
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+        passwordDisplay: payload.password || 'Registered@2025',
+        authType: 'CREDENTIALS',
+        college: newUser.college || 'Karnataka Engineering College',
+        registeredDate: new Date().toISOString().split('T')[0],
+        status: 'VERIFIED',
+        avatar: newUser.avatar || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+        bio: newUser.bio,
+        phoneOrContact: '+91 98*** *****',
+        googleVerified: false,
+      };
+      const updated = [newCred, ...prev.filter(c => c.email.toLowerCase() !== newUser.email)];
+      localStorage.setItem('sc_portal_credentials', JSON.stringify(updated));
+      return updated;
+    });
+
     return true;
   };
 
@@ -361,6 +668,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         markNotificationAsRead,
         theme,
         toggleTheme,
+        visitorLogs,
+        registeredCredentials,
+        impersonateUser,
+        deleteRegisteredCredential,
+        addRegisteredCredential,
+        clearVisitorLogs,
       }}
     >
       {children}

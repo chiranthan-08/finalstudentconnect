@@ -83,6 +83,8 @@ export function Footer() {
               Ecosystem
             </h4>
             <ul className="space-y-2">
+              <li><Link href="/sports" className="hover:text-blue-500 transition-colors flex items-center gap-1 font-semibold text-slate-800 dark:text-slate-200"><span>Sports Opportunities Hub</span> <span className="text-[9px] px-1 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold">New</span></Link></li>
+              <li><Link href="/feature-implementation" className="text-blue-600 dark:text-blue-400 font-bold hover:underline transition-colors flex items-center gap-1"><span>Feature Implementation</span> <span className="text-[9px] px-1 rounded bg-blue-100 dark:bg-blue-950 font-bold">Roadmap</span></Link></li>
               <li><Link href="/courses" className="hover:text-blue-500 transition-colors">3 Free Starter Courses</Link></li>
               <li><Link href="/mentors" className="hover:text-blue-500 transition-colors">Escrow Peer Tutoring</Link></li>
               <li><Link href="/internships" className="hover:text-blue-500 transition-colors">Verified Paid Internships</Link></li>

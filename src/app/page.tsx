@@ -27,12 +27,18 @@ import {
   ArrowUpRight,
   ChevronDown,
   ChevronUp,
+  ChevronRight,
   Sliders,
   Briefcase, 
   HelpCircle, 
   ExternalLink,
   Calculator,
-  X
+  X,
+  Smartphone,
+  Shield,
+  Layers,
+  Rocket,
+  Glasses
 } from 'lucide-react';
 import { COLLEGES_DATA, COURSES_DATA, COMMUNITY_POSTS, TECHNICAL_EVENTS, ADVERTISEMENTS } from '@/data/mockData';
 
@@ -221,62 +227,265 @@ export default function LandingPage() {
   return (
     <div className="space-y-24 pb-20 overflow-hidden">
       
-      {/* 1. HERO SECTION WITH INTERACTIVE SIMULATOR */}
-      <section className="relative pt-10 pb-16 md:pt-16 md:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Glow ambient background effects */}
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-blue-500/20 via-indigo-500/20 to-purple-500/20 blur-3xl rounded-full pointer-events-none -z-10" />
+      {/* 1. HERO SECTION WITH STUDENT & STUDY BACKGROUND PICTURES & INTERACTIVE SIMULATOR */}
+      <section className="relative pt-10 pb-16 md:pt-16 md:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto rounded-3xl overflow-hidden">
+        
+        {/* Real student & campus study imagery in background (Photographic texture) */}
+        <div 
+          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat opacity-[0.14] dark:opacity-[0.18] pointer-events-none filter contrast-125 saturate-150 transition-opacity"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80')`
+          }}
+        />
 
-        <div className="text-center space-y-6 max-w-4xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-900/60 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold shadow-sm backdrop-blur-md">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <span>Karnataka’s Premier Engineering Student Platform</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-            <span className="text-[11px] text-slate-500 font-mono">KCET • COMEDK • VTU</span>
-          </div>
+        {/* Secondary subtle photographic overlay of students collaborating in lab & library */}
+        <div 
+          className="absolute inset-x-0 bottom-0 h-2/3 -z-20 bg-cover bg-bottom opacity-[0.09] dark:opacity-[0.14] pointer-events-none"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1920&q=80')`
+          }}
+        />
 
-          {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
-            Explore. Learn. Connect.{' '}
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">
-              Grow Together.
-            </span>
-          </h1>
+        {/* Ambient radial gradients for soft lighting */}
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[750px] h-[450px] bg-gradient-to-tr from-blue-500/20 via-indigo-500/20 to-cyan-500/15 blur-3xl rounded-full pointer-events-none -z-10" />
 
-          {/* Subheading */}
-          <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Discover 240+ Karnataka engineering colleges, predict admission odds, learn trending tech with free starter courses, and prepare for top tier-1 placements.
-          </p>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* LEFT COLUMN: 2-3 SPONSORED ADVERTISEMENTS (ADMIN MONETIZATION - LENSKART, AZURE, GOOGLE CLOUD) */}
+            <div className="lg:col-span-4 xl:col-span-4 space-y-3 order-2 lg:order-1">
+              
+              {/* Header */}
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-1.5">
+                  <div className="p-1 rounded-md bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400">
+                    <DollarSign className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 block leading-none">
+                      Sponsored Student Deals
+                    </span>
+                    <span className="text-[9px] text-slate-400">Verified Student Discounts</span>
+                  </div>
+                </div>
+                <Link
+                  href="/admin"
+                  className="text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-900"
+                  title="Admin Ad Monetization Console"
+                >
+                  <span>Admin CPC</span>
+                  <ChevronRight className="w-3 h-3" />
+                </Link>
+              </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Link
-              href="/predictor"
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2 group"
-            >
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>Launch College Predictor</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+              {/* Ad 1: Lenskart Buy 1 Get 1 Free Offer */}
+              <div className="rounded-2xl border border-teal-200/90 dark:border-teal-900/60 bg-gradient-to-br from-teal-50/90 via-white to-cyan-50/60 dark:from-teal-950/30 dark:via-slate-900 dark:to-slate-900 p-3.5 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                <div className="flex items-center justify-between text-[10px] mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold px-1.5 py-0.5 rounded bg-[#00BAC6] text-slate-950 text-[9px] uppercase tracking-wider">
+                      Ad • Sponsored
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-semibold truncate max-w-[130px]">
+                      Lenskart Student Club
+                    </span>
+                  </div>
+                  <span className="font-mono text-[9px] text-teal-700 dark:text-teal-300 font-bold bg-teal-100 dark:bg-teal-950 px-1.5 py-0.5 rounded-full">
+                    BUY 1 GET 1
+                  </span>
+                </div>
 
-            <Link
-              href="/assistant"
-              className="px-6 py-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-white font-bold text-sm backdrop-blur-md transition-all flex items-center gap-2"
-            >
-              <Bot className="w-4 h-4 text-blue-500" />
-              <span>Ask Connect AI</span>
-            </Link>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#000042] text-white flex items-center justify-center shrink-0 shadow-sm border border-slate-700">
+                    <Glasses className="w-5 h-5 text-[#00BAC6]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-extrabold text-xs text-slate-900 dark:text-white leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors line-clamp-1">
+                      Lenskart Blu Lenses & Frames
+                    </h4>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1 line-clamp-2">
+                      Exclusive Buy 1 Get 1 Free on Anti-Glare Blu Cut computer glasses + 1 Year Free Gold Membership for engineering students.
+                    </p>
+                  </div>
+                </div>
 
-            <Link
-              href="/courses"
-              className="px-6 py-3.5 rounded-xl bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-sm shadow-md transition-all"
-            >
-              Free Courses & Certificates
-            </Link>
-          </div>
+                <div className="pt-2 mt-2.5 border-t border-teal-100 dark:border-teal-900/40 flex items-center justify-between text-[11px]">
+                  <span className="text-[10px] text-slate-500 font-medium">Valid with College ID / USN</span>
+                  <a
+                    href="https://www.lenskart.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-bold text-teal-600 dark:text-teal-400 hover:underline text-xs"
+                  >
+                    <span>Claim Offer</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Ad 2: Microsoft Azure Certification Voucher */}
+              <div className="rounded-2xl border border-blue-200/90 dark:border-blue-900/60 bg-gradient-to-br from-blue-50/90 via-white to-cyan-50/60 dark:from-blue-950/30 dark:via-slate-900 dark:to-slate-900 p-3.5 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                <div className="flex items-center justify-between text-[10px] mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold px-1.5 py-0.5 rounded bg-blue-600 text-white text-[9px] uppercase tracking-wider">
+                      Ad • Sponsored
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-semibold truncate max-w-[130px]">
+                      Microsoft Learn
+                    </span>
+                  </div>
+                  <span className="font-mono text-[9px] text-blue-700 dark:text-blue-300 font-bold bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded-full">
+                    FREE EXAM
+                  </span>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#0078D4] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm border border-blue-400/40">
+                    <span>Azure</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-extrabold text-xs text-slate-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                      Azure Fundamentals (AZ-900 & AI-900)
+                    </h4>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1 line-clamp-2">
+                      Get $100 free Azure cloud credits + 100% free Microsoft certification exam for college engineering students.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 mt-2.5 border-t border-blue-100 dark:border-blue-900/40 flex items-center justify-between text-[11px]">
+                  <span className="text-[10px] text-slate-500 font-medium">Free for Enrolled Students</span>
+                  <a
+                    href="https://azure.microsoft.com/free/students/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-bold text-blue-600 dark:text-blue-400 hover:underline text-xs"
+                  >
+                    <span>Get Free Exam</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Ad 3: Google Cloud Higher Education Certification */}
+              <div className="rounded-2xl border border-indigo-200/90 dark:border-indigo-900/60 bg-gradient-to-br from-indigo-50/90 via-white to-purple-50/60 dark:from-indigo-950/30 dark:via-slate-900 dark:to-slate-900 p-3.5 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                <div className="flex items-center justify-between text-[10px] mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold px-1.5 py-0.5 rounded bg-indigo-600 text-white text-[9px] uppercase tracking-wider">
+                      Ad • Sponsored
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-semibold truncate max-w-[130px]">
+                      Google Cloud Higher Ed
+                    </span>
+                  </div>
+                  <span className="font-mono text-[9px] text-indigo-700 dark:text-indigo-300 font-bold bg-indigo-100 dark:bg-indigo-950 px-1.5 py-0.5 rounded-full">
+                    ARCADE
+                  </span>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#4285F4] via-[#EA4335] to-[#FBBC05] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
+                    <span>GCP</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-extrabold text-xs text-slate-900 dark:text-white leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-1">
+                      Google Cloud Computing & ACE Exam
+                    </h4>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1 line-clamp-2">
+                      Access Google Cloud Skills Boost labs free + earn Cloud Arcade badges & 50% Associate Cloud Engineer discount.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 mt-2.5 border-t border-indigo-100 dark:border-indigo-900/40 flex items-center justify-between text-[11px]">
+                  <span className="text-[10px] text-slate-500 font-medium">Free Skills Boost Labs</span>
+                  <a
+                    href="https://cloud.google.com/edu/students"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-bold text-indigo-600 dark:text-indigo-400 hover:underline text-xs"
+                  >
+                    <span>Start Free Boost</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Sponsor with Us Footer Box */}
+              <div className="p-2.5 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between text-[10px] text-slate-500">
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Verified Student Partners</span>
+                </span>
+                <Link href="/admin" className="font-bold text-blue-600 dark:text-blue-400 hover:underline">
+                  Admin Ad Portal →
+                </Link>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: MAIN HERO HEADLINE ("Explore. Learn. Connect.") SHIFTED RIGHT */}
+            <div className="lg:col-span-8 xl:col-span-8 space-y-6 text-center lg:text-left order-1 lg:order-2 pl-0 lg:pl-3">
+              
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-200 dark:border-blue-900/60 bg-white/90 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold shadow-sm backdrop-blur-md">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>Karnataka’s Premier Engineering Student Platform</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">KCET • COMEDK • VTU</span>
+              </div>
+
+              {/* Headline */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
+                Explore. Learn. Connect.{' '}
+                <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">
+                  Grow Together.
+                </span>
+              </h1>
+
+              {/* Subheading */}
+              <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                Discover 240+ Karnataka engineering colleges, predict admission odds, learn trending tech with free starter courses, and prepare for top tier-1 placements.
+              </p>
+
+              {/* Social Proof Students Avatars Pill */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 backdrop-blur-sm">
+                <div className="flex -space-x-1.5">
+                  <img className="w-5 h-5 rounded-full object-cover ring-1 ring-white" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80" alt="student" />
+                  <img className="w-5 h-5 rounded-full object-cover ring-1 ring-white" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80" alt="student" />
+                  <img className="w-5 h-5 rounded-full object-cover ring-1 ring-white" src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=60&q=80" alt="student" />
+                  <img className="w-5 h-5 rounded-full object-cover ring-1 ring-white" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&q=80" alt="student" />
+                </div>
+                <span className="text-[11px] font-medium">Joined by <strong>48,500+</strong> students across Tumakuru, Bengaluru, Mysuru & Mangaluru</span>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+                <Link
+                  href="/predictor"
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2 group"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span>Launch College Predictor</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/assistant"
+                  className="px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-white font-bold text-xs sm:text-sm backdrop-blur-md transition-all flex items-center gap-2 shadow-sm"
+                >
+                  <Bot className="w-4 h-4 text-blue-500" />
+                  <span>Ask Connect AI</span>
+                </Link>
+
+                <Link
+                  href="/courses"
+                  className="px-5 py-3 rounded-xl bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs sm:text-sm shadow-md transition-all"
+                >
+                  Free Courses & Certificates
+                </Link>
+              </div>
 
           {/* Quick Search Bar with Live Instant Results Dropdown */}
-          <div className="pt-4 max-w-xl mx-auto relative">
+          <div className="pt-2 max-w-2xl mx-auto lg:mx-0 relative">
             <form 
               onSubmit={(e) => {
                 e.preventDefault();
@@ -436,10 +645,97 @@ export default function LandingPage() {
               </div>
             )}
           </div>
+
+          {/* CONNECT AI STUDENT COPILOT SPOTLIGHT CARD (PERFECTLY ALIGNED WITHIN HERO SCREEN) */}
+          <div className="max-w-2xl mx-auto lg:mx-0 p-3.5 sm:p-4 rounded-2xl border border-blue-200/90 dark:border-blue-900/60 bg-gradient-to-r from-blue-50/90 via-indigo-50/60 to-cyan-50/40 dark:from-blue-950/40 dark:via-indigo-950/30 dark:to-slate-900/80 shadow-md backdrop-blur-md">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/25">
+                  <Bot className="w-5 h-5 text-white" />
+                </div>
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-spin" style={{ animationDuration: '6s' }} />
+                      Connect AI Student Copilot
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-[9px] font-mono font-bold text-blue-700 dark:text-blue-300">
+                      24/7 Live
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Need help with <strong className="text-slate-900 dark:text-white font-semibold">Tumakuru events, CIT Buildathon, KCET cutoffs, or VTU SGPA</strong>? Ask me anytime!
+                  </p>
+                </div>
+              </div>
+
+              <Link
+                href="/assistant"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shrink-0 shadow-md shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all"
+              >
+                <span>Chat with AI Copilot</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Popular Quick Prompt Pills */}
+            <div className="mt-3 pt-2.5 border-t border-blue-200/50 dark:border-blue-900/40 flex flex-wrap items-center gap-1.5 text-[11px]">
+              <span className="text-slate-500 font-semibold text-[10px] uppercase tracking-wider mr-1">Popular:</span>
+              <Link
+                href="/assistant?q=Tell me about CIT Buildathon 2K26"
+                className="px-2.5 py-0.5 rounded-lg bg-white/80 dark:bg-slate-800/80 hover:bg-blue-100 dark:hover:bg-blue-950 text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700 transition-colors"
+              >
+                CIT Buildathon 2K26
+              </Link>
+              <Link
+                href="/assistant?q=Which engineering colleges are best in Tumakuru?"
+                className="px-2.5 py-0.5 rounded-lg bg-white/80 dark:bg-slate-800/80 hover:bg-blue-100 dark:hover:bg-blue-950 text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700 transition-colors"
+              >
+                Tumakuru Colleges
+              </Link>
+              <Link
+                href="/assistant?q=How to calculate VTU 2022 Scheme SGPA?"
+                className="px-2.5 py-0.5 rounded-lg bg-white/80 dark:bg-slate-800/80 hover:bg-blue-100 dark:hover:bg-blue-950 text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700 transition-colors"
+              >
+                VTU SGPA Formula
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        {/* SPORTS OPPORTUNITIES HIGHLIGHT BANNER */}
+        <div className="mt-8 max-w-5xl mx-auto p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-100/40 dark:from-amber-950/40 dark:via-orange-950/20 dark:to-slate-900 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-md shrink-0">
+              <Trophy className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200">
+                  New Hub
+                </span>
+                <span className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">
+                  Collegiate Sports Opportunities & Selection Trials
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                VTU Cricket Championships, SIT Spardha, CIT Volleyball, and Khelo India Trials with direct registration & deadline countdowns.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/sports"
+            className="px-4 py-2 rounded-xl bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold shrink-0 transition-colors flex items-center gap-1.5 shadow-sm"
+          >
+            <span>Explore Sports Hub</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
         {/* INTERACTIVE HERO SIMULATOR WIDGET */}
-        <div className="mt-12 max-w-5xl mx-auto glass-card rounded-3xl p-5 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-2xl">
+        <div className="mt-8 max-w-5xl mx-auto glass-card rounded-3xl p-5 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-2xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800 gap-4">
             <div>
               <div className="flex items-center gap-2">
@@ -985,6 +1281,139 @@ export default function LandingPage() {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* FEATURE IMPLEMENTATION: NEXT PHASE STRATEGIC MASTERPLAN */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-indigo-950/20 via-blue-900/10 to-cyan-950/20 p-6 sm:p-10 shadow-xl relative overflow-hidden space-y-8">
+          
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200/60 dark:border-slate-800/80 pb-6">
+            <div className="space-y-2 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold border border-blue-200 dark:border-blue-800">
+                <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+                <span>Next Phase of Our Website • Feature Implementation</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                Building a Smarter, Safer, and More Rewarding Digital Platform for Students
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Transforming StudentConnect into a comprehensive digital ecosystem: native mobile applications, multi-factor security, multilingual AI, personalized study roadmaps, and transparent reward systems.
+              </p>
+            </div>
+
+            <Link
+              href="/feature-implementation"
+              className="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2 shrink-0 group self-start md:self-auto"
+            >
+              <span>Explore All 18 Pillars & Roadmap</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {/* 6 Key Pillar Highlights Grid (Equal Height & Symmetric Alignment) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              {
+                title: '1. Website & Mobile App Development',
+                desc: 'Native Android & iOS apps with real-time sync, offline access & instant push alerts.',
+                icon: Smartphone,
+                tag: 'Cross-Platform',
+                badge: 'In Development'
+              },
+              {
+                title: '2. Secure Student Database & Privacy',
+                desc: 'Centralized database, role-based access, end-to-end encryption & student privacy controls.',
+                icon: Shield,
+                tag: 'Security',
+                badge: 'Phase 1 Active'
+              },
+              {
+                title: '3. Next-Generation AI Chatbot',
+                desc: 'Kannada, Hindi & Tamil multilingual AI with voice interaction, exam prep & interview coach.',
+                icon: Bot,
+                tag: 'GenAI',
+                badge: 'Phase 1 Active'
+              },
+              {
+                title: '4. Rewards and Recognition System',
+                desc: 'Verifiable digital certificates, trophies, achievement points, scholarships & merit leaderboards.',
+                icon: Trophy,
+                tag: 'Rewards',
+                badge: 'In Development'
+              },
+              {
+                title: '5. AI Personalized Learning',
+                desc: 'Automated skill gap diagnosis, weekly custom study plans & tailored VTU course suggestions.',
+                icon: Sparkles,
+                tag: 'Adaptive',
+                badge: 'In Development'
+              },
+              {
+                title: '6. Smart Digital Portfolios & Jobs',
+                desc: '1-Click ATS resume generator, project showcase with video demos & verified job matching.',
+                icon: Briefcase,
+                tag: 'Careers',
+                badge: 'Phase 1 Active'
+              }
+            ].map((p, idx) => {
+              const PIcon = p.icon;
+              return (
+                <div
+                  key={idx}
+                  className="p-5 sm:p-6 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-blue-500/50 transition-all flex flex-col justify-between h-full space-y-3"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
+                        <PIcon className="w-4 h-4" />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                          {p.tag}
+                        </span>
+                        <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border ${
+                          p.badge === 'Phase 1 Active'
+                            ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                            : 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
+                        }`}>
+                          {p.badge}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="min-h-[28px] flex items-center">
+                      <h3 className="font-bold text-sm text-slate-900 dark:text-white line-clamp-1">{p.title}</h3>
+                    </div>
+
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed min-h-[36px]">
+                      {p.desc}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] font-semibold text-blue-600 dark:text-blue-400">
+                    <span>Feature Pillar 0{idx + 1}</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 4 Phases Timeline Summary (Symmetric & Centered) */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs shadow-sm">
+            <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-extrabold shrink-0">
+              <Rocket className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span>4-Phase Phased Rollout Masterplan</span>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 w-full lg:w-auto">
+              <span className="text-center px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800 text-[11px]">Phase 1: Core Platform</span>
+              <span className="text-center px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold border border-blue-200 dark:border-blue-800 text-[11px]">Phase 2: Learning & Careers</span>
+              <span className="text-center px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-bold border border-amber-200 dark:border-amber-800 text-[11px]">Phase 3: Recognition & Mobile</span>
+              <span className="text-center px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-800 text-[11px]">Phase 4: Advanced AI Scale</span>
+            </div>
+          </div>
+
         </div>
       </section>
 

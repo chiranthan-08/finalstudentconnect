@@ -1,0 +1,532 @@
+import { CollegeEvent } from '@/types';
+
+export const COLLEGE_EVENTS: CollegeEvent[] = [
+  // ==========================================
+  // CHANNABASAVESHWARA INSTITUTE OF TECHNOLOGY (CIT GUBBI, TUMAKURU)
+  // ==========================================
+  {
+    id: 'cit-buildathon-2026',
+    collegeId: 'cit-tumkur',
+    collegeName: 'Channabasaveshwara Institute of Technology',
+    title: 'BUILDATHON-2.0 2K26',
+    tagline: 'INNOVATE. CODE. IMPACT.',
+    theme: 'Building Intelligent Solutions for a Smarter, Sustainable & Secure Tomorrow',
+    category: 'Technical',
+    eventType: 'Hackathon',
+    department: 'Department of Computer Science and Engineering (In connection with KNEW-2K26)',
+    inAssociationWith: ['IEEE', 'ISTE', 'The Institution of Engineers (India)', 'SPARK - IT', 'Institution Innovation Council (IIC)'],
+    eventDate: '30 October 2026 – 31 October 2026',
+    registrationDeadline: '25 October 2026',
+    duration: '24 Hours to Build, Solve & Innovate',
+    venue: 'CIT Campus, NH 206 (B.H. Road), Gubbi, Tumakuru - 572 216, Karnataka',
+    status: 'Open',
+    prizePool: '₹30,000 Worth Cash & Perks',
+    registrationFee: '₹500/- Per Team (3–4 Members)',
+    teamSize: '3 – 4 Members',
+    eligibility: 'National Level – Open to all college engineering & technology students across India',
+    domains: [
+      'Healthcare & Well-Being',
+      'Agriculture & Food Security',
+      'Smart Cities & Mobility',
+      'Education & Digital Society',
+      'Climate, Environment & Sustainability'
+    ],
+    brochureUrl: '/images/events/cit-buildathon-2026.jpg',
+    bannerUrl: '/images/events/cit-buildathon-2026.jpg',
+    description: 'National Level 24-Hour Hackathon organized by the Department of Computer Science & Engineering at CIT Gubbi in connection with KNEW-2K26. Teams work for 24 hours continuously on real-world problem statements across Healthcare, AgriTech, Smart Cities, EdTech, and Clean Energy with mentorship from industry architects and judges.',
+    coordinators: [
+      { type: 'Student', name: 'Supriya R', phone: '+91 91487 21325' },
+      { type: 'Student', name: 'Siri Manjunath Wodiyer', phone: '+91 81232 15329' },
+      { type: 'Faculty', name: 'Dr. Suhas K.C.', phone: '+91 98449 87877' },
+      { type: 'Faculty', name: 'Prof. Mahesh N', phone: '+91 97420 45203' }
+    ],
+    registrationUrl: 'https://cittumkur.org/buildathon-2k26',
+    registeredCount: 84,
+    instagramHandle: '@spark_it_cse_cit',
+  },
+  {
+    id: 'cit-ai-robotics-workshop-2026',
+    collegeId: 'cit-tumkur',
+    collegeName: 'Channabasaveshwara Institute of Technology',
+    title: 'Generative AI & Autonomous Robotics Hands-On Workshop',
+    tagline: 'From Algorithms to Physical Hardware Deployment',
+    theme: 'Edge AI, ROS2 and Sensor Fusion in Autonomous Mobile Robots',
+    category: 'Technical',
+    eventType: 'Workshop',
+    department: 'Department of AI & Data Science & Robotics Innovation Club',
+    inAssociationWith: ['IEEE Student Branch CIT', 'Robotics Society of India'],
+    eventDate: '14 November 2026 – 15 November 2026',
+    registrationDeadline: '10 November 2026',
+    duration: '2 Days (16 Hours Intensive Practical Sessions)',
+    venue: 'Center of Excellence in Robotics & IoT, CIT Campus, Gubbi',
+    status: 'Open',
+    prizePool: 'Hardware Development Kits + VTU Accredited Certificates',
+    registrationFee: '₹250 / Student (Includes Hardware Kit Access & Lunch)',
+    teamSize: 'Individual or Pairs (1–2 Members)',
+    eligibility: 'Open to 2nd, 3rd & 4th Year Engineering Students (All Branches)',
+    domains: [
+      'Edge Computing & NVIDIA Jetson',
+      'ROS2 Robot Operating System',
+      'Computer Vision & Object Detection',
+      'Sensor Fusion & LiDAR SLAM'
+    ],
+    brochureUrl: '/images/events/cit-buildathon-2026.jpg',
+    bannerUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80',
+    description: 'A comprehensive two-day hands-on technical workshop focused on building autonomous mobile robots using ROS2, computer vision, and edge neural processing. Participants deploy real-time navigation algorithms on laboratory robotic kits.',
+    coordinators: [
+      { type: 'Faculty', name: 'Dr. C.P. Shantala', phone: '+91 8131 223 818' },
+      { type: 'Student', name: 'Karthik Gowda', phone: '+91 98450 12345' }
+    ],
+    registrationUrl: 'https://cittumkur.org/workshops/ai-robotics',
+    registeredCount: 120,
+    instagramHandle: '@cit_robotics_club',
+  },
+  {
+    id: 'cit-advith-2k26',
+    collegeId: 'cit-tumkur',
+    collegeName: 'Channabasaveshwara Institute of Technology',
+    title: 'ADVITH 2K26 – Annual State-Level Cultural Extravaganza',
+    tagline: 'Ignite The Rhythm. Celebrate The Culture.',
+    theme: 'Colours of Youth & Creative Expressions',
+    category: 'Non-Technical',
+    eventType: 'Cultural Fest',
+    department: 'CIT Student Cultural Council & Fine Arts Committee',
+    inAssociationWith: ['Youth Red Cross', 'Rotaract Club CIT', 'NSS Karnataka'],
+    eventDate: '18 March 2026 – 20 March 2026',
+    registrationDeadline: '12 March 2026',
+    duration: '3 Days & Nights of Music, Dance & Drama',
+    venue: 'CIT Open Air Amphitheatre & Central Lawns, Gubbi, Tumakuru',
+    status: 'Upcoming',
+    prizePool: '₹1,50,000 Total Cash Prize Pool & Trophies',
+    registrationFee: '₹200 per team / Solo entry depends on category',
+    teamSize: 'Solo / Duet / Crew (up to 15 members)',
+    eligibility: 'Inter-Collegiate: Open to all undergraduate & postgraduate colleges in Karnataka',
+    domains: [
+      'Battle of the Bands (Rock / Fusion / Kannada Indie)',
+      'Eastern & Western Group Dance Championship',
+      'Fashion Show & Ethnic Pageant',
+      'Street Play (Nukkad Natak) & Mono Acting',
+      'Short Film Festival & Mobile Photography',
+      'Fine Arts, Rangoli & Clay Modelling'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80',
+    description: 'Advith 2K26 is CIT Gubbi’s flagship inter-collegiate annual cultural festival attracting over 4,000+ students from 50+ institutions across Karnataka. Featuring pro-nights with renowned playback singers, DJ nights, battle of the bands, classical & contemporary dance spectacles, and literary arenas.',
+    coordinators: [
+      { type: 'Student', name: 'Prajwal Kumar', phone: '+91 97412 88990' },
+      { type: 'Student', name: 'Ananya Sharma', phone: '+91 98860 45678' },
+      { type: 'Faculty', name: 'Prof. Ramesh K.S.', phone: '+91 8131 223 819' }
+    ],
+    registrationUrl: 'https://cittumkur.org/advith2k26',
+    registeredCount: 340,
+    instagramHandle: '@advith_cit_official',
+  },
+  {
+    id: 'cit-kannada-rajyotsava-2026',
+    collegeId: 'cit-tumkur',
+    collegeName: 'Channabasaveshwara Institute of Technology',
+    title: '70th Kannada Rajyotsava Sambhrama 2026',
+    tagline: 'Kannadave Sathya, Kannadave Nithya',
+    theme: 'Celebrating Karnataka Heritage, Folk Traditions & Literature',
+    category: 'Non-Technical',
+    eventType: 'State Festival',
+    department: 'CIT Kannada Sangha & Cultural Heritage Forum',
+    inAssociationWith: ['Kannada Sahitya Parishat Tumakuru', 'CIT NSS Wing'],
+    eventDate: '01 November 2026 – 02 November 2026',
+    registrationDeadline: '28 October 2026',
+    duration: '2 Days Festive Celebrations & Competitions',
+    venue: 'Kuvempu Kalakshetra & Main Central Stage, CIT Campus',
+    status: 'Closing Soon',
+    prizePool: '₹25,000 in Literary & Cultural Awards + Certificates',
+    registrationFee: 'Free Entry for All Students & Faculty',
+    teamSize: 'Individual & Group Entries',
+    eligibility: 'All Engineering Students, Faculty, and Tumakuru District Institutions',
+    domains: [
+      'Janapada Geethe & Sugama Sangeetha (Folk & Light Music)',
+      'Karnataka History & Cultural Heritage Quiz',
+      'Dollu Kunitha, Veeragase & Yakshagana Performances',
+      'Kannada Bhashana & Debate Competition',
+      'Traditional Karnataka Attire Show'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=80',
+    description: 'Grand Karnataka Rajyotsava celebrations at CIT Campus commemorating the formation of Karnataka state. The two-day festival features traditional flag hoisting, traditional percussion (Dollu Kunitha), state-level Kannada debate competitions, Janapada folk songs, authentic Karnataka culinary feast, and honoring prominent local literary figures.',
+    coordinators: [
+      { type: 'Student', name: 'Manohar S.', phone: '+91 94812 34567' },
+      { type: 'Faculty', name: 'Dr. Mallikarjunaiah', phone: '+91 8131 223 820' }
+    ],
+    registrationUrl: 'https://cittumkur.org/rajyotsava2026',
+    registeredCount: 210,
+    instagramHandle: '@cit_kannada_sangha',
+  },
+
+  // ==========================================
+  // SHRIDEVI INSTITUTE OF ENGINEERING AND TECHNOLOGY (SIET TUMAKURU)
+  // ==========================================
+  {
+    id: 'siet-innovatex-2026',
+    collegeId: 'siet-tumkur',
+    collegeName: 'Shridevi Institute of Engineering and Technology',
+    title: 'Shridevi TechFest – InnovateX 2026',
+    tagline: 'State-Level AI & Cyber Security Hackathon & Project Expo',
+    theme: 'AI for Healthcare & Smart Rural Technologies',
+    category: 'Technical',
+    eventType: 'Hackathon',
+    department: 'Department of Computer Science & Engineering and Cyber Security',
+    inAssociationWith: ['VTU Belagavi', 'IEEE Computer Society', 'CSI Tumakuru Chapter'],
+    eventDate: '21 November 2026 – 22 November 2026',
+    registrationDeadline: '16 November 2026',
+    duration: '24 Hours Coding & Live Hardware Prototype Exhibition',
+    venue: 'SIET Campus Auditorium & Advanced AI Labs, Sira Road, Tumakuru',
+    status: 'Open',
+    prizePool: '₹50,000 Cash Prizes + Incubation Support',
+    registrationFee: '₹400 / Team (Up to 4 Students)',
+    teamSize: '2 – 4 Members',
+    eligibility: 'All VTU & Autonomous Engineering College Students',
+    domains: [
+      'AI Diagnostics in Healthcare & Hospital Management',
+      'Cyber Threat Detection & Network Defense',
+      'IoT Solutions for Smart Agriculture in Drylands',
+      'FinTech & Blockchain Security'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80',
+    description: 'State-level flagship hackathon organized by SIET Tumakuru focused on building practical artificial intelligence and cyber-defense tools. Teams present working software and hardware prototypes judged by top IT software architects.',
+    coordinators: [
+      { type: 'Faculty', name: 'Dr. Shivakumar', phone: '+91 816 221 2627' },
+      { type: 'Student', name: 'Nikhil Gowda', phone: '+91 99001 23456' }
+    ],
+    registrationUrl: 'https://shrideviengineering.org/innovatex2026',
+    registeredCount: 96,
+    instagramHandle: '@siet_innovatex',
+  },
+  {
+    id: 'siet-shritharanga-2026',
+    collegeId: 'siet-tumkur',
+    collegeName: 'Shridevi Institute of Engineering and Technology',
+    title: 'Shritharanga 2026 – Annual Inter-Collegiate Cultural Fest',
+    tagline: 'Celebrate Heritage, Rhythm and Innovation',
+    theme: 'Fusion of Classical Heritage & Contemporary Waves',
+    category: 'Non-Technical',
+    eventType: 'Cultural Fest',
+    department: 'SIET Cultural & Literary Committee',
+    inAssociationWith: ['Sri Shridevi Charitable Trust'],
+    eventDate: '08 April 2026 – 09 April 2026',
+    registrationDeadline: '02 April 2026',
+    duration: '2 Days Cultural Championship',
+    venue: 'SIET Open Air Auditorium, Sira Road, Tumakuru',
+    status: 'Upcoming',
+    prizePool: '₹80,000 Cash Awards & Trophies',
+    registrationFee: '₹150 / Participant',
+    teamSize: 'Solo / Group (3–12 members)',
+    eligibility: 'Open to Engineering, Medical & Degree College Students',
+    domains: [
+      'Choreonite (Inter-College Dance Clash)',
+      'Sangeeth Samrat (Vocal Classical & Light Music)',
+      'Fashion Extravaganza',
+      'Short Film & Reel Making Competition',
+      'Rangoli, Mehendi & Poster Art'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80',
+    description: 'The premier annual cultural gathering of Shridevi Group of Institutions bringing together engineering, medical, and paramedical students for thrilling dance battles, celebrity musical concerts, and theatrical performances.',
+    coordinators: [
+      { type: 'Student', name: 'Divya R.', phone: '+91 98801 99223' },
+      { type: 'Faculty', name: 'Prof. Jayashree', phone: '+91 816 221 2628' }
+    ],
+    registrationUrl: 'https://shrideviengineering.org/shritharanga2026',
+    registeredCount: 180,
+    instagramHandle: '@siet_shritharanga',
+  },
+  {
+    id: 'siet-rajyotsava-2026',
+    collegeId: 'siet-tumkur',
+    collegeName: 'Shridevi Institute of Engineering and Technology',
+    title: 'Kannada Rajyotsava & Bhuvaneshwari Puja Mahotsava 2026',
+    tagline: 'Sirigannadam Gelge, Sirigannadam Balge',
+    theme: 'Celebrating 70 Years of Karnataka Statehood',
+    category: 'Non-Technical',
+    eventType: 'State Festival',
+    department: 'SIET Kannada Koota & Youth Red Cross',
+    inAssociationWith: ['Kannada Sahitya Parishat'],
+    eventDate: '03 November 2026 – 04 November 2026',
+    registrationDeadline: '30 October 2026',
+    duration: '2 Days Cultural & Literary Celebrations',
+    venue: 'Central Quadrangle, SIET Campus, Tumakuru',
+    status: 'Open',
+    prizePool: '₹20,000 in Literary Prizes & Books',
+    registrationFee: 'Free Participation for all Students',
+    teamSize: 'Individual & Team entries',
+    eligibility: 'Open to all students of SIET & Tumakuru region',
+    domains: [
+      'Bhavageethe & Janapada Geethe Competition',
+      'Kannada Quiz on Karnataka History & Geography',
+      'Traditional Folk Dance (Veeragase & Dollu Kunitha)',
+      'Elocution on "Karnataka in 2047"'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=80',
+    description: 'SIET’s annual celebration of Karnataka statehood featuring traditional floral decorations, Bhuvaneshwari Devi procession, folk music recitals, poetry recitation, and authentic Karnataka feast.',
+    coordinators: [
+      { type: 'Student', name: 'Darshan K.', phone: '+91 97412 11223' },
+      { type: 'Faculty', name: 'Dr. B.N. Suresh', phone: '+91 816 221 2629' }
+    ],
+    registrationUrl: 'https://shrideviengineering.org/rajyotsava',
+    registeredCount: 150,
+    instagramHandle: '@siet_kannada_koota',
+  },
+
+  // ==========================================
+  // SIDDAGANGA INSTITUTE OF TECHNOLOGY (SIT TUMAKURU)
+  // ==========================================
+  {
+    id: 'sit-halocon-2026',
+    collegeId: 'sit-tumkur',
+    collegeName: 'Siddaganga Institute of Technology',
+    title: 'HALOCON 2026 – National 36-Hour Hackathon & Tech Summit',
+    tagline: 'Code Beyond Boundaries',
+    theme: 'Scalable Cloud, Quantum Computing & Next-Gen Robotics',
+    category: 'Technical',
+    eventType: 'Hackathon',
+    department: 'Department of CSE, ISE & SIT ACM Student Chapter',
+    inAssociationWith: ['ACM India', 'IEEE Bangalore Section', 'Cisco Networking Academy'],
+    eventDate: '07 November 2026 – 09 November 2026',
+    registrationDeadline: '01 November 2026',
+    duration: '36-Hour National Non-Stop Hackathon',
+    venue: 'SIT Birla Auditorium & High-Performance Compute Cluster, B.H. Road, Tumakuru',
+    status: 'Closing Soon',
+    prizePool: '₹1,00,000 Cash Prize Pool + Direct Interview Referrals',
+    registrationFee: '₹600 / Team (3–4 Members)',
+    teamSize: '3 – 4 Members',
+    eligibility: 'All Engineering & Computer Applications Students across India',
+    domains: [
+      'Generative AI Agents & Multi-Modal Models',
+      'Quantum Computing Algorithms (Qiskit)',
+      'Automotive Edge Computing & ADAS Systems',
+      'Decentralized Identity & Web3 Protocols',
+      'Smart Agriculture & Drone Mapping'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+    description: 'HALOCON is SIT Tumakuru’s premier national 36-hour hackathon bringing together over 500+ elite student engineers from IITs, NITs, and premier Karnataka colleges to solve challenging engineering problems with Cisco and AWS mentors.',
+    coordinators: [
+      { type: 'Student', name: 'Rohit Shenoy', phone: '+91 94480 88210' },
+      { type: 'Faculty', name: 'Dr. N.R. Sunitha', phone: '+91 816 228 2696' }
+    ],
+    registrationUrl: 'http://sit.ac.in/halocon2026',
+    registeredCount: 240,
+    instagramHandle: '@sit_halocon',
+  },
+  {
+    id: 'sit-siddaganga-utsav-2026',
+    collegeId: 'sit-tumkur',
+    collegeName: 'Siddaganga Institute of Technology',
+    title: 'Siddaganga Utsav & Rajyotsava Sambhrama 2026',
+    tagline: 'Where Heritage Meets Youth Energy',
+    theme: 'Culture, Classical Arts & Contemporary Expressions',
+    category: 'Non-Technical',
+    eventType: 'Cultural Fest',
+    department: 'SIT Student Union & Spic Macay SIT Chapter',
+    inAssociationWith: ['Sree Siddaganga Education Society'],
+    eventDate: '24 February 2026 – 26 February 2026',
+    registrationDeadline: '18 February 2026',
+    duration: '3 Days Inter-State Cultural Festival',
+    venue: 'SIT Open Stadium & Dr. Sree Sree Sivakumara Swamigalu Kalakshetra',
+    status: 'Upcoming',
+    prizePool: '₹2,00,000 Cash Prizes & Golden Shields',
+    registrationFee: '₹250 per event registration',
+    teamSize: 'Solo and Teams (up to 20)',
+    eligibility: 'All Engineering, Medical and University Students in Karnataka & South India',
+    domains: [
+      'Choreo Night (Western & Eastern Dance)',
+      'Rock Band Wars',
+      'Theatrical Drama & Skit Showcase',
+      'Classical Carnatic & Hindustani Music',
+      'Kannada Literary & Folk Art Competitions'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1200&q=80',
+    description: 'Siddaganga Utsav is one of the oldest and most prestigious cultural festivals in Karnataka, held annually with over 8,000 attendees, pro-nights by top musical artists, national-level dance championships, and grand Rajyotsava celebrations.',
+    coordinators: [
+      { type: 'Student', name: 'Chethan Gowda', phone: '+91 99012 34987' },
+      { type: 'Faculty', name: 'Prof. T.S. Rajesh', phone: '+91 816 228 2697' }
+    ],
+    registrationUrl: 'http://sit.ac.in/utsav2026',
+    registeredCount: 420,
+    instagramHandle: '@sit_utsav_official',
+  },
+
+  // ==========================================
+  // SRI SIDDHARTHA INSTITUTE OF TECHNOLOGY (SSIT TUMAKURU)
+  // ==========================================
+  {
+    id: 'ssit-technosandhi-2026',
+    collegeId: 'ssit-tumkur',
+    collegeName: 'Sri Siddhartha Institute of Technology',
+    title: 'Techno-Sandhi 2026 – National Hardware & IoT Ideathon',
+    tagline: 'Bridging Innovation and Industrial Deployment',
+    theme: 'Smart Embedded Hardware, VLSI & Renewable Energy',
+    category: 'Technical',
+    eventType: 'Symposium',
+    department: 'Departments of ECE, EEE & CSE, SSIT Tumakuru',
+    inAssociationWith: ['IEEE SSIT Student Branch', 'VLSI Society of India'],
+    eventDate: '15 November 2026 – 16 November 2026',
+    registrationDeadline: '09 November 2026',
+    duration: '2 Days Project Exhibition & Technical Paper Presentation',
+    venue: 'SSIT Central Auditorium & Robotics Center, Kunigal Road, Tumakuru',
+    status: 'Open',
+    prizePool: '₹40,000 Cash Prizes + Industrial Sponsorship',
+    registrationFee: '₹350 / Team (Up to 3 Members)',
+    teamSize: '2 – 3 Members',
+    eligibility: 'All Engineering & Polytechnic Diploma Students',
+    domains: [
+      'Smart Grid & Solar Power Optimization',
+      'FPGA & ASIC Hardware Design',
+      'IoT Sensor Networks for Disaster Alert Systems',
+      'Electric Vehicle Battery Management'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+    description: 'National Level Hardware, IoT and VLSI Ideathon designed to foster hardware innovations for clean energy, electrical vehicles, and embedded sensor systems.',
+    coordinators: [
+      { type: 'Faculty', name: 'Dr. M.S. Raviprakasha', phone: '+91 816 220 0314' },
+      { type: 'Student', name: 'Vinay Kumar', phone: '+91 97410 44556' }
+    ],
+    registrationUrl: 'https://ssit.edu.in/technosandhi2026',
+    registeredCount: 75,
+    instagramHandle: '@ssit_technosandhi',
+  },
+  {
+    id: 'ssit-kalakrithi-2026',
+    collegeId: 'ssit-tumkur',
+    collegeName: 'Sri Siddhartha Institute of Technology',
+    title: 'Kalakrithi 2026 – Annual Cultural & Literary Festival',
+    tagline: 'Expressions of Art, Music & Literature',
+    theme: 'Youth Renaissance & Karnataka Folk Heritage',
+    category: 'Non-Technical',
+    eventType: 'Cultural Fest',
+    department: 'SSIT Cultural Council & Kannada Koota',
+    inAssociationWith: ['Sri Siddhartha Education Society'],
+    eventDate: '28 March 2026 – 29 March 2026',
+    registrationDeadline: '22 March 2026',
+    duration: '2 Days Cultural & Kannada Rajyotsava Celebrations',
+    venue: 'SSIT Main Campus Grounds, Kunigal Road, Tumakuru',
+    status: 'Upcoming',
+    prizePool: '₹60,000 Cash Awards',
+    registrationFee: '₹150 / Event',
+    teamSize: 'Solo / Group',
+    eligibility: 'Open to All Karnataka University Students',
+    domains: [
+      'Solo & Group Western / Classical Dance',
+      'Battle of Voices (Singing Contest)',
+      'Kannada Literary Debates & Poetry Recital',
+      'Creative Painting & Clay Sculpture'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80',
+    description: 'Annual cultural festival of SSIT featuring inter-college singing, drama, classical art forms, rock concert, and Kannada Rajyotsava literary celebrations.',
+    coordinators: [
+      { type: 'Student', name: 'Deepak Rao', phone: '+91 98451 22334' },
+      { type: 'Faculty', name: 'Prof. Latha M.', phone: '+91 816 220 0315' }
+    ],
+    registrationUrl: 'https://ssit.edu.in/kalakrithi2026',
+    registeredCount: 160,
+    instagramHandle: '@ssit_kalakrithi',
+  },
+
+  // ==========================================
+  // RV COLLEGE OF ENGINEERING (RVCE BENGALURU)
+  // ==========================================
+  {
+    id: 'rvce-8th-mile-2026',
+    collegeId: 'rvce-blr',
+    collegeName: 'RV College of Engineering',
+    title: '8th Mile 2026 – National Technical & Cultural Mega-Fest',
+    tagline: 'Karnataka’s Premier Collegiate Festival',
+    theme: 'Autonomous Frontiers & Urban Innovation',
+    category: 'Technical',
+    eventType: 'Technical Fest',
+    department: 'RVCE Technical Clubs & Rotaract Club RVCE',
+    inAssociationWith: ['IEEE RVCE', 'Coding Ninjas', 'Google Developer Groups'],
+    eventDate: '05 December 2026 – 07 December 2026',
+    registrationDeadline: '28 November 2026',
+    duration: '3 Days National Hackathons, Coding Marathons & Pro-Nights',
+    venue: 'RVCE Campus, Mysuru Road, Bengaluru',
+    status: 'Open',
+    prizePool: '₹2,50,000 Cash Prize Pool',
+    registrationFee: '₹500 / Team',
+    teamSize: '2 – 4 Members',
+    eligibility: 'All Engineering, MCA & Tech Students Pan-India',
+    domains: [
+      'Generative AI & LLM Fine-Tuning',
+      'Robotics & Autonomous Drones',
+      'Full-Stack Web3 Scalability',
+      'Clean Tech & EV Battery Innovation'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1200&q=80',
+    description: '8th Mile is South India’s most celebrated college techno-cultural fest, hosting over 12,000 students from all premier institutes with national hackathons and international concert nights.',
+    coordinators: [
+      { type: 'Student', name: 'Varun Hegde', phone: '+91 98860 11223' },
+      { type: 'Faculty', name: 'Dr. K.N. Subramanya', phone: '+91 80 6818 8100' }
+    ],
+    registrationUrl: 'https://8thmile.rvce.edu.in',
+    registeredCount: 650,
+    instagramHandle: '@rvce8thmile',
+  },
+
+  // ==========================================
+  // BMS COLLEGE OF ENGINEERING (BMSCE BENGALURU)
+  // ==========================================
+  {
+    id: 'bmsce-utsav-2026',
+    collegeId: 'bmsce-blr',
+    collegeName: 'BMS College of Engineering',
+    title: 'UTSAV 2026 – The Festival of Faith, Fun & Festivity',
+    tagline: 'Karnataka’s Oldest & Largest College Festival',
+    theme: 'Timeless Traditions & Next-Gen Beats',
+    category: 'Non-Technical',
+    eventType: 'Cultural Fest',
+    department: 'BMSCE Cultural Forum & Fine Arts Club',
+    inAssociationWith: ['B.M.S. Educational Trust'],
+    eventDate: '24 April 2026 – 26 April 2026',
+    registrationDeadline: '18 April 2026',
+    duration: '3 Days of Music, Dance, Fashion & Kannada Celebrations',
+    venue: 'BMSCE Campus, Bull Temple Road, Basavanagudi, Bengaluru',
+    status: 'Upcoming',
+    prizePool: '₹3,00,000 in Cash Awards & Trophies',
+    registrationFee: '₹200 per competition',
+    teamSize: 'Solo and Groups',
+    eligibility: 'All College & University Students Nationwide',
+    domains: [
+      'Whirl Dance (Western, Classical & Folk Dance Battle)',
+      'Eastern & Western Acoustic Battle of the Bands',
+      'Karnatakotsava & Janapada Mela',
+      'Fashion Walk & Glamour Pageant',
+      'Street Plays, Mono Acting & Stand-up Comedy'
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80',
+    description: 'UTSAV at BMSCE Basavanagudi is regarded as the grandest collegiate fest in Karnataka since 1978. Three days of electrifying concerts, dance battles, cultural theatre, and Kannada folk celebrations with 15,000+ daily visitors.',
+    coordinators: [
+      { type: 'Student', name: 'Gautam Krishna', phone: '+91 99450 77889' },
+      { type: 'Faculty', name: 'Dr. S. Muralidhara', phone: '+91 80 2662 2130' }
+    ],
+    registrationUrl: 'https://bmsceutsav.com',
+    registeredCount: 820,
+    instagramHandle: '@bmsceutsav',
+  }
+];
+
+// Helper functions
+export function getEventsByCollegeId(collegeId: string): CollegeEvent[] {
+  return COLLEGE_EVENTS.filter(event => event.collegeId === collegeId);
+}
+
+export function getTechnicalEventsByCollegeId(collegeId: string): CollegeEvent[] {
+  return COLLEGE_EVENTS.filter(event => event.collegeId === collegeId && event.category === 'Technical');
+}
+
+export function getNonTechnicalEventsByCollegeId(collegeId: string): CollegeEvent[] {
+  return COLLEGE_EVENTS.filter(event => event.collegeId === collegeId && event.category === 'Non-Technical');
+}

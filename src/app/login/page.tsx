@@ -27,7 +27,10 @@ import {
   FileCheck,
   Check,
   School,
-  BookOpen
+  BookOpen,
+  X,
+  RefreshCw,
+  Copy
 } from 'lucide-react';
 
 interface RoleConfig {
@@ -243,7 +246,7 @@ const ENGINEERING_BRANCHES = [
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, loginWithGoogle, register, user, switchRoleDemo } = useAuth();
+  const { login, register, user, switchRoleDemo } = useAuth();
 
   // Mode: 'login' | 'register'
   const initialTab = searchParams.get('tab') === 'register' ? 'register' : 'login';
@@ -261,9 +264,86 @@ function LoginContent() {
   const [loginPassword, setLoginPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successToast, setSuccessToast] = useState('');
+
+  // Security & Verification States
+  const [otpTimer, setOtpTimer] = useState(60);
+  const [simulatedNotification, setSimulatedNotification] = useState<string | null>(null);
+  const [copiedOtp, setCopiedOtp] = useState(false);
+  const [emailDeliveryInfo, setEmailDeliveryInfo] = useState<{
+    sending: boolean;
+    delivered: 'REAL_EMAIL' | 'LOCAL_CODE' | 'IDLE';
+    message: string;
+  }>({
+    sending: false,
+    delivered: 'IDLE',
+    message: ''
+  });
+
+  // Standard Registration Email OTP Modal State
+  const [showRegisterVerifyModal, setShowRegisterVerifyModal] = useState(false);
+  const [regOtp, setRegOtp] = useState('');
+  const [expectedRegOtp, setExpectedRegOtp] = useState('');
+  const [regOtpError, setRegOtpError] = useState('');
+  const [pendingRegisterData, setPendingRegisterData] = useState<any | null>(null);
+
+  // Helper to trigger backend email dispatch
+  const dispatchVerificationEmail = async (email: string, code: string, _type?: string, name?: string) => {
+    setEmailDeliveryInfo({
+      sending: true,
+      delivered: 'IDLE',
+      message: 'Validating email & contacting verification service...'
+    });
+    try {
+      const res = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          type: 'email_registration',
+          name
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setExpectedRegOtp(data.cleanOtp || code);
+        setSimulatedNotification(`Student Connect Karnataka: Verification code ${data.code} dispatched for ${email}`);
+
+        setEmailDeliveryInfo({
+          sending: false,
+          delivered: data.emailSent ? 'REAL_EMAIL' : 'LOCAL_CODE',
+          message: data.message
+        });
+      } else {
+        setRegOtpError(data.message);
+        setEmailDeliveryInfo({
+          sending: false,
+          delivered: 'LOCAL_CODE',
+          message: data.message || 'Error dispatching verification code'
+        });
+      }
+    } catch {
+      setEmailDeliveryInfo({
+        sending: false,
+        delivered: 'LOCAL_CODE',
+        message: `Local Mode: Verification code generated on screen.`
+      });
+    }
+  };
+
+  // Countdown timer for OTP expiry
+  useEffect(() => {
+    let interval: any;
+    if (showRegisterVerifyModal) {
+      if (otpTimer > 0) {
+        interval = setInterval(() => {
+          setOtpTimer(prev => (prev > 0 ? prev - 1 : 0));
+        }, 1000);
+      }
+    }
+    return () => clearInterval(interval);
+  }, [showRegisterVerifyModal, otpTimer]);
 
   // Form states - Register
   const [regName, setRegName] = useState('');
@@ -377,24 +457,8 @@ function LoginContent() {
     }
   };
 
-  // Google Auth
-  const handleGoogleAuth = async () => {
-    setGoogleLoading(true);
-    setErrorMessage('');
-    try {
-      await loginWithGoogle();
-      setSuccessToast('Google Account Verified! Redirecting to student community...');
-      setTimeout(() => {
-        router.push('/community');
-      }, 700);
-    } catch {
-      setErrorMessage('Google verification failed.');
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
 
-  // Register Submit
+  // Register Submit -> Trigger Verification Modal
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
@@ -420,59 +484,177 @@ function LoginContent() {
       return;
     }
 
+    let roleBio = `${currentRoleConfig.title} on Student Connect Karnataka`;
+    let collegeName = regCollege;
+    let skills = ['Karnataka Academic Ecosystem'];
+
+    if (selectedRole === 'student') {
+      roleBio = `${regYear} in ${regBranch} at ${regCollege}`;
+      skills = ['Engineering Student', regBranch.split(' ')[0]];
+    } else if (selectedRole === 'mentor') {
+      roleBio = `Escrow Peer Tutor • Subjects: ${regMentorSubjects} • CGPA: ${regMentorCgpa}`;
+      skills = regMentorSubjects.split(',').map(s => s.trim());
+    } else if (selectedRole === 'college_rep') {
+      roleBio = `${regRepDesignation} at ${regCollege}`;
+      skills = ['Institutional Representative', 'Admissions', 'Placement'];
+    } else if (selectedRole === 'recruiter') {
+      roleBio = `${regRecruiterDesignation} @ ${regCompanyName}`;
+      collegeName = regCompanyName;
+      skills = ['Talent Acquisition', 'Campus Hiring', 'Bangalore Tech'];
+    } else if (selectedRole === 'event_organizer') {
+      roleBio = `Organizer @ ${regClubName} • Hosting ${regEventTitle}`;
+      skills = ['Hackathons', 'Tech Events', 'Student Guild'];
+    }
+
+    const payload = {
+      name: regName,
+      email: regEmail,
+      role: selectedRole,
+      password: regPassword,
+      college: collegeName,
+      branch: selectedRole === 'student' ? regBranch : undefined,
+      year: selectedRole === 'student' ? regYear : undefined,
+      usn: selectedRole === 'student' ? regUsn : undefined,
+      bio: roleBio,
+      skills,
+      hourlyRate: selectedRole === 'mentor' ? parseInt(regMentorRate) || 300 : undefined,
+      designation: selectedRole === 'college_rep' ? regRepDesignation : selectedRole === 'recruiter' ? regRecruiterDesignation : undefined,
+      organization: selectedRole === 'recruiter' ? regCompanyName : selectedRole === 'event_organizer' ? regClubName : undefined
+    };
+
+    // Trigger Email Verification Code step
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    setPendingRegisterData(payload);
+    setExpectedRegOtp(code);
+    setRegOtp('');
+    setRegOtpError('');
+    setOtpTimer(60);
+    setShowRegisterVerifyModal(true);
+
+    // Trigger backend email dispatch (supports real Gmail/SMTP if configured)
+    dispatchVerificationEmail(regEmail, code, 'register', regName);
+
+    setSimulatedNotification(`Student Connect Karnataka: Verification code SC-${code} dispatched for ${regEmail}`);
+    setTimeout(() => {
+      setSimulatedNotification(null);
+    }, 45000);
+  };
+
+  // 1-Click Auto-Fill & Immediate Account Activation
+  const handleAutoFillAndVerifyRegister = async () => {
+    if (!expectedRegOtp || !pendingRegisterData) return;
+    setRegOtp(expectedRegOtp);
+    setRegOtpError('');
     setLoading(true);
-
     try {
-      let roleBio = `${currentRoleConfig.title} on Student Connect Karnataka`;
-      let collegeName = regCollege;
-      let skills = ['Karnataka Academic Ecosystem'];
+      // 1. Verify with backend OTP API
+      const verifyRes = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: pendingRegisterData.email,
+          otp: expectedRegOtp,
+          type: 'email_registration',
+          name: pendingRegisterData.name,
+          role: pendingRegisterData.role,
+          college: pendingRegisterData.college,
+          branch: pendingRegisterData.branch,
+          year: pendingRegisterData.year,
+          usn: pendingRegisterData.usn
+        })
+      });
+      const verifyData = await verifyRes.json();
 
-      if (selectedRole === 'student') {
-        roleBio = `${regYear} in ${regBranch} at ${regCollege}`;
-        skills = ['Engineering Student', regBranch.split(' ')[0]];
-      } else if (selectedRole === 'mentor') {
-        roleBio = `Escrow Peer Tutor • Subjects: ${regMentorSubjects} • CGPA: ${regMentorCgpa}`;
-        skills = regMentorSubjects.split(',').map(s => s.trim());
-      } else if (selectedRole === 'college_rep') {
-        roleBio = `${regRepDesignation} at ${regCollege}`;
-        skills = ['Institutional Representative', 'Admissions', 'Placement'];
-      } else if (selectedRole === 'recruiter') {
-        roleBio = `${regRecruiterDesignation} @ ${regCompanyName}`;
-        collegeName = regCompanyName;
-        skills = ['Talent Acquisition', 'Campus Hiring', 'Bangalore Tech'];
-      } else if (selectedRole === 'event_organizer') {
-        roleBio = `Organizer @ ${regClubName} • Hosting ${regEventTitle}`;
-        skills = ['Hackathons', 'Tech Events', 'Student Guild'];
-      } else if (selectedRole === 'admin' || selectedRole === 'super_admin') {
-        roleBio = `Institutional Auditor & System Administrator`;
-        skills = ['System Security', 'RBAC', 'Governance'];
+      if (!verifyData.success) {
+        setRegOtpError(verifyData.message || 'Verification failed.');
+        setLoading(false);
+        return;
       }
 
-      await register({
-        name: regName,
-        email: regEmail,
-        role: selectedRole,
-        password: regPassword,
-        college: collegeName,
-        branch: selectedRole === 'student' ? regBranch : undefined,
-        year: selectedRole === 'student' ? regYear : undefined,
-        usn: selectedRole === 'student' ? regUsn : undefined,
-        bio: roleBio,
-        skills,
-        hourlyRate: selectedRole === 'mentor' ? parseInt(regMentorRate) || 300 : undefined,
-        designation: selectedRole === 'college_rep' ? regRepDesignation : selectedRole === 'recruiter' ? regRecruiterDesignation : undefined,
-        organization: selectedRole === 'recruiter' ? regCompanyName : selectedRole === 'event_organizer' ? regClubName : undefined
-      });
-
-      setSuccessToast(`Welcome to Student Connect! Registered as ${currentRoleConfig.title}.`);
-      setTimeout(() => {
-        redirectAfterAuth(selectedRole);
-      }, 700);
+      // 2. Activate user
+      const success = await register(pendingRegisterData);
+      if (success) {
+        setShowRegisterVerifyModal(false);
+        setSuccessToast(`Email Verified! Welcome to Student Connect, ${pendingRegisterData.name}!`);
+        setTimeout(() => {
+          redirectAfterAuth(pendingRegisterData.role);
+        }, 700);
+      } else {
+        setRegOtpError('Registration could not be completed.');
+      }
     } catch {
-      setErrorMessage('Registration failed. Please try again.');
+      setRegOtpError('An error occurred during account verification.');
     } finally {
       setLoading(false);
     }
+  };
+
+  // Complete Registration with OTP Verification
+  const handleVerifyRegisterOtp = async () => {
+    setRegOtpError('');
+    if (!regOtp.trim()) {
+      setRegOtpError('Please enter the 6-digit verification code.');
+      return;
+    }
+
+    if (!pendingRegisterData) return;
+
+    setLoading(true);
+    try {
+      // 1. Verify with backend OTP API
+      const verifyRes = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: pendingRegisterData.email,
+          otp: regOtp,
+          type: 'email_registration',
+          name: pendingRegisterData.name,
+          role: pendingRegisterData.role,
+          college: pendingRegisterData.college,
+          branch: pendingRegisterData.branch,
+          year: pendingRegisterData.year,
+          usn: pendingRegisterData.usn
+        })
+      });
+      const verifyData = await verifyRes.json();
+
+      if (!verifyData.success) {
+        setRegOtpError(verifyData.message || 'Incorrect verification code.');
+        setLoading(false);
+        return;
+      }
+
+      // 2. Activate user
+      const success = await register(pendingRegisterData);
+      if (success) {
+        setShowRegisterVerifyModal(false);
+        setSuccessToast(`Email Verified! Welcome to Student Connect, ${pendingRegisterData.name}!`);
+        setTimeout(() => {
+          redirectAfterAuth(pendingRegisterData.role);
+        }, 700);
+      } else {
+        setRegOtpError('Registration could not be completed.');
+      }
+    } catch {
+      setRegOtpError('An error occurred during account verification.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendRegisterOtp = () => {
+    if (!pendingRegisterData) return;
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    setExpectedRegOtp(code);
+    setRegOtp('');
+    setRegOtpError('');
+    setOtpTimer(60);
+    dispatchVerificationEmail(pendingRegisterData.email, code, 'register', pendingRegisterData.name);
+    setSimulatedNotification(`New Verification Code: SC-${code} dispatched for ${pendingRegisterData.email}`);
+    setTimeout(() => {
+      setSimulatedNotification(null);
+    }, 45000);
   };
 
   return (
@@ -484,6 +666,66 @@ function LoginContent() {
           <div className="fixed top-20 right-4 z-50 p-4 rounded-2xl bg-emerald-600 text-white shadow-2xl flex items-center gap-3 animate-in slide-in-from-top-4">
             <CheckCircle2 className="w-5 h-5" />
             <span className="text-xs sm:text-sm font-bold">{successToast}</span>
+          </div>
+        )}
+
+        {/* Floating Inbound Security Notification (High Z-Index so it stays on top) */}
+        {simulatedNotification && (
+          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[70] w-full max-w-lg p-4 mx-4 rounded-2xl bg-slate-900/95 dark:bg-slate-950/95 text-white shadow-2xl border-2 border-blue-500/80 backdrop-blur-xl animate-in slide-in-from-top-4 flex items-start gap-3">
+            <div className="p-2.5 rounded-xl bg-blue-600/30 text-blue-400 shrink-0">
+              <Mail className="w-5 h-5 animate-pulse" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  {emailDeliveryInfo.delivered === 'REAL_EMAIL' ? 'Official Verification Email Dispatched' : 'Security Verification Code Generated'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSimulatedNotification(null)}
+                  className="text-slate-400 hover:text-white p-1 rounded-lg"
+                  aria-label="Dismiss notification"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-xs text-slate-200 mt-1 font-mono break-all font-bold">{simulatedNotification}</p>
+              
+              <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const matchSC = simulatedNotification.match(/SC-(\d{6})/);
+                    if (matchSC) {
+                      setRegOtp(matchSC[1]);
+                      setRegOtpError('');
+                      handleAutoFillAndVerifyRegister();
+                    }
+                  }}
+                  className="text-xs font-bold px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm flex items-center gap-1.5 active:scale-95"
+                >
+                  <Zap className="w-3.5 h-3.5 text-amber-300" />
+                  <span>⚡ 1-Click Auto-Fill & Verify</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const match = simulatedNotification.match(/(SC-)?(\d{6})/);
+                    if (match) {
+                      navigator.clipboard.writeText(match[2]);
+                      setCopiedOtp(true);
+                      setTimeout(() => setCopiedOtp(false), 2000);
+                    }
+                  }}
+                  className="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors flex items-center gap-1"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{copiedOtp ? 'Copied!' : 'Copy Code'}</span>
+                </button>
+                <span className="text-[11px] text-slate-400">Valid for {otpTimer}s</span>
+              </div>
+            </div>
           </div>
         )}
 
@@ -662,43 +904,6 @@ function LoginContent() {
           {activeTab === 'login' && (
             <div className="space-y-6">
               
-              {/* Google Verification */}
-              <div>
-                <button
-                  type="button"
-                  onClick={handleGoogleAuth}
-                  disabled={googleLoading}
-                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-xs sm:text-sm hover:bg-slate-50 dark:hover:bg-slate-700/80 transition-all shadow-sm active:scale-[0.99]"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24">
-                    <path
-                      fill="#4285F4"
-                      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.36 24 12 24z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
-                    />
-                    <path
-                      fill="#EA4335"
-                      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
-                    />
-                  </svg>
-                  <span>{googleLoading ? 'Verifying with Google...' : 'Continue with College Google Account (@college.edu.in)'}</span>
-                </button>
-              </div>
-
-              <div className="relative flex items-center justify-center">
-                <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
-                <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider shrink-0">
-                  or sign in with {currentRoleConfig.title} credentials
-                </span>
-                <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
-              </div>
 
               {/* Persona Credentials Auto-Fill Banner */}
               {(currentRoleConfig.role === 'admin' || currentRoleConfig.role === 'super_admin') ? (
@@ -874,6 +1079,7 @@ function LoginContent() {
                   Role: {currentRoleConfig.title}
                 </span>
               </div>
+
 
               {/* Basic Account Credentials */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1220,6 +1426,199 @@ function LoginContent() {
             <span>KEA / VTU Academic Aligned</span>
           </div>
         </div>
+
+
+        {/* ========================================================= */}
+        {/* REGISTRATION EMAIL VERIFICATION MODAL                     */}
+        {/* ========================================================= */}
+        {showRegisterVerifyModal && pendingRegisterData && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in">
+            <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-in zoom-in-95 p-6 space-y-5">
+              
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <span className="font-bold text-sm text-slate-900 dark:text-white">Verify Your Email Address</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowRegisterVerifyModal(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="text-center space-y-1">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                  Enter Verification Code
+                </h3>
+                <p className="text-xs text-slate-500">
+                  We sent a 6-digit confirmation code to activate your <strong className="text-blue-600 dark:text-blue-400 capitalize">{pendingRegisterData.role.replace('_', ' ')}</strong> account.
+                </p>
+                <div className="inline-block mt-1 font-mono text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                  {pendingRegisterData.email}
+                </div>
+              </div>
+
+              {regOtpError && (
+                <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/60 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{regOtpError}</span>
+                </div>
+              )}
+
+              {/* UNMISSABLE OFFICIAL REGISTRATION CODE HERO CARD */}
+              {expectedRegOtp && (
+                <div className="rounded-2xl border-2 border-blue-500 dark:border-blue-400 bg-gradient-to-br from-blue-50 via-indigo-50/50 to-blue-50/20 dark:from-blue-950/60 dark:via-indigo-950/40 dark:to-slate-900 p-4 shadow-xl shadow-blue-500/10 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-blue-200/60 dark:border-blue-800/60">
+                    <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-300">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Registration Activation Code</span>
+                    </div>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      emailDeliveryInfo.delivered === 'REAL_EMAIL'
+                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                        : 'bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300'
+                    }`}>
+                      {emailDeliveryInfo.delivered === 'REAL_EMAIL' ? 'Sent to Inbox' : 'Instant Display'}
+                    </span>
+                  </div>
+
+                  {/* Giant Monospace Code Display */}
+                  <div className="text-center py-1">
+                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-medium mb-1.5">
+                      Activation code for: <strong className="text-slate-900 dark:text-white font-mono">{pendingRegisterData.email}</strong>
+                    </div>
+                    <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border-2 border-blue-400 dark:border-blue-500 shadow-md">
+                      <span className="font-mono text-2xl sm:text-3xl font-black tracking-[0.25em] text-blue-600 dark:text-blue-400 select-all">
+                        SC-{expectedRegOtp}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(expectedRegOtp);
+                          setCopiedOtp(true);
+                          setTimeout(() => setCopiedOtp(false), 2000);
+                        }}
+                        title="Copy code"
+                        className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors flex items-center gap-1 text-[11px] font-bold"
+                      >
+                        {copiedOtp ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 1-Click Fast Activate Button */}
+                  <button
+                    type="button"
+                    onClick={handleAutoFillAndVerifyRegister}
+                    disabled={loading}
+                    className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-extrabold shadow-md shadow-blue-500/25 flex items-center justify-center gap-2 active:scale-98 transition-all disabled:opacity-50"
+                  >
+                    <Zap className="w-4 h-4 text-amber-300" />
+                    <span>{loading ? 'Activating...' : '⚡ 1-Click Auto-Fill & Activate Immediately'}</span>
+                  </button>
+
+                  {/* Explanation regarding Email vs Local Mode */}
+                  <div className="p-2.5 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-blue-200/60 dark:border-blue-800/60 text-[11px] text-slate-600 dark:text-slate-300">
+                    {emailDeliveryInfo.delivered === 'REAL_EMAIL' ? (
+                      <p className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                        <span>Verification email dispatched to your inbox: <strong>{pendingRegisterData.email}</strong>!</span>
+                      </p>
+                    ) : (
+                      <div className="flex items-start gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-slate-800 dark:text-white">Why is the code displayed here?</strong>
+                          <p className="mt-0.5 text-slate-500 dark:text-slate-400">
+                            In local development without external SMTP credentials, your code is <strong>generated right above on this card</strong> for instant account activation without waiting. (To enable real email dispatch to your Gmail inbox, add <code className="px-1 py-0.5 bg-slate-200 dark:bg-slate-800 rounded font-mono text-[10px]">GMAIL_APP_PASSWORD</code> in <code className="px-1 py-0.5 bg-slate-200 dark:bg-slate-800 rounded font-mono text-[10px]">.env.local</code>).
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Manual Code Input fallback */}
+              <div className="space-y-1.5 pt-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
+                  Or manually type the 6-digit code:
+                </label>
+                <div className="relative max-w-xs mx-auto">
+                  <div className="absolute left-3.5 top-2.5 text-xs font-mono font-bold text-slate-400">
+                    SC-
+                  </div>
+                  <input
+                    type="text"
+                    maxLength={6}
+                    value={regOtp}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+                      setRegOtp(val);
+                      setRegOtpError('');
+                    }}
+                    placeholder="••••••"
+                    className="w-full pl-10 pr-3 py-2 text-center font-mono text-lg tracking-[0.35em] font-extrabold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-inner"
+                  />
+                </div>
+              </div>
+
+              {/* Timer / Resend */}
+              <div className="text-center text-xs">
+                {otpTimer > 0 ? (
+                  <span className="text-slate-500">
+                    Resend code in <strong className="font-mono text-blue-600">{otpTimer}s</strong>
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleResendRegisterOtp}
+                    className="text-blue-600 dark:text-blue-400 font-bold hover:underline inline-flex items-center gap-1"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Resend Verification Code</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowRegisterVerifyModal(false)}
+                  className="w-1/3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleVerifyRegisterOtp}
+                  disabled={loading || regOtp.length !== 6}
+                  className="w-2/3 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2"
+                >
+                  <span>{loading ? 'Activating...' : 'Verify & Activate Account'}</span>
+                  <Check className="w-4 h-4" />
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

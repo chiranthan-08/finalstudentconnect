@@ -1,40 +1,52 @@
-import { NextResponse } from 'next/server';
-import { INITIAL_USERS } from '@/data/mockData';
+import { NextRequest, NextResponse } from 'next/server';
+import { AuthService } from '@/backend/services/authService';
+import { checkRateLimit } from '@/backend/middleware/rateLimiter';
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await request.json();
-    const cleanEmail = email?.trim().toLowerCase();
-
-    // Check admin credentials
-    if (cleanEmail === 'admin@studentconnect.edu') {
-      if (password !== 'Admin@SC2025!') {
-        return NextResponse.json(
-          { success: false, message: 'Invalid Admin Password! Please use "Admin@SC2025!"' },
-          { status: 401 }
-        );
-      }
-      const adminUser = INITIAL_USERS.find(u => u.email === 'admin@studentconnect.edu');
-      return NextResponse.json({ success: true, user: adminUser, token: 'jwt_admin_demo_token' });
+    const ip = req.headers.get('x-forwarded-for') || 'local_ip';
+    const rateCheck = checkRateLimit(`login_${ip}`, 15, 60000);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { success: false, message: `Too many login attempts. Please retry in ${rateCheck.resetInSec}s.` },
+        { status: 429 }
+      );
     }
 
-    const found = INITIAL_USERS.find(u => u.email.toLowerCase() === cleanEmail);
-    if (found) {
-      return NextResponse.json({ success: true, user: found, token: 'jwt_demo_token' });
+    const body = await req.json();
+    const { email, password } = body;
+
+    if (!email) {
+      return NextResponse.json(
+        { success: false, message: 'Email address is required.' },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json({
-      success: true,
-      user: {
-        id: 'usr_' + Date.now(),
-        name: email.split('@')[0],
-        email: cleanEmail,
-        role: 'student',
-        isVerified: true,
-      },
-      token: 'jwt_new_token',
+    const sessionId = req.headers.get('x-session-id') || 'sess_' + Date.now();
+    const result = await AuthService.login(email, password, sessionId, {
+      ipAddress: ip,
+      userAgent: req.headers.get('user-agent') || undefined,
     });
+
+    if (!result.success) {
+      return NextResponse.json(result, { status: 401 });
+    }
+
+    const response = NextResponse.json(result);
+    response.cookies.set('sc_token', result.token!, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60,
+    });
+
+    return response;
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: error.message || 'Internal login error' },
+      { status: 500 }
+    );
   }
 }

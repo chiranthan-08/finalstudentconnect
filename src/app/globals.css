@@ -187,4 +187,49 @@ h1, h2, h3, h4, h5, h6 {
   animation: shimmer 2.5s infinite;
 }
 
+/* VTU Printable Grade Card Print Styles */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  header, footer, nav, .no-print {
+    display: none !important;
+  }
+  
+  #vtu-printable-gradecard {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  #vtu-printable-gradecard * {
+    color: #000000 !important;
+    background: transparent !important;
+  }
+
+  #vtu-printable-gradecard table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  #vtu-printable-gradecard th, 
+  #vtu-printable-gradecard td {
+    border: 1px solid #333333 !important;
+    padding: 6px 8px !important;
+  }
+
+  #vtu-printable-gradecard .print-border {
+    border: 2px solid #000000 !important;
+  }
+}
+
+
 
