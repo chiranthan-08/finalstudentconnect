@@ -41,7 +41,7 @@ async function runTests() {
     role: 'student' as const,
     name: 'Test Student',
   };
-  const token = signToken(tokenPayload, '1h');
+  const token = signToken(tokenPayload);
   assert(typeof token === 'string' && token.split('.').length === 3, 'JWT has valid 3-part format (header.payload.sig)');
   const decoded = verifyToken(token);
   assert(decoded !== null, 'Token verified successfully');

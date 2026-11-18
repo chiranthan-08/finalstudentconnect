@@ -23,7 +23,9 @@ export default function RootLayout({
     <html lang="en" className="dark h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-blue-500 selection:text-white">
         <AuthProvider>
-          <AnalyticsTracker />
+          <Suspense fallback={null}>
+            <AnalyticsTracker />
+          </Suspense>
           <Suspense fallback={<div className="h-16 border-b border-slate-800 bg-slate-950/80" />}>
             <Navbar />
           </Suspense>
@@ -32,7 +34,9 @@ export default function RootLayout({
               {children}
             </Suspense>
           </main>
-          <FloatingCopilot />
+          <Suspense fallback={null}>
+            <FloatingCopilot />
+          </Suspense>
           <Footer />
         </AuthProvider>
       </body>
