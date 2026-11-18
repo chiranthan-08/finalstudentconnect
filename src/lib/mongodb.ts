@@ -17,7 +17,7 @@ function loadEnvLocalFallback() {
           if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
             val = val.slice(1, -1);
           }
-          if (key === 'MONGODB_URI' || !process.env[key]) {
+          if (key === 'MONGODB_URI' || key === 'MONGO_URI' || !process.env[key]) {
             process.env[key] = val;
           }
         }
@@ -28,7 +28,7 @@ function loadEnvLocalFallback() {
 
 export function getMongoUri(): string {
   loadEnvLocalFallback();
-  return process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/studentconnect';
+  return process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/studentconnect';
 }
 
 interface MongooseCache {
