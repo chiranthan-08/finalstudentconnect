@@ -1,5 +1,6 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { PaymentModel, SubscriptionModel, UserModel, AnalyticsEventModel } from '@/models';
+import { sendPremiumUpgradeEmail } from '@/lib/emailService';
 
 export interface CreatePaymentIntentInput {
   userId: string;
@@ -93,11 +94,27 @@ export class PaymentService {
     });
 
     // 3. Update User subscriptionStatus in MongoDB
-    await UserModel.findByIdAndUpdate(payment.userId, {
-      subscriptionStatus: 'premium',
-    }).catch(() => {});
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      payment.userId,
+      { subscriptionStatus: 'premium' },
+      { new: true }
+    ).catch(() => null);
 
-    // 4. Log conversion & revenue analytics event
+    // 4. Send Premium Upgrade Confirmation Email via Gmail SMTP
+    const emailResult = await sendPremiumUpgradeEmail({
+      to: payment.userEmail,
+      name: updatedUser?.name,
+      planName: subscription.planName,
+      amountINR: payment.amountINR,
+      paymentId: payment.providerTransactionId || payment.paymentId,
+      validUntil: endDate,
+    }).catch((err) => ({
+      emailSent: false,
+      provider: 'NONE' as const,
+      error: err?.message || 'Failed to dispatch premium confirmation email',
+    }));
+
+    // 5. Log conversion & revenue analytics event
     await AnalyticsEventModel.create({
       sessionId: 'session_' + payment.userId,
       userId: payment.userId,
@@ -118,6 +135,7 @@ export class PaymentService {
       message: 'Payment verified and premium subscription activated',
       subscriptionId: subscription._id.toString(),
       paymentId: payment.paymentId,
+      emailNotification: emailResult,
     };
   }
 

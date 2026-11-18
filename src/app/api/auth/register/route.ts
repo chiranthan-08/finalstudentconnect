@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AuthService } from '@/backend/services/authService';
 import { checkRateLimit } from '@/backend/middleware/rateLimiter';
+import { sendRegistrationWelcomeEmail } from '@/lib/emailService';
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,8 +45,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(result, { status: 400 });
     }
 
+    // Send account creation & verification email via Gmail SMTP
+    const emailResult = await sendRegistrationWelcomeEmail({
+      to: email,
+      name,
+      role,
+      college,
+    }).catch((err) => ({
+      emailSent: false,
+      provider: 'NONE' as const,
+      error: err?.message || 'Failed to dispatch welcome email',
+    }));
+
     // Set secure cookie as well
-    const response = NextResponse.json(result, { status: 201 });
+    const response = NextResponse.json(
+      {
+        ...result,
+        emailNotification: emailResult,
+      },
+      { status: 201 }
+    );
     response.cookies.set('sc_token', result.token!, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

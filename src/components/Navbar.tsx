@@ -30,7 +30,8 @@ import {
   LogOut, 
   ChevronRight,
   Lock,
-  Zap
+  Zap,
+  Accessibility
 } from 'lucide-react';
 import { UserRole } from '@/types';
 
@@ -89,6 +90,7 @@ export function Navbar() {
 
   // Secondary ecosystem items in Hubs dropdown
   const ecosystemHubs = [
+    { href: '/accessibility', label: 'Accessibility Hub (Inclusive)', desc: 'Sign-to-text classroom, speech AAC cards & audio books for every student', icon: Accessibility, badge: 'Inclusive', pulse: true },
     { href: '/pricing', label: 'Student Connect Pro', desc: 'Verified student certificates, uncapped AI & Razorpay plans', icon: Zap, badge: 'Pro', pulse: true },
     { href: '/sports', label: 'Sports Opportunities Hub', desc: 'College, VTU & National tournaments, trials & deadlines', icon: Trophy, badge: 'New', pulse: true },
     { href: '/feature-implementation', label: 'Feature Implementation', desc: 'Next phase roadmap: 18 pillars, mobile apps & rewards', icon: Sparkles, badge: 'Next Phase' },
@@ -246,6 +248,21 @@ export function Navbar() {
           {/* 3. RIGHT CONTROLS: SEARCH, ADMIN, ROLE, NOTIFS, THEME, USER PROFILE */}
           <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 ml-auto">
             
+            {/* Accessibility Hub Direct Entry (Inclusive Learning Platform) */}
+            <Link
+              href="/accessibility"
+              className={`h-8 flex items-center gap-1.5 px-2.5 rounded-xl text-xs font-extrabold transition-all shrink-0 whitespace-nowrap ${
+                pathname?.startsWith('/accessibility')
+                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/20'
+                  : 'border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60'
+              }`}
+              title="StudentConnect Accessibility Hub — Sign, Speech & Audio Learning"
+              aria-label="Open StudentConnect Accessibility Hub"
+            >
+              <Accessibility className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden xl:inline">Accessibility Hub</span>
+            </Link>
+
             {/* Quick Search Trigger */}
             <button
               onClick={() => setIsCommandPaletteOpen(true)}

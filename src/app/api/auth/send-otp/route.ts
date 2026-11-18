@@ -3,6 +3,7 @@ import dns from 'dns';
 import nodemailer from 'nodemailer';
 import { connectToDatabase } from '@/lib/mongodb';
 import { OtpVerificationModel } from '@/models/OtpVerification';
+import { isGmailSmtpConfigured, sendMailViaSmtp } from '@/lib/emailService';
 
 // In-memory fallback store to ensure zero downtime if local MongoDB server is not running
 declare global {
@@ -116,14 +117,51 @@ export async function POST(request: Request) {
       createdAt: Date.now()
     });
 
-    // 6. Email Dispatch Logic (Resend / Brevo / Gmail SMTP / Nodemailer)
+    // 6. Email Dispatch Logic (Gmail SMTP Priority -> Resend -> Brevo)
     let emailSent = false;
     let providerUsed = 'LOCAL_CODE';
     let deliveryError: string | null = null;
 
-    // Check Option A: Resend API Key
+    // Priority Option 1: Gmail SMTP (works for ANY recipient inbox without sandbox restrictions)
+    if (isGmailSmtpConfigured()) {
+      const smtpResult = await sendMailViaSmtp({
+        to: cleanEmail,
+        subject: isGoogle
+          ? `Google 2-Step Verification Code: ${formattedCode}`
+          : `Student Connect Verification Code: ${formattedCode}`,
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #2563eb, #4f46e5); padding: 24px; text-align: center; color: #ffffff;">
+              <h1 style="margin: 0; font-size: 20px;">Student Connect Karnataka</h1>
+              <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.9;">Secure Identity &amp; Verification System</p>
+            </div>
+            <div style="padding: 28px 24px;">
+              <h2 style="margin: 0 0 10px; font-size: 18px; color: #0f172a;">${isGoogle ? 'Google 2-Step Verification' : 'Email Account Verification'}</h2>
+              <p style="margin: 0 0 16px; font-size: 14px; color: #475569;">
+                Hello <strong>${recipientName}</strong>,<br/>
+                Please use the one-time verification code below to authorize your StudentConnect account:
+              </p>
+              <div style="background: #f8fafc; border: 2px dashed #93c5fd; border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0;">
+                <span style="font-family: monospace; font-size: 32px; font-weight: 900; letter-spacing: 6px; color: #1d4ed8;">${formattedCode}</span>
+                <p style="margin: 8px 0 0; font-size: 12px; color: #64748b;">Valid for 10 minutes • 5 attempts permitted</p>
+              </div>
+            </div>
+          </div>
+        `,
+        text: `Hello ${recipientName}, your Student Connect verification code is ${formattedCode}. Valid for 10 minutes.`,
+      });
+
+      if (smtpResult.emailSent) {
+        emailSent = true;
+        providerUsed = smtpResult.provider;
+      } else {
+        deliveryError = smtpResult.error || 'Gmail SMTP error';
+      }
+    }
+
+    // Check Option A: Resend API Key (fallback if Gmail SMTP is not configured)
     const resendApiKey = process.env.RESEND_API_KEY;
-    if (resendApiKey) {
+    if (!emailSent && resendApiKey) {
       try {
         const resendRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',

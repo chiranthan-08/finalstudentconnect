@@ -73,7 +73,8 @@ export async function connectToDatabase(): Promise<{
   if (!cached.promise || cached.status === 'error' || cached.status === 'disconnected') {
     const opts: mongoose.ConnectOptions = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 5000, // 5s timeout for Atlas connection check
+      serverSelectionTimeoutMS: 10000, // 10s timeout for Atlas SRV + TLS handshake
+      family: 4, // Prefer IPv4 to avoid Windows/ISP IPv6 Atlas timeout issues
       maxPoolSize: 10,
     };
 
