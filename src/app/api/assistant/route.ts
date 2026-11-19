@@ -316,6 +316,10 @@ function findCollegeInDatabase(query: string) {
     'nhce': 'nhce-bangalore',
     'new horizon': 'nhce-bangalore',
     'oxford': 'toce-bangalore',
+    'atria': 'atria-bangalore',
+    'ait': 'atria-bangalore',
+    'atria institute': 'atria-bangalore',
+    'atria it': 'atria-bangalore',
   };
 
   for (const [key, id] of Object.entries(acronyms)) {

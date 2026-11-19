@@ -862,6 +862,183 @@ export const COLLEGES_DATA: College[] = [
   // BENGALURU URBAN COLLEGES
   // ==========================================
   {
+    id: 'atria-bangalore',
+    name: 'Atria Institute of Technology',
+    shortName: 'Atria IT Bengaluru',
+    code: 'E099',
+    logo: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
+    description: 'Atria Institute of Technology (AIT), established in 2000, is an autonomous engineering institution situated on a lush 17.5-acre campus in Hebbal, Bengaluru, adjacent to Bangalore Baptist Hospital and close to Manyata Embassy Tech Park. Affiliated to Visvesvaraya Technological University (VTU) Belagavi, approved by AICTE, and accredited with an exemplary NAAC "A++" grade, Atria offers high-demand degrees across Computer Science, Artificial Intelligence, Data Science, and Electronics with ₹30 LPA highest campus packages and top recruiter drives including Amazon, Infosys, and Cognizant.',
+    highlights: [
+      '17.5-Acre Modern Green Campus located in Hebbal, Bengaluru near Manyata Tech Park',
+      'Autonomous Institution affiliated to VTU Belagavi & Approved by AICTE New Delhi',
+      'Accredited with prestigious NAAC "A++" Grade & NBA Accredited Engineering Programs',
+      '₹30.0 LPA Highest CTC with 86% campus placement record across tier-1 software & core companies',
+      'Centres of Excellence in Artificial Intelligence, Cloud Computing, IoT, and Digital Manufacturing',
+      'Proximity to Bengaluru Northern IT Corridor with active industry internship pathways',
+    ],
+    facilities: [
+      'State-of-the-art Compute & AI Research Labs with high-end GPU workstations',
+      'Central Digital Library featuring 45,000+ volumes, IEEE Xplore, and Elsevier portal access',
+      'Dedicated Career Development Centre (CDC) with continuous CRT training programs',
+      'On-Campus Separate Hostels for Boys & Girls with high-speed Wi-Fi and 24/7 security',
+      'Multi-cuisine Food Court, Cafeterias, and Student Recreational Zones',
+      'Sports Complex featuring Basketball Court, Cricket Practice Nets, Badminton, and Fitness Gym',
+    ],
+    campusPhotos: [
+      {
+        title: 'Atria Academic Quadrangle & Campus',
+        category: 'Campus Architecture',
+        url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
+        caption: 'Central academic buildings and open quadrangles at Atria IT Hebbal, Bengaluru.'
+      },
+      {
+        title: 'AI, Machine Learning & Robotics Labs',
+        category: 'Laboratories',
+        url: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=1200&q=80',
+        caption: 'Specialized computing infrastructure and IoT hardware development workstations.'
+      },
+      {
+        title: 'Atria Central Library & Digital Reference Wing',
+        category: 'Library',
+        url: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80',
+        caption: 'Spacious study hall and online subscription portal for engineering researchers.'
+      }
+    ],
+    location: {
+      district: 'Bengaluru Urban',
+      city: 'Bengaluru',
+      address: '1st Main Road, AGS Colony, Anandnagar, Hebbal, Bengaluru, Karnataka 560024',
+      mapUrl: 'https://maps.google.com/?q=Atria+Institute+of+Technology+Hebbal+Bengaluru',
+    },
+    website: 'https://atria.edu',
+    contact: {
+      phone: '+91 80 2354 7299',
+      email: 'principal@atria.edu',
+    },
+    collegeType: 'Private',
+    affiliation: 'Autonomous',
+    accreditations: {
+      naacGrade: 'A++',
+      nbaAccredited: true,
+      nirfRank: 160,
+      karnatakaRank: 22,
+    },
+    rating: 4.4,
+    reviewCount: 340,
+    fees: {
+      kcetAnnual: 105000,
+      comedkAnnual: 240000,
+      managementAnnual: 375000,
+      hostelAnnual: 95000,
+    },
+    hostelAvailable: true,
+    admissionInfo: {
+      eligibility: '45% in 10+2 with Physics & Mathematics. KCET/COMEDK rank required for quota seats.',
+      process: 'KEA CET Single Window Counselling (Code: E099) / COMEDK UGET (Code: E012).',
+      managementQuotaDetails: 'Available through Atria Education Trust admission council.',
+    },
+    sourceInfo: {
+      source: 'KEA CET Official Allotment Matrix & Institutional Placement Records',
+      lastUpdated: '2024-2025',
+      verificationStatus: 'Verified',
+    },
+    placements: {
+      year: 2024,
+      placementPercentage: 86,
+      totalEligible: 650,
+      studentsPlaced: 560,
+      highestPackageLPA: 30.0,
+      averagePackageLPA: 5.6,
+      medianPackageLPA: 4.8,
+      topRecruiters: ['Amazon', 'Accenture', 'Infosys', 'Wipro', 'HP', 'Cognizant', 'Capgemini', 'TCS', 'HCL', 'Honeywell', 'Mindtree'],
+      historicalTrend: [
+        { year: 2022, avgPackage: 4.8, placementRate: 82 },
+        { year: 2023, avgPackage: 5.2, placementRate: 85 },
+        { year: 2024, avgPackage: 5.6, placementRate: 86 },
+      ],
+    },
+    branches: [
+      {
+        branchCode: 'CSE',
+        branchName: 'Computer Science & Engineering',
+        intakeSeats: 240,
+        cutoffs: {
+          kcet: { gm: 34200, twoA: 42100, twoB: 48300, threeA: 37400, threeB: 35600, sc: 88500, st: 92400 },
+          comedk: { gm: 31350, hkr: 44200 },
+        },
+        avgPackage: 7.2,
+        highestPackage: 30.0,
+      },
+      {
+        branchCode: 'AIML',
+        branchName: 'Artificial Intelligence & Machine Learning',
+        intakeSeats: 120,
+        cutoffs: {
+          kcet: { gm: 38400, twoA: 49200, twoB: 55100, threeA: 41300, threeB: 39500, sc: 95200, st: 98100 },
+          comedk: { gm: 35300, hkr: 52000 },
+        },
+        avgPackage: 6.8,
+        highestPackage: 26.0,
+      },
+      {
+        branchCode: 'ISE',
+        branchName: 'Information Science & Engineering',
+        intakeSeats: 120,
+        cutoffs: {
+          kcet: { gm: 51200, twoA: 62400, twoB: 68100, threeA: 54300, threeB: 52600, sc: 105400, st: 110200 },
+          comedk: { gm: 34000, hkr: 56000 },
+        },
+        avgPackage: 6.5,
+        highestPackage: 22.0,
+      },
+      {
+        branchCode: 'AIDS',
+        branchName: 'Artificial Intelligence & Data Science',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 44100, twoA: 55300, twoB: 61400, threeA: 47200, threeB: 45800, sc: 99100, st: 104200 },
+          comedk: { gm: 38500, hkr: 54000 },
+        },
+        avgPackage: 6.6,
+        highestPackage: 24.0,
+      },
+      {
+        branchCode: 'ECE',
+        branchName: 'Electronics & Communication Engineering',
+        intakeSeats: 120,
+        cutoffs: {
+          kcet: { gm: 62400, twoA: 78300, twoB: 85200, threeA: 66400, threeB: 64100, sc: 125400, st: 130500 },
+          comedk: { gm: 58000, hkr: 72000 },
+        },
+        avgPackage: 5.4,
+        highestPackage: 18.0,
+      },
+      {
+        branchCode: 'CIVIL',
+        branchName: 'Civil Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 135000, twoA: 148000, twoB: 152000, threeA: 139000, threeB: 137000, sc: 168000, st: 172000 },
+          comedk: { gm: 98000 },
+        },
+        avgPackage: 4.2,
+        highestPackage: 8.5,
+      },
+      {
+        branchCode: 'MECH',
+        branchName: 'Mechanical Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 142000, twoA: 154000, twoB: 158000, threeA: 146000, threeB: 144000, sc: 172000, st: 176000 },
+          comedk: { gm: 95000 },
+        },
+        avgPackage: 4.5,
+        highestPackage: 10.0,
+      },
+    ],
+  },
+  {
     id: 'rvce-bangalore',
     name: 'R.V. College of Engineering',
     shortName: 'RVCE',

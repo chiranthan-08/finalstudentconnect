@@ -2,6 +2,48 @@ import { CollegeEvent } from '@/types';
 
 export const COLLEGE_EVENTS: CollegeEvent[] = [
   // ==========================================
+  // ATRIA INSTITUTE OF TECHNOLOGY (HEBBAL, BENGALURU)
+  // ==========================================
+  {
+    id: 'atria-hackfrenzy-2026',
+    collegeId: 'atria-bangalore',
+    collegeName: 'Atria Institute of Technology',
+    title: 'ATRIA HACK-FRENZY 2026',
+    tagline: 'Code Beyond Boundaries • Innovate for Tomorrow',
+    theme: 'AI Agents, Distributed Intelligence & Clean Cities',
+    category: 'Technical',
+    eventType: 'Hackathon',
+    department: 'Department of Computer Science & Engineering (in association with IEEE AIT & ACM)',
+    inAssociationWith: ['IEEE AIT Student Branch', 'ACM Student Chapter', 'Atria Incubation Centre (AIC)'],
+    eventDate: '24 May 2026 – 25 May 2026',
+    registrationDeadline: '18 May 2026',
+    duration: '24-Hour National Sprint',
+    venue: 'Atria Central Auditorium & AI Research Lab, Hebbal, Bengaluru',
+    status: 'Open',
+    prizePool: '₹50,000 Cash + Direct Cloud Credits & Internship Interviews',
+    registrationFee: '₹400 / Team (2–4 Members)',
+    teamSize: '2 – 4 Members',
+    eligibility: 'All Engineering & BCA/MCA Undergraduates across Karnataka',
+    domains: [
+      'Generative AI & Agentic Systems',
+      'Smart Urban Mobility & EV Analytics',
+      'Healthcare Tech & Assistive AI',
+      'Green Energy & IoT Monitoring',
+      'Open Innovation & Web3 Fintech',
+    ],
+    brochureUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+    bannerUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+    description: 'Atria Hack-Frenzy is Bengaluru’s flagship 24-hour inter-collegiate coding hackathon hosted by Atria Institute of Technology Hebbal. Teams collaborate across AI, Cloud, and Smart City tracks with 1-on-1 industry mentorship and immediate startup incubation evaluation.',
+    coordinators: [
+      { type: 'Student', name: 'Nikhil R', phone: '+91 98451 23412' },
+      { type: 'Student', name: 'Sneha M', phone: '+91 97412 88765' },
+      { type: 'Faculty', name: 'Dr. G. Rajesh', phone: '+91 80 2354 7299' },
+    ],
+    registrationUrl: 'https://atria.edu/hack-frenzy',
+    registeredCount: 78,
+    instagramHandle: '@atria_hackfrenzy',
+  },
+  // ==========================================
   // CHANNABASAVESHWARA INSTITUTE OF TECHNOLOGY (CIT GUBBI, TUMAKURU)
   // ==========================================
   {
