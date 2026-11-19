@@ -40,9 +40,11 @@ import {
   Share2,
   AlertTriangle,
   Filter,
-  Search
+  Search,
+  Navigation
 } from 'lucide-react';
 import { COLLEGES_DATA, getEventsByCollegeId } from '@/data/mockData';
+import { CollegeGoogleMap } from '@/components/colleges/CollegeGoogleMap';
 import { CollegeEvent } from '@/types';
 
 function CollegeDetailContent() {
@@ -61,12 +63,12 @@ function CollegeDetailContent() {
   }, [college.id]);
 
   const searchParams = useSearchParams();
-  const validTabs = ['events', 'gallery', 'cutoffs', 'placements', 'branches', 'admission'];
-  const urlTab = searchParams.get('tab') as 'events' | 'gallery' | 'cutoffs' | 'placements' | 'branches' | 'admission' | null;
+  const validTabs = ['events', 'gallery', 'directions', 'cutoffs', 'placements', 'branches', 'admission'];
+  const urlTab = searchParams.get('tab') as 'events' | 'gallery' | 'directions' | 'cutoffs' | 'placements' | 'branches' | 'admission' | null;
   const defaultTab = (urlTab && validTabs.includes(urlTab))
     ? urlTab
     : (collegeEvents.length > 0 ? 'events' : 'gallery');
-  const [activeTab, setActiveTab] = useState<'events' | 'gallery' | 'cutoffs' | 'placements' | 'branches' | 'admission'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<'events' | 'gallery' | 'directions' | 'cutoffs' | 'placements' | 'branches' | 'admission'>(defaultTab);
 
   React.useEffect(() => {
     const tabFromUrl = searchParams.get('tab') as any;
@@ -219,6 +221,15 @@ function CollegeDetailContent() {
             )}
 
             <button
+              onClick={() => setActiveTab('directions')}
+              className="px-3.5 py-2.5 rounded-2xl bg-white/20 hover:bg-emerald-600 text-white backdrop-blur-md text-xs font-bold transition-all flex items-center gap-1.5 shadow-md border border-white/20"
+              title="Interactive Google Map & Directions"
+            >
+              <Navigation className="w-4 h-4 text-emerald-300" />
+              <span>Map & Directions</span>
+            </button>
+
+            <button
               onClick={() => toggleSaveCollege(college.id)}
               className={`p-2.5 sm:p-3 rounded-2xl text-xs font-bold transition-all shadow-md flex items-center gap-1.5 ${
                 isSaved ? 'bg-rose-500 text-white' : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border border-white/20'
@@ -308,6 +319,7 @@ function CollegeDetailContent() {
         {[
           { id: 'events', label: `🎪 Running Events (${collegeEvents.length})`, badge: collegeEvents.length > 0 ? 'ACTIVE' : null },
           { id: 'gallery', label: '🏛️ Campus View & HD Photos', badge: null },
+          { id: 'directions', label: '📍 Google Map & GPS Directions', badge: 'LIVE GPS' },
           { id: 'cutoffs', label: '📊 KCET & COMEDK Cutoffs', badge: null },
           { id: 'placements', label: '💼 Placement Analytics', badge: null },
           { id: 'branches', label: '⚙️ Branches & Seat Matrix', badge: null },
@@ -769,38 +781,38 @@ function CollegeDetailContent() {
             </div>
           )}
 
-          {/* Location & Directions Map Card */}
-          <div className="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-red-500" />
-              <span>Campus Address & Direction Details</span>
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              <strong>Campus Location: </strong> {college.location.address}
-            </p>
-            <div className="pt-2 flex flex-wrap gap-3">
-              <a
-                href={college.location.mapUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md"
-              >
-                <MapPin className="w-3.5 h-3.5" />
-                <span>Navigate on Google Maps</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-              <a
-                href={college.website}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>Official College Website</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
+          {/* Interactive Google Map & Directions Card in Campus View */}
+          <CollegeGoogleMap college={college} />
+        </div>
+      )}
+
+      {/* TAB CONTENT: DIRECTIONS & LIVE GOOGLE MAP */}
+      {activeTab === 'directions' && (
+        <div className="space-y-6">
+          <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-red-500" />
+                <span>Live Campus Navigation & Google Maps</span>
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Explore the physical campus of {college.name}, get real-time driving or bus transit routes, and locate student housing nearby.
+              </p>
             </div>
+
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(college.name + ', ' + college.location.address)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md shrink-0"
+            >
+              <Navigation className="w-3.5 h-3.5" />
+              <span>Open in Google Maps App</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
           </div>
+
+          <CollegeGoogleMap college={college} />
         </div>
       )}
 

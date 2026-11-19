@@ -24,10 +24,12 @@ import {
   Camera,
   Eye,
   CheckCircle2,
-  Info
+  Info,
+  Navigation
 } from 'lucide-react';
 import { COLLEGES_DATA, KARNATAKA_DISTRICTS, ENGINEERING_BRANCHES, getEventsByCollegeId } from '@/data/mockData';
 import { College } from '@/types';
+import { CollegeGoogleMap } from '@/components/colleges/CollegeGoogleMap';
 
 function CollegesDirectoryContent() {
   const searchParams = useSearchParams();
@@ -640,6 +642,17 @@ function CollegesDirectoryContent() {
                     <span>Clear View</span>
                   </button>
 
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(college.name + ', ' + college.location.address)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-400 bg-slate-50/70 dark:bg-slate-800/40 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition-colors flex items-center gap-1 text-xs"
+                    title="Open Google Maps Turn-by-Turn GPS Directions"
+                  >
+                    <Navigation className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Directions</span>
+                  </a>
+
                   <Link
                     href={`/predictor?college=${college.id}`}
                     className="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors"
@@ -827,6 +840,11 @@ function CollegesDirectoryContent() {
                 </div>
               </div>
             )}
+
+            {/* Interactive Google Map & Direction Guide in Preview */}
+            <div className="pt-1">
+              <CollegeGoogleMap college={previewCollege} compact />
+            </div>
 
             {/* Action Footer */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200 dark:border-slate-800">
