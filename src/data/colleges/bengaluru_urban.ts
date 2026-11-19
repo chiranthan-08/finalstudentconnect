@@ -10,6 +10,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "New Horizon College of Engineering (NHCE Bengaluru) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 92% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹35.0 LPA Highest CTC with 92% campus placement rate',
@@ -196,6 +199,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Nitte Meenakshi Institute of Technology (NMIT Yelahanka (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 91% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹40.0 LPA Highest CTC with 91% campus placement rate',
@@ -284,94 +289,116 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     },
     branches: [
       {
-            "branchCode": "CSE",
-            "branchName": "Computer Science & Engineering",
-            "intakeSeats": 180,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 29900,
-                        "twoA": 37600,
-                        "twoB": 43600,
-                        "threeA": 32900,
-                        "threeB": 30900,
-                        "sc": 74200,
-                        "st": 82200
-                  },
-                  "comedk": {
-                        "gm": 28200,
-                        "hkr": 36200
-                  }
-            },
-            "avgPackage": 8.7,
-            "highestPackage": 40.0
+        branchCode: 'CSE',
+        branchName: 'Computer Science & Engineering',
+        intakeSeats: 180,
+        cutoffs: {
+          kcet: { gm: 12500, twoA: 18500, twoB: 21500, threeA: 15500, threeB: 14000, sc: 42000, st: 46000 },
+          comedk: { gm: 11000, hkr: 14500 }
+        },
+        avgPackage: 9.2,
+        highestPackage: 40.0
       },
       {
-            "branchCode": "ISE",
-            "branchName": "Information Science & Engineering",
-            "intakeSeats": 120,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 37320,
-                        "twoA": 45880,
-                        "twoB": 51880,
-                        "threeA": 40320,
-                        "threeB": 38320,
-                        "sc": 86200,
-                        "st": 94200
-                  },
-                  "comedk": {
-                        "gm": 34900,
-                        "hkr": 42900
-                  }
-            },
-            "avgPackage": 8.0,
-            "highestPackage": 36.0
+        branchCode: 'ISE',
+        branchName: 'Information Science & Engineering',
+        intakeSeats: 120,
+        cutoffs: {
+          kcet: { gm: 17200, twoA: 24500, twoB: 28000, threeA: 21000, threeB: 19500, sc: 54000, st: 58000 },
+          comedk: { gm: 15200, hkr: 19500 }
+        },
+        avgPackage: 8.5,
+        highestPackage: 32.0
       },
       {
-            "branchCode": "AIML",
-            "branchName": "Artificial Intelligence & Machine Learning",
-            "intakeSeats": 60,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 33040,
-                        "twoA": 41600,
-                        "twoB": 47600,
-                        "threeA": 36040,
-                        "threeB": 34040,
-                        "sc": 80200,
-                        "st": 88200
-                  },
-                  "comedk": {
-                        "gm": 31480,
-                        "hkr": 39480
-                  }
-            },
-            "avgPackage": 8.4,
-            "highestPackage": 38.0
+        branchCode: 'AIML',
+        branchName: 'Artificial Intelligence & Machine Learning',
+        intakeSeats: 120,
+        cutoffs: {
+          kcet: { gm: 14800, twoA: 21500, twoB: 25000, threeA: 18500, threeB: 17000, sc: 49000, st: 53000 },
+          comedk: { gm: 13200, hkr: 17800 }
+        },
+        avgPackage: 8.8,
+        highestPackage: 36.0
       },
       {
-            "branchCode": "ECE",
-            "branchName": "Electronics & Communication Engineering",
-            "intakeSeats": 120,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 48300,
-                        "twoA": 62000,
-                        "twoB": 69000,
-                        "threeA": 52300,
-                        "threeB": 50300,
-                        "sc": 102200,
-                        "st": 109200
-                  },
-                  "comedk": {
-                        "gm": 45600,
-                        "hkr": 55600
-                  }
-            },
-            "avgPackage": 7.2,
-            "highestPackage": 32.0
+        branchCode: 'DS',
+        branchName: 'Computer Science & Engineering (Data Science)',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 16000, twoA: 23000, twoB: 26500, threeA: 19800, threeB: 18200, sc: 51000, st: 56000 },
+          comedk: { gm: 14500, hkr: 18800 }
+        },
+        avgPackage: 8.6,
+        highestPackage: 35.0
+      },
+      {
+        branchCode: 'AERO_SPACE',
+        branchName: 'Aerospace Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 32000, twoA: 45000, twoB: 51000, threeA: 38000, threeB: 35000, sc: 85000, st: 92000 },
+          comedk: { gm: 28000, hkr: 36000 }
+        },
+        avgPackage: 7.2,
+        highestPackage: 22.0
+      },
+      {
+        branchCode: 'AERO',
+        branchName: 'Aeronautical Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 34000, twoA: 48000, twoB: 54000, threeA: 41000, threeB: 38000, sc: 89000, st: 96000 },
+          comedk: { gm: 31000, hkr: 39000 }
+        },
+        avgPackage: 7.0,
+        highestPackage: 20.0
+      },
+      {
+        branchCode: 'ECE',
+        branchName: 'Electronics & Communication Engineering',
+        intakeSeats: 180,
+        cutoffs: {
+          kcet: { gm: 22000, twoA: 31000, twoB: 35500, threeA: 27000, threeB: 25000, sc: 68000, st: 74000 },
+          comedk: { gm: 20500, hkr: 26000 }
+        },
+        avgPackage: 7.8,
+        highestPackage: 28.0
+      },
+      {
+        branchCode: 'EEE',
+        branchName: 'Electrical & Electronics Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 42000, twoA: 58000, twoB: 65000, threeA: 50000, threeB: 47000, sc: 98000, st: 105000 },
+          comedk: { gm: 38000, hkr: 47000 }
+        },
+        avgPackage: 6.8,
+        highestPackage: 18.0
+      },
+      {
+        branchCode: 'MECH',
+        branchName: 'Mechanical Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 78000, twoA: 98000, twoB: 108000, threeA: 88000, threeB: 83000, sc: 142000, st: 151000 },
+          comedk: { gm: 65000, hkr: 78000 }
+        },
+        avgPackage: 5.8,
+        highestPackage: 14.0
+      },
+      {
+        branchCode: 'CIVIL',
+        branchName: 'Civil Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 92000, twoA: 114000, twoB: 125000, threeA: 102000, threeB: 97000, sc: 152000, st: 160000 },
+          comedk: { gm: 75000, hkr: 88000 }
+        },
+        avgPackage: 5.4,
+        highestPackage: 12.0
       }
-],
+    ],
   },
   {
     id: "cmrit-bangalore",
@@ -568,6 +595,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "R.N.S. Institute of Technology (RNSIT RR Nagar (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 89% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹30.0 LPA Highest CTC with 89% campus placement rate',
@@ -754,6 +783,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Acharya Institute of Technology (Acharya IT Soladevanahalli) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 87% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹26.0 LPA Highest CTC with 87% campus placement rate',
@@ -842,94 +874,127 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     },
     branches: [
       {
-            "branchCode": "CSE",
-            "branchName": "Computer Science & Engineering",
-            "intakeSeats": 180,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 32000,
-                        "twoA": 40000,
-                        "twoB": 46000,
-                        "threeA": 35000,
-                        "threeB": 33000,
-                        "sc": 76000,
-                        "st": 84000
-                  },
-                  "comedk": {
-                        "gm": 30000,
-                        "hkr": 38000
-                  }
-            },
-            "avgPackage": 7.8,
-            "highestPackage": 26.0
+        branchCode: 'CSE',
+        branchName: 'Computer Science & Engineering',
+        intakeSeats: 180,
+        cutoffs: {
+          kcet: { gm: 22000, twoA: 29500, twoB: 33500, threeA: 25500, threeB: 23800, sc: 62000, st: 68000 },
+          comedk: { gm: 21000, hkr: 27500 }
+        },
+        avgPackage: 7.8,
+        highestPackage: 26.0
       },
       {
-            "branchCode": "ISE",
-            "branchName": "Information Science & Engineering",
-            "intakeSeats": 120,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 39600,
-                        "twoA": 48400,
-                        "twoB": 54400,
-                        "threeA": 42600,
-                        "threeB": 40600,
-                        "sc": 88000,
-                        "st": 96000
-                  },
-                  "comedk": {
-                        "gm": 37000,
-                        "hkr": 45000
-                  }
-            },
-            "avgPackage": 7.1,
-            "highestPackage": 23.4
+        branchCode: 'ISE',
+        branchName: 'Information Science & Engineering',
+        intakeSeats: 120,
+        cutoffs: {
+          kcet: { gm: 29500, twoA: 38500, twoB: 43000, threeA: 33500, threeB: 31500, sc: 74000, st: 81000 },
+          comedk: { gm: 27500, hkr: 35000 }
+        },
+        avgPackage: 7.1,
+        highestPackage: 23.4
       },
       {
-            "branchCode": "AIML",
-            "branchName": "Artificial Intelligence & Machine Learning",
-            "intakeSeats": 60,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 35200,
-                        "twoA": 44000,
-                        "twoB": 50000,
-                        "threeA": 38200,
-                        "threeB": 36200,
-                        "sc": 82000,
-                        "st": 90000
-                  },
-                  "comedk": {
-                        "gm": 33400,
-                        "hkr": 41400
-                  }
-            },
-            "avgPackage": 7.5,
-            "highestPackage": 24.7
+        branchCode: 'AIML',
+        branchName: 'Artificial Intelligence & Machine Learning',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 26000, twoA: 34500, twoB: 39000, threeA: 29500, threeB: 27800, sc: 68000, st: 75000 },
+          comedk: { gm: 24500, hkr: 32000 }
+        },
+        avgPackage: 7.5,
+        highestPackage: 24.7
       },
       {
-            "branchCode": "ECE",
-            "branchName": "Electronics & Communication Engineering",
-            "intakeSeats": 120,
-            "cutoffs": {
-                  "kcet": {
-                        "gm": 51000,
-                        "twoA": 65000,
-                        "twoB": 72000,
-                        "threeA": 55000,
-                        "threeB": 53000,
-                        "sc": 104000,
-                        "st": 111000
-                  },
-                  "comedk": {
-                        "gm": 48000,
-                        "hkr": 58000
-                  }
-            },
-            "avgPackage": 6.5,
-            "highestPackage": 20.8
+        branchCode: 'ECE',
+        branchName: 'Electronics & Communication Engineering',
+        intakeSeats: 120,
+        cutoffs: {
+          kcet: { gm: 38000, twoA: 49500, twoB: 55500, threeA: 42500, threeB: 40000, sc: 88000, st: 96000 },
+          comedk: { gm: 36000, hkr: 45000 }
+        },
+        avgPackage: 6.5,
+        highestPackage: 20.8
+      },
+      {
+        branchCode: 'AERO',
+        branchName: 'Aeronautical Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 45000, twoA: 59000, twoB: 66000, threeA: 52000, threeB: 48000, sc: 98000, st: 108000 },
+          comedk: { gm: 42000, hkr: 52000 }
+        },
+        avgPackage: 6.4,
+        highestPackage: 18.0
+      },
+      {
+        branchCode: 'MECHATRONICS',
+        branchName: 'Mechatronics Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 52000, twoA: 68000, twoB: 76000, threeA: 60000, threeB: 56000, sc: 112000, st: 122000 },
+          comedk: { gm: 49000, hkr: 61000 }
+        },
+        avgPackage: 6.2,
+        highestPackage: 16.5
+      },
+      {
+        branchCode: 'AUTO',
+        branchName: 'Automobile Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 72000, twoA: 92000, twoB: 102000, threeA: 82000, threeB: 77000, sc: 135000, st: 145000 },
+          comedk: { gm: 65000, hkr: 79000 }
+        },
+        avgPackage: 5.8,
+        highestPackage: 15.0
+      },
+      {
+        branchCode: 'BT',
+        branchName: 'Biotechnology Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 48000, twoA: 64000, twoB: 72000, threeA: 56000, threeB: 52000, sc: 106000, st: 116000 },
+          comedk: { gm: 46000, hkr: 58000 }
+        },
+        avgPackage: 6.3,
+        highestPackage: 16.0
+      },
+      {
+        branchCode: 'MINING',
+        branchName: 'Mining Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 85000, twoA: 108000, twoB: 118000, threeA: 96000, threeB: 91000, sc: 148000, st: 158000 },
+          comedk: { gm: 74000, hkr: 88000 }
+        },
+        avgPackage: 5.6,
+        highestPackage: 14.0
+      },
+      {
+        branchCode: 'MECH',
+        branchName: 'Mechanical Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 88000, twoA: 112000, twoB: 122000, threeA: 99000, threeB: 94000, sc: 151000, st: 160000 },
+          comedk: { gm: 76000, hkr: 91000 }
+        },
+        avgPackage: 5.5,
+        highestPackage: 13.5
+      },
+      {
+        branchCode: 'CIVIL',
+        branchName: 'Civil Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 96000, twoA: 121000, twoB: 132000, threeA: 108000, threeB: 102000, sc: 158000, st: 166000 },
+          comedk: { gm: 82000, hkr: 96000 }
+        },
+        avgPackage: 5.2,
+        highestPackage: 12.0
       }
-],
+    ],
   },
   {
     id: "bnmit-bangalore",
@@ -941,6 +1006,7 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     description: "B.N.M. Institute of Technology (BNMIT Banashankari (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 90% annual placement conversion.",
     highlights: [
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
+      'Located in Banashankari 2nd Stage, Bengaluru with excellent metro connectivity',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹40.0 LPA Highest CTC with 90% campus placement rate',
       'Advanced compute, hardware development, and innovation incubation centers',
@@ -1126,6 +1192,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "JSS Academy of Technical Education (JSSATE Uttarahalli (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 88% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹33.8 LPA Highest CTC with 88% campus placement rate',
@@ -1312,6 +1380,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "The Oxford College of Engineering (TOCE Bommanahalli (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 85% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹22.0 LPA Highest CTC with 85% campus placement rate',
@@ -1684,6 +1755,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Dr. Ambedkar Institute of Technology (Dr. AIT Mallathahalli (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 88% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹25.0 LPA Highest CTC with 88% campus placement rate',
@@ -1870,6 +1944,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "S.J.B. Institute of Technology (SJBIT Kengeri (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 87% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹24.0 LPA Highest CTC with 87% campus placement rate',
@@ -2056,6 +2132,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "A.M.C. Engineering College (AMC Bannerghatta (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 84% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹21.0 LPA Highest CTC with 84% campus placement rate',
@@ -3172,6 +3250,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "BGS College of Engineering and Technology (BGSCET Mahalakshmipuram) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 85% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹20.0 LPA Highest CTC with 85% campus placement rate',
@@ -3358,6 +3439,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Brindavan College of Engineering (BCE Yelahanka (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 82% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹18.0 LPA Highest CTC with 82% campus placement rate',
@@ -3544,6 +3628,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Cambridge Institute of Technology (CIT KR Puram (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 89% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹27.0 LPA Highest CTC with 89% campus placement rate',
@@ -3916,6 +4002,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Dayananda Sagar Academy of Technology and Management (DSATM Kanakapura Rd (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 91% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹32.0 LPA Highest CTC with 91% campus placement rate',
@@ -4102,6 +4190,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "East Point College of Engineering and Technology (EPCET Bidarahalli (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 85% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹25.0 LPA Highest CTC with 85% campus placement rate',
@@ -4474,6 +4565,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "East West Institute of Technology (EWIT Magadi Rd (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 84% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹22.0 LPA Highest CTC with 84% campus placement rate',
@@ -4846,6 +4940,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Global Academy of Technology (GAT RR Nagar (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 88% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹25.0 LPA Highest CTC with 88% campus placement rate',
@@ -5218,6 +5314,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "H.K.B.K. College of Engineering (HKBK Nagawara (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 86% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹22.4 LPA Highest CTC with 86% campus placement rate',
@@ -5776,6 +5875,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Jyothy Institute of Technology (JIT Tataguni (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 84% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹20.0 LPA Highest CTC with 84% campus placement rate',
@@ -6148,6 +6250,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "K.S. Institute of Technology (KSIT Raghuvanahalli (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 86% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹22.0 LPA Highest CTC with 86% campus placement rate',
@@ -6334,6 +6439,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "K.S. School of Engineering and Management (KSSEM Mallasandra (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 83% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹18.0 LPA Highest CTC with 83% campus placement rate',
@@ -6706,6 +6814,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "PES Institute of Technology (Electronic City Campus) (PESIT South ECity) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 95% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹48.0 LPA Highest CTC with 95% campus placement rate',
@@ -6892,6 +7002,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Presidency University (Presidency Univ Rajanakunte) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 90% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹34.0 LPA Highest CTC with 90% campus placement rate',
@@ -7264,6 +7376,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Rajarajeswari College of Engineering (RRCE Mysuru Rd (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 86% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹23.0 LPA Highest CTC with 86% campus placement rate',
@@ -7636,6 +7750,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "REVA University (REVA University Yelahanka) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 92% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹50.0 LPA Highest CTC with 92% campus placement rate',
@@ -7822,6 +7938,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "R.V. Institute of Technology and Management (RVITM JP Nagar (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 94% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹42.0 LPA Highest CTC with 94% campus placement rate',
@@ -8008,6 +8127,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Sai Vidya Institute of Technology (SVIT Rajanukunte (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 85% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹21.0 LPA Highest CTC with 85% campus placement rate',
@@ -8194,6 +8316,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Sambhram Institute of Technology (SaIT Vidyaranyapura) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 83% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹21.0 LPA Highest CTC with 83% campus placement rate',
@@ -8380,6 +8505,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Sapthagiri College of Engineering (SCE Hesaraghatta (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 88% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹28.0 LPA Highest CTC with 88% campus placement rate',
@@ -9124,6 +9251,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Sri Sairam College of Engineering (SSCE Anekal (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 85% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹20.0 LPA Highest CTC with 85% campus placement rate',
@@ -9310,6 +9439,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Sri Venkateshwara College of Engineering (SVCE Vidyanagar (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 85% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to Autonomous with robust industry partnerships',
       '₹22.0 LPA Highest CTC with 85% campus placement rate',
@@ -9496,6 +9628,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "T. John Institute of Technology (TJIT Bannerghatta (Bengaluru)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 82% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹18.0 LPA Highest CTC with 82% campus placement rate',
@@ -9682,6 +9817,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Vemana Institute of Technology (Vemana IT Koramangala) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 87% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to VTU Affiliated with robust industry partnerships',
       '₹24.0 LPA Highest CTC with 87% campus placement rate',
@@ -10426,6 +10564,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Alliance University (Alliance College of Engineering & Design) (Alliance Univ Anekal) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 91% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹38.0 LPA Highest CTC with 91% campus placement rate',
@@ -10612,6 +10752,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Christ University (Faculty of Engineering) (Christ Univ Kengeri Campus) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 93% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Deemed with robust industry partnerships',
       '₹42.0 LPA Highest CTC with 93% campus placement rate',
@@ -10798,6 +10940,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "CMR University (School of Engineering & Technology) (CMR Univ Main Campus) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 89% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹30.0 LPA Highest CTC with 89% campus placement rate',
@@ -10984,6 +11128,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Dayananda Sagar University (DSU Innovation Campus) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 93% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹45.0 LPA Highest CTC with 93% campus placement rate',
@@ -11170,6 +11316,9 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Garden City University (Garden City Univ Bengaluru) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 85% annual placement conversion.",
     highlights: [
+      'Located at Soladevanahalli, Hesaraghatta Road — ~14 km from Hebbal corridor via Outer Ring Road',
+      'Sprawling 120-acre multidisciplinary Wi-Fi international campus with 15,000+ students from 75+ countries',
+      'Wide program choice including specialized disciplines like Mining, Mechatronics, Aeronautical & Automobile Engineering',
       'Accredited with NAAC Grade A & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹22.0 LPA Highest CTC with 85% campus placement rate',
@@ -11356,6 +11505,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "International Institute of Information Technology Bangalore (IIIT Bangalore (IIIT-B)) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 99% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to Deemed with robust industry partnerships',
       '₹65.0 LPA Highest CTC with 99% campus placement rate',
@@ -11542,6 +11693,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "M.S. Ramaiah University of Applied Sciences (MSRUAS Peenya Campus) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 94% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹45.0 LPA Highest CTC with 94% campus placement rate',
@@ -11914,6 +12067,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "RV University (School of Computer Science & Engineering) (RV University Bengaluru) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 96% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹55.0 LPA Highest CTC with 96% campus placement rate',
@@ -12100,6 +12255,8 @@ export const BENGALURU_URBAN_COLLEGES: College[] = [
     heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     description: "Sapthagiri NPS University (Sapthagiri NPS Univ) is a distinguished engineering institution in Bengaluru, Bengaluru Urban district. Accredited by NAAC with Grade A+ and recognized by AICTE, the institution offers comprehensive undergraduate programs with modern laboratories, proactive career guidance, and a 89% annual placement conversion.",
     highlights: [
+      'Located at Govindapura, Yelahanka — ~10 km from Hebbal (direct commute along Bellary Road / NH 44)',
+      'Major North Bengaluru option commonly compared with BMSIT&M with balanced academics and vibrant campus life',
       'Accredited with NAAC Grade A+ & Approved by AICTE New Delhi',
       'Affiliated to State University with robust industry partnerships',
       '₹30.0 LPA Highest CTC with 89% campus placement rate',

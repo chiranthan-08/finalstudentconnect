@@ -23,7 +23,8 @@ import {
   Calendar,
   Building2,
   Lock,
-  UserCheck
+  UserCheck,
+  Compass
 } from 'lucide-react';
 import { 
   COLLEGES_DATA, 
@@ -71,6 +72,16 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   // 1. Comprehensive Core Tools & Services
   const baseTools: PaletteItem[] = [
+    {
+      id: 'tool-career-pathways',
+      title: 'After 10th, 12th or Diploma: What Next?',
+      subtitle: 'Higher education roadmaps, DCET polytechnic lateral entry matrix, PUC streams, exams & scholarship guide',
+      category: 'AI & Tools',
+      href: '/career-pathways',
+      icon: Compass,
+      badge: 'Career Guide',
+      keywords: 'after 10th sslc after 12th puc after diploma polytechnic dcet lateral entry what next higher degrees career guidance ssp scholarship',
+    },
     {
       id: 'tool-predictor',
       title: 'AI College Cutoff Predictor',

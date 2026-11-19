@@ -31,7 +31,8 @@ import {
   ChevronRight,
   Lock,
   Zap,
-  Accessibility
+  Accessibility,
+  Compass
 } from 'lucide-react';
 import { UserRole } from '@/types';
 
@@ -82,6 +83,7 @@ export function Navbar() {
   const primaryLinks = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/colleges', label: 'Colleges', icon: GraduationCap },
+    { href: '/career-pathways', label: 'After 10th/12th/Diploma', icon: Compass, badge: 'Guide' },
     { href: '/predictor', label: 'Predictor', icon: Sparkles, badge: 'KCET' },
     { href: '/vtu-tools', label: 'VTU Tools', icon: Calculator },
     { href: '/courses', label: 'Courses', icon: BookOpen, badge: 'Free' },
@@ -90,6 +92,7 @@ export function Navbar() {
 
   // Secondary ecosystem items in Hubs dropdown
   const ecosystemHubs = [
+    { href: '/career-pathways', label: 'After 10th / 12th / Diploma: What Next?', desc: 'Complete education roadmaps, DCET/KCET options, polytechnic & degree suggestions', icon: Compass, badge: 'What Next?', pulse: true },
     { href: '/accessibility', label: 'Accessibility Hub (Inclusive)', desc: 'Sign-to-text classroom, speech AAC cards & audio books for every student', icon: Accessibility, badge: 'Inclusive', pulse: true },
     { href: '/pricing', label: 'Student Connect Pro', desc: 'Verified student certificates, uncapped AI & Razorpay plans', icon: Zap, badge: 'Pro', pulse: true },
     { href: '/sports', label: 'Sports Opportunities Hub', desc: 'College, VTU & National tournaments, trials & deadlines', icon: Trophy, badge: 'New', pulse: true },
@@ -225,6 +228,23 @@ export function Navbar() {
                   </div>
                 )}
               </div>
+
+              {/* After 10th / 12th / Diploma: What Next? Featured Desktop Link */}
+              <Link
+                href="/career-pathways"
+                className={`h-8 flex items-center gap-1.5 px-2 xl:px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 whitespace-nowrap ${
+                  pathname === '/career-pathways'
+                    ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70 font-bold border border-emerald-200 dark:border-emerald-800 shadow-sm'
+                    : 'text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-900'
+                }`}
+                title="After 10th, 12th or Diploma: What Next? Complete Career & Higher Education Guidance"
+              >
+                <Compass className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                <span className="font-semibold">What Next?</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold hidden 2xl:inline border border-emerald-200 dark:border-emerald-800">
+                  10th • 12th • Diploma
+                </span>
+              </Link>
 
               {/* Feature Implementation Link (Always visible on desktop with full label, carefully spaced to never overlap) */}
               <Link
@@ -551,6 +571,7 @@ export function Navbar() {
             <div className="grid grid-cols-1 gap-1">
               {[
                 { href: '/', label: 'Home Dashboard', desc: 'Central landing page, simulator & rankings', icon: Home },
+                { href: '/career-pathways', label: 'After 10th / 12th / Diploma', desc: 'Career guide & higher education pathways', icon: Compass, badge: 'What Next?' },
                 { href: '/colleges', label: 'Karnataka Engineering Colleges', desc: 'Cutoffs, fees & NIRF ranks', icon: GraduationCap },
                 { href: '/predictor', label: 'AI KCET & COMEDK Predictor', desc: 'Calculate odds based on rank', icon: Sparkles, badge: 'Popular' },
                 { href: '/vtu-tools', label: 'VTU Academic Tools Suite', desc: 'SGPA, CGPA & attendance calc', icon: Calculator },

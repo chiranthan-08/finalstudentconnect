@@ -598,18 +598,447 @@ export const COLLEGE_EVENTS: CollegeEvent[] = [
     registrationUrl: 'https://bmsceutsav.com',
     registeredCount: 820,
     instagramHandle: '@bmsceutsav',
+  },
+
+  {
+    id: "msrit-udbhav-2026",
+    collegeId: "msrit-bangalore",
+    collegeName: "Ramaiah Institute of Technology",
+    title: "UDBHAV 2026",
+    tagline: "The Mega Cultural Phenomenon of Bengaluru",
+    theme: "Symphony of Heritage, Contemporary Art & Youth Expression",
+    category: "Non-Technical",
+    eventType: "Cultural Fest",
+    department: "Ramaiah Student Council & Extra-Curricular Activities Board",
+    inAssociationWith: ["VTU Youth Festival Directorate", "Spic Macay", "MSR Trust"],
+    eventDate: "10 April 2026 \u2013 12 April 2026",
+    registrationDeadline: "05 April 2026",
+    duration: "3 Days of Live Concerts, Pro-Nites & 40+ Competitions",
+    venue: "Apex Block Quadrangle & Open Air Theatre, MSR Nagar, Mathikere, Bengaluru",
+    status: "Upcoming",
+    prizePool: "\u20b92,50,000 Worth Cash Prizes & Trophies",
+    registrationFee: "Free for Intra-College \u2022 \u20b9200 for External Delegates",
+    teamSize: "Solo & Teams (Up to 15 Members)",
+    eligibility: "All Degree & Engineering Students across Karnataka",
+    domains: ["Battle of Bands", "Street Play & Theatre", "Fashion Show (Panache)", "Choreo Night", "Fine Arts & Photography"],
+    brochureUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+    description: "UDBHAV is Ramaiah Institute of Technology's flagship national-level cultural extravaganza. Drawing over 15,000 students from 100+ colleges across South India, featuring celebrity artists, competitive musical battles, dance showcases, and high-energy pro-nites.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Varun Kamath",
+            "phone": "+91 98450 11223"
+      },
+      {
+            "type": "Student",
+            "name": "Ananya Sharma",
+            "phone": "+91 97420 44556"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. K. R. Suresh (Dean Student Affairs)",
+            "phone": "+91 80 2360 0822"
+      }
+],
+    registrationUrl: "https://msrit.edu/udbhav",
+    registeredCount: 420,
+    instagramHandle: "@msrit_udbhav",
+  },
+
+  {
+    id: "msrit-codecrack-2026",
+    collegeId: "msrit-bangalore",
+    collegeName: "Ramaiah Institute of Technology",
+    title: "RAMAIAH CODE-CRACK 2026",
+    tagline: "24-Hour National Algorithmic Sprint & Hackathon",
+    theme: "Autonomous Agents, Cyber-Physical Systems & High-Frequency FinTech",
+    category: "Technical",
+    eventType: "Hackathon",
+    department: "Department of Computer Science & Cyber Security (in association with IEEE MSRIT)",
+    inAssociationWith: ["IEEE MSRIT Student Branch", "ACM Student Chapter", "Cisco ThingQbator"],
+    eventDate: "15 May 2026 \u2013 16 May 2026",
+    registrationDeadline: "10 May 2026",
+    duration: "24 Hours Non-Stop Sprint",
+    venue: "Apex Computing Centre & Central Auditorium, Mathikere, Bengaluru",
+    status: "Open",
+    prizePool: "\u20b91,00,000 Cash Pool + Direct Summer Internship Interviews",
+    registrationFee: "\u20b9400 / Team (3\u20134 Members)",
+    teamSize: "2 \u2013 4 Members",
+    eligibility: "All Engineering Students (B.E./B.Tech) across India",
+    domains: ["AI Agents & LLM Orchestration", "Zero-Trust Cyber Security", "Distributed Ledger Systems", "Smart Health & Telemedicine", "EV Battery Telematics"],
+    brochureUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
+    description: "RAMAIAH CODE-CRACK 2026 brings together elite competitive coders and developers to engineer production-ready solutions evaluated by senior engineering architects from top Silicon Valley tech giants and Indian unicorns.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Rohan Deshmukh",
+            "phone": "+91 99001 23456"
+      },
+      {
+            "type": "Student",
+            "name": "Pooja Hegde",
+            "phone": "+91 98451 88776"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. Anita Kanavalli (HoD CSE)",
+            "phone": "+91 80 2360 0822"
+      }
+],
+    registrationUrl: "https://msrit.edu/code-crack",
+    registeredCount: 215,
+    instagramHandle: "@ramaiah_codecrack",
+  },
+
+  {
+    id: "bmsit-utsav-2026",
+    collegeId: "bmsit-bangalore",
+    collegeName: "BMS Institute of Technology and Management",
+    title: "BMSIT UTSAV 2026",
+    tagline: "Celebrate the Spirit of Youth, Art and Innovation",
+    theme: "Futuristic Traditions & Creative Renaissance",
+    category: "Non-Technical",
+    eventType: "Cultural Fest",
+    department: "Department of Student Welfare & Cultural Affairs",
+    inAssociationWith: ["BMS Educational Trust", "Kannada Sahitya Parishat", "Red Bull"],
+    eventDate: "24 April 2026 \u2013 26 April 2026",
+    registrationDeadline: "18 April 2026",
+    duration: "3 Days of Dance, Music, Theatrics & DJ Night",
+    venue: "BMSIT Open Air Amphitheatre, Avalahalli, Yelahanka, Bengaluru",
+    status: "Upcoming",
+    prizePool: "\u20b91,50,000 Total Cash Awards",
+    registrationFee: "Free Registration for Academic Delegations",
+    teamSize: "Individual & Group Events",
+    eligibility: "Open to all College and University Students across Karnataka",
+    domains: ["Western & Classical Dance", "Acoustic Unplugged", "Gaming Arcade", "Short Film Screening", "Street Fashion"],
+    brochureUrl: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80",
+    description: "BMSIT UTSAV is Avalahalli Yelahanka's most celebrated spring fest. Featuring multi-genre cultural competitions, live band showdowns, art exhibitions, and a massive closing rock concert on the lush campus grounds.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Tejas Kumar",
+            "phone": "+91 96321 44556"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. C. Kavitha (Dean Student Welfare)",
+            "phone": "+91 80 6873 0444"
+      }
+],
+    registrationUrl: "https://bmsit.ac.in/utsav",
+    registeredCount: 380,
+    instagramHandle: "@bmsit_utsav",
+  },
+
+  {
+    id: "bmsit-synapse-2026",
+    collegeId: "bmsit-bangalore",
+    collegeName: "BMS Institute of Technology and Management",
+    title: "TECH-SYNAPSE 2026",
+    tagline: "Confluence of Cloud, AI & Business Intelligence",
+    theme: "Building Enterprise-Grade Resilient Web & AI Systems",
+    category: "Technical",
+    eventType: "Hackathon",
+    department: "Departments of CSE & CSBS in association with IEEE Computer Society",
+    inAssociationWith: ["IEEE Computer Society BMSIT", "AWS Educate", "Intel OneAPI"],
+    eventDate: "20 May 2026 \u2013 21 May 2026",
+    registrationDeadline: "14 May 2026",
+    duration: "36-Hour Hackathon Sprint",
+    venue: "BMSIT Tech Park Computing Block, Avalahalli, Yelahanka, Bengaluru",
+    status: "Open",
+    prizePool: "\u20b960,000 Cash Pool + Cloud Credits & Fast-Track Interviews",
+    registrationFee: "\u20b9350 / Team (3\u20134 Members)",
+    teamSize: "3 \u2013 4 Members",
+    eligibility: "Undergraduate B.E./B.Tech, BCA & MCA Students",
+    domains: ["Business Systems & FinTech", "Generative AI Workflows", "Green Cloud Computing", "Assistive Educational Tech"],
+    brochureUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80",
+    description: "TECH-SYNAPSE 2026 challenges undergraduate engineers to design scalable architectures bridging AI capabilities with real-world enterprise business logic. Mentored by industry professionals from Microsoft, SAP, and Dell.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Sneha Narayan",
+            "phone": "+91 97411 22334"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. Thippeswamy G (HoD CSE)",
+            "phone": "+91 80 6873 0444"
+      }
+],
+    registrationUrl: "https://bmsit.ac.in/tech-synapse",
+    registeredCount: 160,
+    instagramHandle: "@bmsit_synapse",
+  },
+
+  {
+    id: "nmit-anaadyanta-2026",
+    collegeId: "nmit-bangalore",
+    collegeName: "Nitte Meenakshi Institute of Technology",
+    title: "ANAADYANTA 2026",
+    tagline: "The Infinite Celebration \u2014 South India's Mega Fest",
+    theme: "Dimensions of Eternity: Art, Technology, Music & Culture",
+    category: "Non-Technical",
+    eventType: "Cultural Fest",
+    department: "NMIT Student Council & Extra-Curricular Directorate",
+    inAssociationWith: ["Nitte Education Trust", "MTV Beats", "Monster Energy"],
+    eventDate: "27 March 2026 \u2013 29 March 2026",
+    registrationDeadline: "22 March 2026",
+    duration: "3 Action-Packed Days & Star Pro-Nites",
+    venue: "NMIT Main Campus Grounds, Govindapura, Yelahanka, Bengaluru",
+    status: "Closing Soon",
+    prizePool: "\u20b93,00,000 Cash Pool & National Trophies",
+    registrationFee: "Free for Registered Delegations",
+    teamSize: "Solo, Duet & Group Squads",
+    eligibility: "All College & University Students across India",
+    domains: ["Rock Band War (Riff-Off)", "Choreo Fest (Natya)", "7-A-Side Football Turf Cup", "Street Fashion Show", "EDM Pro-Night"],
+    brochureUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80",
+    description: "ANAADYANTA is one of the most prestigious and widely attended inter-collegiate cultural and technical fests in South India with 30,000+ footfall. Famous for grand stage setups, national-level musical headliners, and electrifying student competitions.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Karthik Gowda",
+            "phone": "+91 98860 11445"
+      },
+      {
+            "type": "Student",
+            "name": "Disha Rai",
+            "phone": "+91 99011 33221"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. V. Sridhar (Dean Student Welfare)",
+            "phone": "+91 80 2216 7800"
+      }
+],
+    registrationUrl: "https://nmit.ac.in/anaadyanta",
+    registeredCount: 680,
+    instagramHandle: "@nmit_anaadyanta",
+  },
+
+  {
+    id: "nmit-hackabit-2026",
+    collegeId: "nmit-bangalore",
+    collegeName: "Nitte Meenakshi Institute of Technology",
+    title: "HACK-A-BIT 2026",
+    tagline: "Aerospace, Autonomous Drones & Intelligent Systems Sprint",
+    theme: "Next-Gen Avionics, Edge AI & Space Telemetry",
+    category: "Technical",
+    eventType: "Hackathon",
+    department: "Departments of Aeronautical, Aerospace & CSE",
+    inAssociationWith: ["ISRO Space Applications Cell", "Aeronautical Society of India", "IEEE Aerospace & Electronic Systems Society"],
+    eventDate: "12 May 2026 \u2013 13 May 2026",
+    registrationDeadline: "06 May 2026",
+    duration: "36-Hour Aerospace & Hardware Hackathon",
+    venue: "Centre of Excellence in Aerospace & Satellite Tech, NMIT Yelahanka, Bengaluru",
+    status: "Open",
+    prizePool: "\u20b975,000 Cash Pool + Incubation Support & ISRO Mentorship",
+    registrationFee: "\u20b9400 / Team (3\u20134 Members)",
+    teamSize: "2 \u2013 4 Members",
+    eligibility: "All Engineering & Polytechnic Students in Karnataka",
+    domains: ["Unmanned Aerial Vehicle (UAV) Autopilot", "Satellite Image Processing", "Edge AI for Remote Sensing", "Disaster Management Robotics"],
+    brochureUrl: "https://images.unsplash.com/photo-1517976487502-5f69022646d8?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1517976487502-5f69022646d8?auto=format&fit=crop&w=1200&q=80",
+    description: "HACK-A-BIT leverages NMIT's specialized aerospace wind-tunnels, drone testing cages, and satellite communications laboratory, challenging engineering teams to design autonomous aerial systems and geospatial machine learning algorithms.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Abhishek Nair",
+            "phone": "+91 96322 77889"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. P. K. Dash (HoD Aeronautical Engg)",
+            "phone": "+91 80 2216 7800"
+      }
+],
+    registrationUrl: "https://nmit.ac.in/hackabit",
+    registeredCount: 175,
+    instagramHandle: "@nmit_hackabit",
+  },
+
+  {
+    id: "sir-mvit-kalanidhi-2026",
+    collegeId: "sir-mvit-bangalore",
+    collegeName: "Sir M. Visvesvaraya Institute of Technology",
+    title: "KALANIDHI 2026",
+    tagline: "The Royal Cultural Carnival of Airport Road",
+    theme: "Honouring Heritage, Igniting Creative Passions",
+    category: "Non-Technical",
+    eventType: "Cultural Fest",
+    department: "Sir MVIT Cultural Committee (SPIC & SARGAM)",
+    inAssociationWith: ["Sri Krishnadevaraya Educational Trust", "Kannada & Culture Department"],
+    eventDate: "17 April 2026 \u2013 19 April 2026",
+    registrationDeadline: "12 April 2026",
+    duration: "3 Days of Music, Drama, Battle of Bands & Celebrity Night",
+    venue: "Open Air Amphitheatre, Sir MVIT 133-Acre Campus, Hunasamaranahalli, Bengaluru",
+    status: "Upcoming",
+    prizePool: "\u20b91,25,000 Worth Cash Awards & Citations",
+    registrationFee: "Free Registration for Academic Teams",
+    teamSize: "Solo, Duet & Large Group Troupes",
+    eligibility: "Open to all Engineering, Degree and University Undergraduates",
+    domains: ["Eastern & Western Group Dance", "Indian Solo Singing", "Mono Acting & Skit", "Photography & Digital Art", "Live Rock Band Concert"],
+    brochureUrl: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1200&q=80",
+    description: "KALANIDHI is Sir MVIT's signature annual cultural festival hosted on its serene 133-acre campus on International Airport Road. Known for drawing competitive collegiate teams for music, traditional dance, and electrifying musical rock concerts.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Chirag M",
+            "phone": "+91 97400 33445"
+      },
+      {
+            "type": "Faculty",
+            "name": "Prof. R. Sundaresan (Cultural Convenor)",
+            "phone": "+91 80 2846 7248"
+      }
+],
+    registrationUrl: "https://sirmvit.edu/kalanidhi",
+    registeredCount: 310,
+    instagramHandle: "@sirmvit_kalanidhi",
+  },
+
+  {
+    id: "sir-mvit-techsummit-2026",
+    collegeId: "sir-mvit-bangalore",
+    collegeName: "Sir M. Visvesvaraya Institute of Technology",
+    title: "VISVESVARA TECH-SUMMIT 2026",
+    tagline: "Robotics Arena, Drone Grand Prix & Coding Sprint",
+    theme: "Sustainable Engineering, Smart Agriculture & Autonomous Mobility",
+    category: "Technical",
+    eventType: "Technical Fest",
+    department: "Departments of ECE, EEE & CSE in association with ISTE",
+    inAssociationWith: ["Indian Society for Technical Education (ISTE)", "IEEE Bangalore", "Robokits India"],
+    eventDate: "02 May 2026 \u2013 03 May 2026",
+    registrationDeadline: "26 April 2026",
+    duration: "2 Full Days of Robotics Combat, Drone Racing & Coding",
+    venue: "Mechanical Workshops Arena & Central Compute Wing, Sir MVIT Campus, Bengaluru",
+    status: "Open",
+    prizePool: "\u20b950,000 Cash Pool + Robot Component Kits & IEEE Certificates",
+    registrationFee: "\u20b9300 / Team (2\u20134 Members)",
+    teamSize: "2 \u2013 4 Members",
+    eligibility: "All Engineering, Diploma and Technology Undergraduates",
+    domains: ["Robo-Wars (15kg & 30kg Combat)", "FPV Drone Obstacle Race", "Line Follower & Maze Solver", "Algo-Coding Speed Run", "IoT Smart Agri Prototypes"],
+    brochureUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80",
+    description: "VISVESVARA TECH-SUMMIT celebrates the engineering legacy of Sir MV with high-intensity robo-combat arenas, high-speed indoor FPV drone circuits, and fast-paced algorithmic coding sprints judged by leading industrial automation engineers.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Aditya Rao",
+            "phone": "+91 98800 66778"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. G. Balaji (HoD ECE)",
+            "phone": "+91 80 2846 7248"
+      }
+],
+    registrationUrl: "https://sirmvit.edu/tech-summit",
+    registeredCount: 185,
+    instagramHandle: "@sirmvit_techsummit",
+  },
+
+  {
+    id: "acharya-habba-2026",
+    collegeId: "acharya-it-bangalore",
+    collegeName: "Acharya Institute of Technology",
+    title: "ACHARYA HABBA 2026",
+    tagline: "One of India's Largest Month-Long University Fests",
+    theme: "Global Cultures, Global Voices, Unstoppable Energy",
+    category: "Non-Technical",
+    eventType: "Cultural Fest",
+    department: "Acharya Institutes Central Cultural Directorate",
+    inAssociationWith: ["UN Global Youth Council", "Vh1 India", "Vh1 Supersonic Campus"],
+    eventDate: "10 April 2026 \u2013 12 April 2026",
+    registrationDeadline: "04 April 2026",
+    duration: "3 Mega Days of International Concerts & 50+ Events",
+    venue: "Acharya 120-Acre Stadium & Central Amphitheatre, Soladevanahalli, Bengaluru",
+    status: "Upcoming",
+    prizePool: "\u20b94,00,000 Worth Mega Cash Pool & Trophies",
+    registrationFee: "Free Access for Registered College Contingents",
+    teamSize: "Solo, Duet & Inter-College Contingents",
+    eligibility: "Open to all National and International University Students",
+    domains: ["International Cultural Showcase (30+ Countries)", "Battle of Bands (National)", "Mega Choreo Night", "Auto Expo & Superbike Rally", "EDM Mega Festival"],
+    brochureUrl: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80",
+    description: "ACHARYA HABBA is an iconic mega-festival uniting 25,000+ students from 75+ nations studying across Acharya's 120-acre international campus. Features celebrity international DJs, rock bands, high-fashion runways, motor expos, and food pavilions from 20+ countries.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Samuel Kiprono",
+            "phone": "+91 96112 55443"
+      },
+      {
+            "type": "Student",
+            "name": "Keerthana M",
+            "phone": "+91 98450 77665"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. Rajath Vasudev (Cultural Director)",
+            "phone": "+91 80 2255 5555"
+      }
+],
+    registrationUrl: "https://acharya.ac.in/habba",
+    registeredCount: 920,
+    instagramHandle: "@acharyahabba",
+  },
+
+  {
+    id: "acharya-innovatron-2026",
+    collegeId: "acharya-it-bangalore",
+    collegeName: "Acharya Institute of Technology",
+    title: "INNOVATRON 2026",
+    tagline: "National Engineering Project Expo & Autonomous Robotics Arena",
+    theme: "Smart Mobility, Clean Tech, Autonomous Drones & Generative Automation",
+    category: "Technical",
+    eventType: "Technical Fest",
+    department: "Acharya R&D Cell & Departments of Mechatronics & Aeronautical Engineering",
+    inAssociationWith: ["AICTE Idea Lab", "Confederation of Indian Industry (CII)", "IEEE Bangalore"],
+    eventDate: "22 May 2026 \u2013 23 May 2026",
+    registrationDeadline: "16 May 2026",
+    duration: "2 Days of Hardware Expos, Hackathons & Seed Funding Pitches",
+    venue: "Acharya AICTE Idea Lab & Convention Centre, Soladevanahalli, Bengaluru",
+    status: "Open",
+    prizePool: "\u20b980,000 Cash Pool + Direct Seed Grant Incubation",
+    registrationFee: "\u20b9400 / Team (3\u20134 Members)",
+    teamSize: "2 \u2013 4 Members",
+    eligibility: "All Engineering, Diploma and BCA/MCA Undergraduates",
+    domains: ["Working Hardware Project Expo", "Electric Vehicle (EV) Powertrain Design", "Autonomous Agricultural Drones", "AI-Powered Medical Assistive Devices", "Robotics & Mechatronics Arena"],
+    brochureUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+    description: "INNOVATRON 2026 is Acharya's premier inter-collegiate engineering project exhibition and innovation sprint. Supported by the AICTE Idea Lab, teams showcase working physical prototypes and software products before angel investors and enterprise R&D directors.",
+    coordinators: [
+      {
+            "type": "Student",
+            "name": "Naveen Raj",
+            "phone": "+91 97422 11990"
+      },
+      {
+            "type": "Faculty",
+            "name": "Dr. Devarajaiah R. M. (Dean R&D)",
+            "phone": "+91 80 2255 5555"
+      }
+],
+    registrationUrl: "https://acharya.ac.in/innovatron",
+    registeredCount: 210,
+    instagramHandle: "@acharya_innovatron",
   }
 ];
 
-// Helper functions
 export function getEventsByCollegeId(collegeId: string): CollegeEvent[] {
-  return COLLEGE_EVENTS.filter(event => event.collegeId === collegeId);
+  return COLLEGE_EVENTS.filter(e => e.collegeId === collegeId);
 }
 
 export function getTechnicalEventsByCollegeId(collegeId: string): CollegeEvent[] {
-  return COLLEGE_EVENTS.filter(event => event.collegeId === collegeId && event.category === 'Technical');
+  return COLLEGE_EVENTS.filter(e => e.collegeId === collegeId && (e.category === 'Technical' || e.eventType === 'Technical Fest'));
 }
 
 export function getNonTechnicalEventsByCollegeId(collegeId: string): CollegeEvent[] {
-  return COLLEGE_EVENTS.filter(event => event.collegeId === collegeId && event.category === 'Non-Technical');
+  return COLLEGE_EVENTS.filter(e => e.collegeId === collegeId && e.category !== 'Technical' && e.eventType !== 'Technical Fest');
 }

@@ -876,7 +876,9 @@ const BASE_COLLEGES_DATA: College[] = [
     heroImage: '/images/colleges/atria-campus.jpg',
     description: 'Atria Institute of Technology (AIT), established in 2000, is an autonomous engineering institution situated on a lush 17.5-acre campus in Hebbal, Bengaluru, adjacent to Bangalore Baptist Hospital and close to Manyata Embassy Tech Park. Affiliated to Visvesvaraya Technological University (VTU) Belagavi, approved by AICTE, and accredited with an exemplary NAAC "A++" grade, Atria offers high-demand degrees across Computer Science, Artificial Intelligence, Data Science, and Electronics with ₹30 LPA highest campus packages and top recruiter drives including Amazon, Infosys, and Cognizant.',
     highlights: [
-      '17.5-Acre Modern Green Campus located in Hebbal, Bengaluru near Manyata Tech Park',
+      'Located at Hebbal Kempapura / Anandnagar — just 1 km from Hebbal Flyover (shortest commute in North Bengaluru)',
+      'Best suited for students seeking a short central commute with emerging degrees in AI, Data Science & Robotics',
+      '17.5-Acre Modern Green Campus located in Hebbal, Bengaluru adjacent to Bangalore Baptist Hospital',
       'Autonomous Institution affiliated to VTU Belagavi & Approved by AICTE New Delhi',
       'Accredited with prestigious NAAC "A++" Grade & NBA Accredited Engineering Programs',
       '₹30.0 LPA Highest CTC with 86% campus placement record across tier-1 software & core companies',
@@ -1047,6 +1049,17 @@ const BASE_COLLEGES_DATA: College[] = [
         },
         avgPackage: 4.5,
         highestPackage: 10.0,
+      },
+      {
+        branchCode: 'ROBOTICS',
+        branchName: 'Robotics & Automation Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 52000, twoA: 64000, twoB: 71000, threeA: 55000, threeB: 53000, sc: 110000, st: 118000 },
+          comedk: { gm: 48000, hkr: 60000 },
+        },
+        avgPackage: 6.0,
+        highestPackage: 20.0,
       },
     ],
   },
@@ -1523,7 +1536,7 @@ const BASE_COLLEGES_DATA: College[] = [
     accreditations: {
       naacGrade: 'A+',
       nbaAccredited: true,
-      nirfRank: 78,
+      nirfRank: 75, // Official 2025 NIRF Engineering Rank
       karnatakaRank: 3,
     },
     rating: 4.8,
@@ -2288,6 +2301,50 @@ const BASE_COLLEGES_DATA: College[] = [
         cutoffs: {
           kcet: { gm: 24000, twoA: 36000, twoB: 42000, threeA: 31000, threeB: 28000, sc: 64000, st: 72000 },
           comedk: { gm: 22000, hkr: 28500 },
+        },
+        avgPackage: 6.8,
+        highestPackage: 18.0,
+      },
+      {
+        branchCode: 'EEE',
+        branchName: 'Electrical & Electronics Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 28000, twoA: 41000, twoB: 47000, threeA: 35000, threeB: 32000, sc: 75000, st: 84000 },
+          comedk: { gm: 26000, hkr: 34000 },
+        },
+        avgPackage: 6.5,
+        highestPackage: 16.0,
+      },
+      {
+        branchCode: 'MECH',
+        branchName: 'Mechanical Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 68000, twoA: 88000, twoB: 98000, threeA: 78000, threeB: 72000, sc: 135000, st: 142000 },
+          comedk: { gm: 55000, hkr: 68000 },
+        },
+        avgPackage: 5.6,
+        highestPackage: 14.0,
+      },
+      {
+        branchCode: 'CIVIL',
+        branchName: 'Civil Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 85000, twoA: 105000, twoB: 118000, threeA: 95000, threeB: 90000, sc: 148000, st: 156000 },
+          comedk: { gm: 65000, hkr: 78000 },
+        },
+        avgPackage: 5.2,
+        highestPackage: 12.0,
+      },
+      {
+        branchCode: 'TELECOM',
+        branchName: 'Electronics & Telecommunication Engineering',
+        intakeSeats: 60,
+        cutoffs: {
+          kcet: { gm: 26000, twoA: 38000, twoB: 44000, threeA: 33000, threeB: 30000, sc: 72000, st: 80000 },
+          comedk: { gm: 24000, hkr: 32000 },
         },
         avgPackage: 6.8,
         highestPackage: 18.0,
