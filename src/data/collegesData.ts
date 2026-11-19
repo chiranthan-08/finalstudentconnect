@@ -1,4 +1,10 @@
 import { College } from '@/types';
+import { BENGALURU_URBAN_COLLEGES } from './colleges/bengaluru_urban';
+import { BENGALURU_RURAL_COLLEGES } from './colleges/bengaluru_rural';
+import { COASTAL_KARNATAKA_COLLEGES } from './colleges/coastal_karnataka';
+import { NORTH_KARNATAKA_COLLEGES } from './colleges/north_karnataka';
+import { CENTRAL_KARNATAKA_COLLEGES } from './colleges/central_karnataka';
+import { SOUTH_KARNATAKA_COLLEGES } from './colleges/south_karnataka';
 
 export const KARNATAKA_DISTRICTS: string[] = [
   'Bagalkote',
@@ -60,7 +66,7 @@ export const ENGINEERING_BRANCHES = [
   { code: 'MINING', name: 'Mining Engineering' },
 ];
 
-export const COLLEGES_DATA: College[] = [
+const BASE_COLLEGES_DATA: College[] = [
   // ==========================================
   // TUMAKURU (TUMKUR) COLLEGES (Priority requested)
   // ==========================================
@@ -4675,3 +4681,21 @@ export const COLLEGES_DATA: College[] = [
     ],
   },
 ];
+
+// Deduplicate by ID to guarantee unique college keys
+const collegeMap = new Map<string, College>();
+for (const c of [
+  ...BASE_COLLEGES_DATA,
+  ...BENGALURU_URBAN_COLLEGES,
+  ...BENGALURU_RURAL_COLLEGES,
+  ...COASTAL_KARNATAKA_COLLEGES,
+  ...NORTH_KARNATAKA_COLLEGES,
+  ...CENTRAL_KARNATAKA_COLLEGES,
+  ...SOUTH_KARNATAKA_COLLEGES,
+]) {
+  if (!collegeMap.has(c.id)) {
+    collegeMap.set(c.id, c);
+  }
+}
+
+export const COLLEGES_DATA: College[] = Array.from(collegeMap.values());
