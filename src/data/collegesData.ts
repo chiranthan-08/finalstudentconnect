@@ -867,7 +867,7 @@ export const COLLEGES_DATA: College[] = [
     shortName: 'Atria IT Bengaluru',
     code: 'E099',
     logo: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=200&q=80',
-    heroImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
+    heroImage: '/images/colleges/atria-campus.jpg',
     description: 'Atria Institute of Technology (AIT), established in 2000, is an autonomous engineering institution situated on a lush 17.5-acre campus in Hebbal, Bengaluru, adjacent to Bangalore Baptist Hospital and close to Manyata Embassy Tech Park. Affiliated to Visvesvaraya Technological University (VTU) Belagavi, approved by AICTE, and accredited with an exemplary NAAC "A++" grade, Atria offers high-demand degrees across Computer Science, Artificial Intelligence, Data Science, and Electronics with ₹30 LPA highest campus packages and top recruiter drives including Amazon, Infosys, and Cognizant.',
     highlights: [
       '17.5-Acre Modern Green Campus located in Hebbal, Bengaluru near Manyata Tech Park',
@@ -887,10 +887,16 @@ export const COLLEGES_DATA: College[] = [
     ],
     campusPhotos: [
       {
-        title: 'Atria Academic Quadrangle & Campus',
+        title: 'Atria Institute of Technology - Main Academic Building',
         category: 'Campus Architecture',
-        url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
-        caption: 'Central academic buildings and open quadrangles at Atria IT Hebbal, Bengaluru.'
+        url: '/images/colleges/atria-campus.jpg',
+        caption: 'Modern glass-facade academic complex and main administrative entrance at Anandnagar, Hebbal, Bengaluru.'
+      },
+      {
+        title: 'CICADA 2026 3-Day Tech Fest Official Brochure',
+        category: 'College Fests & Hackathons',
+        url: '/images/colleges/atria-brochure-cicada.jpg',
+        caption: 'Official brochure for CICADA 2026: Project Expo, Hackathon, IPL Auction, and E-Sports (19–21 November 2026).'
       },
       {
         title: 'AI, Machine Learning & Robotics Labs',
