@@ -20,10 +20,12 @@ export async function POST(request: Request) {
     // 1. Try to find OTP record in MongoDB
     let record: any = null;
     let usingMemory = false;
+    let isDbConnected = false;
 
     try {
       const db = await connectToDatabase();
-      if (db.isConnected) {
+      isDbConnected = db.isConnected;
+      if (isDbConnected) {
         record = await OtpVerificationModel.findOne({
           email: cleanEmail,
           isVerified: false
@@ -118,8 +120,7 @@ export async function POST(request: Request) {
     
     let dbUser: any = null;
     try {
-      const db = await connectToDatabase();
-      if (db.isConnected) {
+      if (isDbConnected) {
         dbUser = await UserModel.findOneAndUpdate(
           { email: cleanEmail },
           {

@@ -37,6 +37,7 @@ interface MongooseCache {
   status: 'connected' | 'connecting' | 'disconnected' | 'error';
   lastError: string | null;
   connectedAt: Date | null;
+  lastAttempt: number;
 }
 
 declare global {
@@ -50,14 +51,18 @@ let cached: MongooseCache = global.mongooseCache || {
   status: 'disconnected',
   lastError: null,
   connectedAt: null,
+  lastAttempt: 0,
 };
 
 if (!global.mongooseCache) {
   global.mongooseCache = cached;
 }
 
+// 15-second cooldown after a failed connection attempt to avoid hanging requests in 10s loops
+const CONNECTION_RETRY_COOLDOWN_MS = 15000;
+
 /**
- * Connect to MongoDB Atlas or local MongoDB using Mongoose with connection pooling
+ * Connect to MongoDB Atlas or local MongoDB using Mongoose with connection pooling and fast-fail cache
  */
 export async function connectToDatabase(): Promise<{
   isConnected: boolean;
@@ -68,34 +73,55 @@ export async function connectToDatabase(): Promise<{
     return { isConnected: true, status: 'connected' };
   }
 
-  const currentUri = getMongoUri();
-
-  if (!cached.promise || cached.status === 'error' || cached.status === 'disconnected') {
-    const opts: mongoose.ConnectOptions = {
-      bufferCommands: false,
-      serverSelectionTimeoutMS: 10000, // 10s timeout for Atlas SRV + TLS handshake
-      family: 4, // Prefer IPv4 to avoid Windows/ISP IPv6 Atlas timeout issues
-      maxPoolSize: 10,
+  // If in connection failure cooldown, return immediately without blocking the rendering/API thread
+  const now = Date.now();
+  if (cached.status === 'error' && now - cached.lastAttempt < CONNECTION_RETRY_COOLDOWN_MS) {
+    return {
+      isConnected: false,
+      status: 'disconnected',
+      error: cached.lastError || 'Database offline (in retry cooldown)',
     };
-
-    cached.status = 'connecting';
-    cached.promise = mongoose
-      .connect(currentUri, opts)
-      .then((m) => {
-        cached.status = 'connected';
-        cached.lastError = null;
-        cached.connectedAt = new Date();
-        console.log(`[MongoDB] Connected successfully to: ${getMaskedUri()}`);
-        return m;
-      })
-      .catch((err) => {
-        cached.status = 'error';
-        cached.lastError = err?.message || 'Failed to connect to MongoDB';
-        cached.promise = null;
-        console.warn(`[MongoDB Notice] ${cached.lastError}. (Configure MONGODB_URI in .env.local to link MongoDB Atlas)`);
-        return null;
-      });
   }
+
+  // If already connecting, await the existing promise rather than starting a new one
+  if (cached.status === 'connecting' && cached.promise) {
+    try {
+      cached.conn = await cached.promise;
+      if (cached.conn && mongoose.connection.readyState === 1) {
+        return { isConnected: true, status: 'connected' };
+      }
+    } catch {}
+    return { isConnected: false, status: 'disconnected', error: cached.lastError || 'Connection pending' };
+  }
+
+  const currentUri = getMongoUri();
+  cached.lastAttempt = now;
+
+  const opts: mongoose.ConnectOptions = {
+    bufferCommands: false,
+    serverSelectionTimeoutMS: 2500, // Reduced from 10s to 2.5s for fast response
+    family: 4, // IPv4 preference
+    maxPoolSize: 10,
+    connectTimeoutMS: 5000,
+  };
+
+  cached.status = 'connecting';
+  cached.promise = mongoose
+    .connect(currentUri, opts)
+    .then((m) => {
+      cached.status = 'connected';
+      cached.lastError = null;
+      cached.connectedAt = new Date();
+      console.log(`[MongoDB] Connected successfully to: ${getMaskedUri()}`);
+      return m;
+    })
+    .catch((err) => {
+      cached.status = 'error';
+      cached.lastError = err?.message || 'Failed to connect to MongoDB';
+      cached.promise = null;
+      console.warn(`[MongoDB Notice] ${cached.lastError}. (Configure MONGODB_URI in .env.local or whitelist your IP in Atlas)`);
+      return null;
+    });
 
   try {
     cached.conn = await cached.promise;
