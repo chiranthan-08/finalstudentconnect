@@ -50,27 +50,31 @@ export function AccessibilityShell({ children }: { children: React.ReactNode }) 
   const navItems = [
     {
       href: '/accessibility',
-      label: 'Accessibility Hub',
-      shortLabel: 'Hub',
+      label: 'Hub Home',
+      shortLabel: 'Home',
       icon: Accessibility,
+      emoji: '🌟',
     },
     {
       href: '/accessibility/sign-communication',
       label: 'Sign & Captions',
       shortLabel: 'Sign',
       icon: Hand,
+      emoji: '🦻',
     },
     {
       href: '/accessibility/speech-support',
-      label: 'Speech & AAC',
+      label: 'Speech & Cards',
       shortLabel: 'Speech',
       icon: MessageSquareText,
+      emoji: '🗣️',
     },
     {
       href: '/accessibility/audio-learning',
-      label: 'Audio Learning',
+      label: 'Audio Textbooks',
       shortLabel: 'Audio',
       icon: Headphones,
+      emoji: '🎧',
     },
   ];
 
@@ -212,7 +216,7 @@ export function AccessibilityShell({ children }: { children: React.ReactNode }) 
                         : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5 shrink-0" />
+                  <span className="text-sm">{item.emoji}</span>
                   <span className="hidden md:inline">{item.label}</span>
                   <span className="md:hidden">{item.shortLabel}</span>
                 </Link>

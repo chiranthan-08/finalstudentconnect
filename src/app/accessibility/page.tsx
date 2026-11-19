@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAccessibility } from '@/components/accessibility/AccessibilityContext';
-import { VISUAL_CONCEPT_GUIDES } from '@/lib/accessibilityData';
 import {
   Accessibility,
   Hand,
@@ -14,460 +13,370 @@ import {
   Sparkles,
   CheckCircle2,
   ShieldCheck,
-  Sliders,
   BookOpen,
-  BarChart3,
   Bot,
-  Eye,
   Subtitles,
   Mic,
   Lightbulb,
   Layers,
+  Wand2,
+  Check,
+  ChevronRight,
 } from 'lucide-react';
 
-const COMMUNICATION_MODES = [
-  { id: 'sign', label: 'Sign Language Camera', icon: Hand, desc: 'Detect hand signs into text & speech' },
-  { id: 'captions', label: 'Live Lecture Captions', icon: Subtitles, desc: 'Real-time subtitles during classes' },
-  { id: 'aac_speech', label: 'Gesture Cards & TTS', icon: MessageSquareText, desc: 'Tap visual cards or type to speak aloud' },
-  { id: 'audio_reader', label: 'Book-to-Audio Reader', icon: Headphones, desc: 'Listen to textbooks, PDFs & notes' },
-  { id: 'voice_nav', label: 'Voice AI & Navigation', icon: Mic, desc: 'Speak commands & ask voice doubts' },
-];
-
 export default function AccessibilityHubPage() {
-  const { profile, updateProfile, togglePreferredMode, speakText } = useAccessibility();
-  const [activeVisualId, setActiveVisualId] = useState(VISUAL_CONCEPT_GUIDES[0].id);
+  const { profile, updateProfile, speakText, announce } = useAccessibility();
+  const [activePreset, setActivePreset] = useState<string | null>(null);
 
-  const activeVisual =
-    VISUAL_CONCEPT_GUIDES.find((g) => g.id === activeVisualId) || VISUAL_CONCEPT_GUIDES[0];
+  // 1-Click Profile Presets for effortless setup
+  const applyPreset = (preset: 'deaf' | 'speech' | 'blind') => {
+    setActivePreset(preset);
+    if (preset === 'deaf') {
+      updateProfile({
+        preferredModes: ['sign', 'captions'],
+        alwaysShowCaptions: true,
+        highContrast: false,
+        fontSizeScale: 105,
+      });
+      speakText('Deaf and Hard of Hearing preset applied. Live captions and sign doubt features are active.');
+      announce('Deaf preset active.');
+    } else if (preset === 'speech') {
+      updateProfile({
+        preferredModes: ['aac_speech'],
+        alwaysShowCaptions: false,
+        ttsRate: 1.0,
+      });
+      speakText('Speech Support preset applied. Instant voice cards and sentence composer are ready.');
+      announce('Speech preset active.');
+    } else if (preset === 'blind') {
+      updateProfile({
+        preferredModes: ['audio_reader', 'voice_nav'],
+        fontSizeScale: 125,
+        highContrast: true,
+        ttsRate: 1.1,
+      });
+      speakText('Low Vision and Audio Learning preset applied. High contrast enabled, text size enlarged, audio reader active.');
+      announce('Audio learning preset active.');
+    }
+  };
 
-  const dashboards = [
+  const experienceCards = [
     {
-      href: '/accessibility/sign-communication',
+      id: 'sign',
       badge: 'Deaf & Hard-of-Hearing',
-      title: 'Sign Communication & Live Classroom',
-      subtitle: 'Camera sign-to-text, real-time lecture captions, teacher doubt panel & ISL/ASL library',
+      badgeColor: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-800',
+      title: 'Sign Language & Live Subtitles',
+      simpleFor: 'For students who communicate with sign language or prefer reading real-time captions.',
+      href: '/accessibility/sign-communication',
       icon: Hand,
-      gradient: 'from-blue-600 via-indigo-600 to-violet-600',
-      border: 'border-blue-200 dark:border-blue-900/60',
-      features: [
-        'Camera hand-gesture recognition with student confirm/correct bar',
-        '1-click non-camera sign cards (✋ ❓ 👍 🆘) sent live to teacher',
-        'Real-time speech-to-text lecture subtitles & sign-to-speech output',
-        'Searchable ISL/ASL Educational Sign Language Dictionary',
+      buttonText: 'Open Sign Classroom',
+      buttonBg: 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/25',
+      points: [
+        'Live speech-to-text subtitles for teacher lectures',
+        '1-tap doubt cards (✋ I have a doubt, ❓ Explain again)',
+        'Camera sign recognition (camera is completely optional)',
+        'Searchable Indian & American Sign Language dictionary',
       ],
     },
     {
+      id: 'speech',
+      badge: 'Speech & Non-Verbal Support',
+      badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+      title: 'Tap-to-Speak & Visual Cards',
+      simpleFor: 'For students who prefer communicating by tapping picture cards or typing aloud.',
       href: '/accessibility/speech-support',
-      badge: 'Speech Support & AAC',
-      title: 'Visual Gesture & Speech Communication',
-      subtitle: 'Communicate confidently with visual cards, sentence builder & natural voice synthesis',
       icon: MessageSquareText,
-      gradient: 'from-emerald-600 via-teal-600 to-cyan-600',
-      border: 'border-emerald-200 dark:border-emerald-900/60',
-      features: [
-        'Categorized visual communication cards that speak aloud instantly',
-        'Sentence composer: combine cards or type custom doubts to play audio',
-        'Personalized communication dictionary saved across sessions',
-        'Direct bridge to send questions to the Live Classroom teacher panel',
+      buttonText: 'Open Speech Cards',
+      buttonBg: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-500/25',
+      points: [
+        'Large, colorful picture cards that speak aloud instantly',
+        'Simple sentence builder to combine multiple cards',
+        'Sends your questions directly to the teacher’s screen',
+        'Personal communication dictionary saved to your account',
       ],
     },
     {
-      href: '/accessibility/audio-learning',
+      id: 'audio',
       badge: 'Blind & Low-Vision',
-      title: 'Audio Learning Hub & Voice AI Tutor',
-      subtitle: 'Independent study with book-to-audio converter, voice AI assistant, OCR & audio quizzes',
+      badgeColor: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+      title: 'Audio Textbooks & Voice AI',
+      simpleFor: 'For students who learn by listening to textbooks, voice navigation, and spoken AI.',
+      href: '/accessibility/audio-learning',
       icon: Headphones,
-      gradient: 'from-amber-500 via-orange-500 to-rose-600',
-      border: 'border-amber-200 dark:border-amber-900/60',
-      features: [
-        'Upload PDF/TXT or open VTU textbooks with speed, rewind & bookmarks',
-        'Voice-based AI Study Assistant that answers aloud via Connect AI',
-        'Interactive Audio Quizzes accepting spoken or keyboard (1-4) answers',
-        'Textbook Image OCR reader & narrated recorded lectures',
+      buttonText: 'Open Audio Hub',
+      buttonBg: 'bg-amber-600 hover:bg-amber-700 text-white shadow-amber-500/25',
+      points: [
+        'Listen to VTU engineering textbooks & uploaded PDFs',
+        'Voice AI Study Assistant — ask any question aloud',
+        'Spoken audio quizzes with keyboard (1-4) answers',
+        'Image OCR reader to listen to textbook screenshots',
       ],
     },
   ];
 
   return (
-    <div className="space-y-8">
-      {/* Hero Banner */}
+    <div className="space-y-8 max-w-6xl mx-auto pb-10">
+      {/* Friendly Hero Banner */}
       <section
         aria-labelledby="hub-hero-heading"
-        className={`relative overflow-hidden rounded-3xl p-6 sm:p-10 border shadow-xl ${
+        className={`relative overflow-hidden rounded-3xl p-6 sm:p-10 border shadow-lg transition-all ${
           profile.highContrast
             ? 'bg-black border-yellow-400 text-yellow-100'
-            : 'bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white border-indigo-500/30'
+            : 'bg-gradient-to-br from-indigo-950 via-slate-900 to-blue-950 text-white border-indigo-500/30'
         }`}
       >
-        <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-blue-500/20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold">
-              <Accessibility className="w-4 h-4 text-cyan-300" />
-              <span>StudentConnect — Inclusive Learning Platform</span>
-            </div>
-
-            <h1 id="hub-hero-heading" className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
-              StudentConnect Accessibility Hub
-            </h1>
-
-            <p className="text-sm sm:text-base text-slate-200 font-medium">
-              One platform. Every student. Equal learning opportunities. Learn, communicate, ask doubts,
-              attend live classes, and study educational materials independently in the way that works best for you.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() =>
-                  speakText(
-                    'Welcome to StudentConnect Accessibility Hub. One platform, every student, equal learning opportunities. Choose Sign Communication for live captions and camera sign to text, Speech Support for visual gesture cards and text to speech, or Audio Learning for textbook audio conversion, voice AI tutor, and audio quizzes. Press Alt plus V anytime for voice navigation.'
-                  )
-                }
-                className="px-4 py-2.5 rounded-xl bg-white text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              >
-                <Volume2 className="w-4 h-4 text-blue-600" />
-                <span>Listen to Hub Overview</span>
-              </button>
-
-              <Link
-                href="/accessibility/sign-communication"
-                className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-colors"
-              >
-                <Hand className="w-4 h-4" />
-                <span>Launch Live Sign Classroom</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+        <div className="relative z-10 max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-cyan-200">
+            <Accessibility className="w-4 h-4 text-cyan-300" />
+            <span>Inclusive Learning Platform</span>
           </div>
 
-          {/* Quick Live Stats Card */}
-          <div className="grid grid-cols-2 gap-3 shrink-0 lg:w-80">
-            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm">
-              <div className="text-2xl font-black text-cyan-300">{profile.progress.lessonsCompleted}</div>
-              <div className="text-xs text-slate-200 mt-0.5">Inclusive Lessons</div>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm">
-              <div className="text-2xl font-black text-emerald-300">{profile.progress.listeningMinutes}m</div>
-              <div className="text-xs text-slate-200 mt-0.5">Audio Study Time</div>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm">
-              <div className="text-2xl font-black text-amber-300">{profile.progress.quizAverageScore}%</div>
-              <div className="text-xs text-slate-200 mt-0.5">Audio Quiz Avg</div>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm">
-              <div className="text-2xl font-black text-purple-300">{profile.progress.signsPracticed}</div>
-              <div className="text-xs text-slate-200 mt-0.5">Signs Practiced</div>
-            </div>
-          </div>
-        </div>
-      </section>
+          <h1 id="hub-hero-heading" className="text-2xl sm:text-4xl font-black tracking-tight leading-snug">
+            StudentConnect Accessibility Hub
+          </h1>
 
-      {/* Autonomy-First Communication Preference Selector */}
-      <section
-        aria-labelledby="comm-prefs-heading"
-        className={`rounded-3xl p-5 sm:p-6 border ${
-          profile.highContrast
-            ? 'bg-black border-yellow-400'
-            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm'
-        }`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-          <div>
-            <h2 id="comm-prefs-heading" className="text-base sm:text-lg font-extrabold flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-indigo-500" />
-              <span>Choose How You Prefer to Communicate & Learn</span>
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              We never assume your abilities from your profile. Select any combination of tools below — your choice is saved automatically.
-            </p>
-          </div>
-          <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 self-start sm:self-auto">
-            {profile.preferredModes.length} Active Mode{profile.preferredModes.length === 1 ? '' : 's'}
-          </span>
-        </div>
+          <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+            Learn, communicate, attend classes, and study independently. Choose the experience below that fits the way you learn best.
+          </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {COMMUNICATION_MODES.map((mode) => {
-            const Icon = mode.icon;
-            const selected = profile.preferredModes.includes(mode.id);
-            return (
-              <button
-                key={mode.id}
-                type="button"
-                aria-pressed={selected}
-                onClick={() => togglePreferredMode(mode.id)}
-                className={`text-left p-3.5 rounded-2xl border transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  selected
-                    ? profile.highContrast
-                      ? 'bg-yellow-400 text-black border-yellow-300'
-                      : 'bg-blue-50 dark:bg-blue-950/50 border-blue-500 ring-1 ring-blue-500/30'
-                    : profile.highContrast
-                      ? 'bg-black text-yellow-100 border-yellow-400/50 hover:bg-yellow-400/10'
-                      : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 hover:border-blue-300'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1.5">
-                  <Icon className={`w-4 h-4 ${selected ? (profile.highContrast ? 'text-black' : 'text-blue-600 dark:text-blue-400') : 'text-slate-500'}`} />
-                  {selected && <CheckCircle2 className={`w-4 h-4 ${profile.highContrast ? 'text-black' : 'text-blue-600'}`} />}
-                </div>
-                <div className="text-xs font-extrabold">{mode.label}</div>
-                <div className={`text-[11px] mt-0.5 ${selected && profile.highContrast ? 'text-black/80' : 'text-slate-500 dark:text-slate-400'}`}>
-                  {mode.desc}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Three Dedicated Inclusive Dashboards */}
-      <section aria-labelledby="three-dashboards-heading" className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 id="three-dashboards-heading" className="text-lg sm:text-xl font-black">
-              Three Specialized Accessibility Dashboards
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Dedicated experiences engineered for independent learning — completely separate from the standard StudentConnect dashboard.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          {dashboards.map((dash) => {
-            const Icon = dash.icon;
-            return (
-              <div
-                key={dash.href}
-                className={`rounded-3xl border p-6 flex flex-col justify-between transition-all hover:shadow-xl ${
-                  profile.highContrast
-                    ? 'bg-black border-yellow-400'
-                    : `bg-white dark:bg-slate-900 ${dash.border} shadow-sm`
-                }`}
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${dash.gradient} flex items-center justify-center text-white shadow-lg`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-                      {dash.badge}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-base sm:text-lg font-extrabold">{dash.title}</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{dash.subtitle}</p>
-                  </div>
-
-                  <ul className="space-y-2 pt-1">
-                    {dash.features.map((feat) => (
-                      <li key={feat} className="text-xs flex items-start gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Link
-                  href={dash.href}
-                  className={`mt-6 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r ${dash.gradient} text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:opacity-95 transition-opacity`}
-                >
-                  <span>Open Dashboard</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Visual Concept Explainer + Smart Progress & Quick Links */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Visual Concept Explanation (Step-by-Step Accessible Diagrams) */}
-        <div
-          className={`lg:col-span-2 rounded-3xl border p-6 space-y-4 ${
-            profile.highContrast
-              ? 'bg-black border-yellow-400'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm'
-          }`}
-        >
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h2 className="text-base sm:text-lg font-extrabold flex items-center gap-2">
-                <Lightbulb className="w-4 h-4 text-amber-500" />
-                <span>Visual Concept Explanations (AI-Simplified)</span>
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Difficult engineering topics turned into step-by-step visual flows with audio narration.
-              </p>
-            </div>
-            <div className="flex items-center gap-1.5">
-              {VISUAL_CONCEPT_GUIDES.map((g) => (
-                <button
-                  key={g.id}
-                  type="button"
-                  onClick={() => setActiveVisualId(g.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
-                    activeVisual.id === g.id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
-                  }`}
-                >
-                  {g.topic}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="text-xs">
-              <span className="font-extrabold text-indigo-700 dark:text-indigo-300">Simple Analogy: </span>
-              <span>{activeVisual.analogy}</span>
-            </div>
+          <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() =>
                 speakText(
-                  `${activeVisual.topic}. ${activeVisual.analogy}. ` +
-                    activeVisual.steps.map((s) => `${s.title}: ${s.detail}`).join(' ')
+                  'Welcome to StudentConnect Accessibility Hub. Choose from three simple platforms: Sign Language and Live Subtitles for deaf students, Tap to Speak cards for speech support, or Audio Textbooks and Voice AI for low vision students. You can press Alt plus V at any time to give a voice command.'
                 )
               }
-              className="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
+              className="px-4 py-2.5 rounded-xl bg-white text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md hover:bg-blue-50 transition-all"
             >
-              <Volume2 className="w-3.5 h-3.5" />
-              <span>Read Steps</span>
+              <Volume2 className="w-4 h-4 text-blue-600" />
+              <span>🔊 Listen to Voice Guide</span>
             </button>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {activeVisual.steps.map((step) => (
-              <div
-                key={step.title}
-                className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 space-y-2"
-              >
-                <div className="text-xs font-extrabold text-blue-600 dark:text-blue-400">{step.title}</div>
-                <div className="px-2.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-mono text-xs font-bold text-center">
-                  {step.visual}
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300">{step.detail}</p>
-              </div>
-            ))}
+            <div className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/10 text-xs font-semibold text-slate-300 border border-white/10">
+              <Mic className="w-3.5 h-3.5 text-cyan-300" />
+              <span>Shortcut: Press <kbd className="px-1.5 py-0.5 rounded bg-black/40 font-mono text-[11px] text-white">Alt + V</kbd> to speak commands</span>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* My Learning Tools & Accessibility Preferences Summary */}
-        <div
-          className={`rounded-3xl border p-6 space-y-4 ${
-            profile.highContrast
-              ? 'bg-black border-yellow-400'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm'
-          }`}
-        >
-          <h2 className="text-base font-extrabold flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-blue-500" />
-            <span>Accessibility Settings & My Tools</span>
+      {/* 1-Tap Quick Setup Bar */}
+      <section
+        aria-labelledby="preset-heading"
+        className={`rounded-2xl p-5 border shadow-xs transition-all ${
+          profile.highContrast
+            ? 'bg-black border-yellow-400'
+            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
+        }`}
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-2">
+            <Wand2 className="w-4 h-4 text-purple-500" />
+            <h2 id="preset-heading" className="text-sm font-extrabold text-slate-900 dark:text-white">
+              1-Tap Quick Setup (Optional)
+            </h2>
+          </div>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400">
+            Automatically adjusts text size, subtitles, and contrast for you
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <button
+            type="button"
+            onClick={() => applyPreset('deaf')}
+            className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+              activePreset === 'deaf'
+                ? 'bg-blue-50 dark:bg-blue-950/50 border-blue-500 ring-1 ring-blue-500'
+                : 'hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl">🦻</span>
+              <div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Deaf / Hard-of-Hearing</div>
+                <div className="text-[10px] text-slate-500">Live subtitles & sign doubt cards</div>
+              </div>
+            </div>
+            {activePreset === 'deaf' && <Check className="w-4 h-4 text-blue-600" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => applyPreset('speech')}
+            className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+              activePreset === 'speech'
+                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-500 ring-1 ring-emerald-500'
+                : 'hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl">🗣️</span>
+              <div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Speech Support</div>
+                <div className="text-[10px] text-slate-500">Tap cards to speak out loud</div>
+              </div>
+            </div>
+            {activePreset === 'speech' && <Check className="w-4 h-4 text-emerald-600" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => applyPreset('blind')}
+            className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+              activePreset === 'blind'
+                ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-500 ring-1 ring-amber-500'
+                : 'hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl">👁️</span>
+              <div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Blind / Low-Vision</div>
+                <div className="text-[10px] text-slate-500">Big font, audiobooks & voice AI</div>
+              </div>
+            </div>
+            {activePreset === 'blind' && <Check className="w-4 h-4 text-amber-600" />}
+          </button>
+        </div>
+      </section>
+
+      {/* The 3 Core Dashboards (Large, Easy to Understand Cards) */}
+      <section aria-labelledby="choose-experience-heading" className="space-y-4">
+        <div>
+          <h2 id="choose-experience-heading" className="text-lg sm:text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-indigo-500" />
+            <span>Choose Your Learning Dashboard</span>
           </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Click any dashboard below to start learning. Everything is designed to be simple, self-explanatory, and independent.
+          </p>
+        </div>
 
-          {/* Sign Language Standard */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold block">Preferred Sign Language Standard</label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(['ISL', 'ASL', 'CUSTOM'] as const).map((lang) => (
-                <button
-                  key={lang}
-                  type="button"
-                  onClick={() => updateProfile({ signLanguage: lang })}
-                  className={`py-1.5 rounded-xl text-xs font-bold border ${
-                    profile.signLanguage === lang
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  {lang}
-                </button>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {experienceCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={card.id}
+                className={`rounded-3xl border p-6 flex flex-col justify-between transition-all hover:shadow-xl hover:-translate-y-1 ${
+                  profile.highContrast
+                    ? 'bg-black border-yellow-400'
+                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm'
+                }`}
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border ${card.badgeColor}`}>
+                      {card.badge}
+                    </span>
+                    <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight">
+                      {card.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                      {card.simpleFor}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    {card.points.map((pt, idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                        <span>{pt}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-6">
+                  <Link
+                    href={card.href}
+                    className={`w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all ${card.buttonBg}`}
+                  >
+                    <span>{card.buttonText}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* How it Works in 3 Simple Steps */}
+      <section
+        aria-labelledby="how-it-works-heading"
+        className={`rounded-3xl p-6 sm:p-8 border shadow-xs ${
+          profile.highContrast
+            ? 'bg-black border-yellow-400'
+            : 'bg-gradient-to-r from-blue-50/60 via-slate-50 to-indigo-50/60 dark:from-slate-900 dark:via-slate-900 dark:to-slate-850 border-slate-200 dark:border-slate-800'
+        }`}
+      >
+        <div className="max-w-2xl mb-6">
+          <h2 id="how-it-works-heading" className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <Lightbulb className="w-5 h-5 text-amber-500" />
+            <span>How Live Classroom Communication Works</span>
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Designed so students and teachers communicate naturally in real-time without barriers.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1.5 shadow-xs">
+            <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 font-black text-xs flex items-center justify-center">
+              1
             </div>
+            <div className="text-xs font-bold text-slate-900 dark:text-white">Teacher Teaches Online</div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              Teacher speaks naturally. Real-time subtitles appear on student screens instantly.
+            </p>
           </div>
 
-          {/* Speech Speed */}
-          <div className="space-y-1">
-            <div className="flex justify-between text-xs font-bold">
-              <label htmlFor="tts-rate-slider">Audio Speech Speed</label>
-              <span className="font-mono">{profile.ttsRate.toFixed(1)}x</span>
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1.5 shadow-xs">
+            <div className="w-7 h-7 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 font-black text-xs flex items-center justify-center">
+              2
             </div>
-            <input
-              id="tts-rate-slider"
-              type="range"
-              min="0.6"
-              max="2.0"
-              step="0.1"
-              value={profile.ttsRate}
-              onChange={(e) => updateProfile({ ttsRate: parseFloat(e.target.value) })}
-              className="w-full accent-blue-600"
-            />
+            <div className="text-xs font-bold text-slate-900 dark:text-white">Student Asks Doubts</div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              Sign with camera, tap 1-click cards (✋ ❓ 👍), or tap speech buttons.
+            </p>
           </div>
 
-          {/* Quick Links to Connected StudentConnect Modules */}
-          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
-            <div className="text-xs font-bold text-slate-500">My Accessible Learning Tools</div>
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                href="/courses"
-                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800"
-              >
-                <BookOpen className="w-3.5 h-3.5 text-blue-500" />
-                <span>My Courses</span>
-              </Link>
-              <Link
-                href="/study-materials"
-                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800"
-              >
-                <Layers className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Accessible Notes</span>
-              </Link>
-              <Link
-                href="/assistant"
-                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800"
-              >
-                <Bot className="w-3.5 h-3.5 text-purple-500" />
-                <span>Connect AI</span>
-              </Link>
-              <Link
-                href="/accessibility/audio-learning"
-                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800"
-              >
-                <BarChart3 className="w-3.5 h-3.5 text-amber-500" />
-                <span>Audio Quizzes</span>
-              </Link>
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1.5 shadow-xs">
+            <div className="w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 font-black text-xs flex items-center justify-center">
+              3
             </div>
-          </div>
-
-          {/* Privacy & Safety Commitments */}
-          <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/60 text-[11px] space-y-1">
-            <div className="font-extrabold text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Inclusive Privacy & Consent First</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300">
-              Camera & microphone start only on explicit click. Non-camera alternatives are always available. Low-confidence signs always ask for your confirmation before sending.
+            <div className="text-xs font-bold text-slate-900 dark:text-white">Instant Explanation</div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              Teacher sees your doubt immediately on the side of their screen and explains again.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Quick Accessibility Guide Footer Note */}
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-4">
+      {/* Simple Privacy & Autonomy Assurance */}
+      <section className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-300">
         <div className="flex items-center gap-2">
-          <Eye className="w-4 h-4 text-blue-500" />
-          <span>Keyboard Shortcut: Press <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[11px]">Alt + V</kbd> anywhere in Accessibility Hub for Voice Navigation.</span>
+          <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+          <span>
+            <strong>Your Privacy: </strong> Cameras and microphones only start when you click them. All 1-tap doubt cards work 100% without a camera.
+          </span>
         </div>
-        <span>Standard StudentConnect dashboard remains untouched at <Link href="/" className="underline font-bold text-blue-600 dark:text-blue-400">Home</Link>.</span>
-      </div>
+        <Link
+          href="/"
+          className="text-blue-600 dark:text-blue-400 font-bold hover:underline shrink-0"
+        >
+          Return to Regular StudentConnect Dashboard →
+        </Link>
+      </section>
     </div>
   );
 }
